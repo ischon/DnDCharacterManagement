@@ -94,6 +94,14 @@ export class Attack {
     }
 }
 
+export class Item {
+    constructor(name, count, weight) {
+        this.name = name;
+        this.count = count;
+        this.weight = weight;
+    }
+}
+
 export class Character {
 
     default() {
@@ -139,7 +147,6 @@ export class Character {
                     misc: 0
                 },
                 initiative: {
-                    base: 0,
                     misc: 0
                 },
                 speed: 30,
@@ -154,108 +161,96 @@ export class Character {
                     failures: 0
                 },
             },
-            equipment: [],
+            equipment: {},
             languages: [],
             attacks: {},
-            spellcasting:
-                {
-                    cantrips: [],
-                    spells:
-                        {
-                            level1: {
-                                prepared: [],
-                                known:
-                                    [],
-                                spellSlots:
-                                    0,
-                                spellSlotsExpanded:
-                                    0
-                            }
-                            ,
-                            level2: {
-                                prepared: [],
-                                known:
-                                    [],
-                                spellSlots:
-                                    0,
-                                spellSlotsExpanded:
-                                    0
-                            }
-                            ,
-                            level3: {
-                                prepared: [],
-                                known:
-                                    [],
-                                spellSlots:
-                                    0,
-                                spellSlotsExpanded:
-                                    0
-                            }
-                            ,
-                            level4: {
-                                prepared: [],
-                                known:
-                                    [],
-                                spellSlots:
-                                    0,
-                                spellSlotsExpanded:
-                                    0
-                            }
-                            ,
-                            level5: {
-                                prepared: [],
-                                known:
-                                    [],
-                                spellSlots:
-                                    0,
-                                spellSlotsExpanded:
-                                    0
-                            }
-                            ,
-                            level6: {
-                                prepared: [],
-                                known:
-                                    [],
-                                spellSlots:
-                                    0,
-                                spellSlotsExpanded:
-                                    0
-                            }
-                            ,
-                            level7: {
-                                prepared: [],
-                                known:
-                                    [],
-                                spellSlots:
-                                    0,
-                                spellSlotsExpanded:
-                                    0
-                            }
-                            ,
-                            level8: {
-                                prepared: [],
-                                known:
-                                    [],
-                                spellSlots:
-                                    0,
-                                spellSlotsExpanded:
-                                    0
-                            }
-                            ,
-                            level9: {
-                                prepared: [],
-                                known:
-                                    [],
-                                spellSlots:
-                                    0,
-                                spellSlotsExpanded:
-                                    0
-                            }
-                            ,
-                        }
-                    ,
-                }
-
+            spellcasting: {
+                cantrips: [],
+                spells: {
+                    level1: {
+                        prepared: [],
+                        known:
+                            [],
+                        spellSlots:
+                            0,
+                        spellSlotsExpanded:
+                            0
+                    },
+                    level2: {
+                        prepared: [],
+                        known:
+                            [],
+                        spellSlots:
+                            0,
+                        spellSlotsExpanded:
+                            0
+                    },
+                    level3: {
+                        prepared: [],
+                        known:
+                            [],
+                        spellSlots:
+                            0,
+                        spellSlotsExpanded:
+                            0
+                    },
+                    level4: {
+                        prepared: [],
+                        known:
+                            [],
+                        spellSlots:
+                            0,
+                        spellSlotsExpanded:
+                            0
+                    },
+                    level5: {
+                        prepared: [],
+                        known:
+                            [],
+                        spellSlots:
+                            0,
+                        spellSlotsExpanded:
+                            0
+                    },
+                    level6: {
+                        prepared: [],
+                        known:
+                            [],
+                        spellSlots:
+                            0,
+                        spellSlotsExpanded:
+                            0
+                    },
+                    level7: {
+                        prepared: [],
+                        known:
+                            [],
+                        spellSlots:
+                            0,
+                        spellSlotsExpanded:
+                            0
+                    },
+                    level8: {
+                        prepared: [],
+                        known:
+                            [],
+                        spellSlots:
+                            0,
+                        spellSlotsExpanded:
+                            0
+                    },
+                    level9: {
+                        prepared: [],
+                        known:
+                            [],
+                        spellSlots:
+                            0,
+                        spellSlotsExpanded:
+                            0
+                    },
+                },
+            },
+            features: [],
         }
     };
 
@@ -329,6 +324,75 @@ export class Character {
         }
     }
 
+    addCantrip(cantrip) {
+        if (!this._character.spellcasting.cantrips.includes(cantrip)) {
+            this._character.spellcasting.cantrips.push(cantrip)
+        }
+    }
+
+    removeCantrip(cantrip) {
+        if (this._character.spellcasting.cantrips.includes(cantrip)) {
+            this._character.spellcasting.cantrips.splice(this._character.spellcasting.cantrips.indexOf(cantrip), 1)
+        }
+    }
+
+    addSpell(level, spell) {
+        if (!this._character.spellcasting.spells[level].known.includes(spell)) {
+            this._character.spellcasting.spells[level].known.push(spell)
+        }
+    }
+
+    removeSpell(level, spell) {
+        if (this._character.spellcasting.spells[level].known.includes(spell)) {
+            this._character.spellcasting.spells[level].known.splice(this._character.spellcasting.spells[level].known.indexOf(spell), 1)
+        }
+    }
+
+    addPreparedSpell(level, spell) {
+        if (!this._character.spellcasting.spells[level].prepared.includes(spell)) {
+            this._character.spellcasting.spells[level].prepared.push(spell)
+        }
+    }
+
+    removePreparedSpell(level, spell) {
+        if (this._character.spellcasting.spells[level].prepared.includes(spell)) {
+            this._character.spellcasting.spells[level].prepared.splice(this._character.spellcasting.spells[level].prepared.indexOf(spell), 1)
+        }
+    }
+
+    addFeature(feature) {
+        if (!this._character.features.includes(feature)) {
+            this._character.features.push(feature)
+        }
+    }
+
+    removeFeature(feature) {
+        if (this._character.features.includes(feature)) {
+            this._character.features.splice(this._character.features.indexOf(feature), 1)
+        }
+    }
+
+    addEquipment(name, count, weight) {
+        if (this._character.equipment[name] !== undefined) {
+            this._character.equipment[name].count += count
+            return
+        }
+        this._character.equipment[name] = new Item(name, count, weight)
+    }
+
+    removeEquipment(name, count) {
+        if (this._character.equipment[name] === undefined) {
+            return
+        }
+
+        if (this._character.equipment[name].count > count) {
+            this._character.equipment[name].count -= count
+            return
+        }
+
+        delete this._character.equipment[name]
+    }
+
 // COMPUTED PROPERTIES
     get strengthModifier() {
         return this._calculateAbilityModifier(this.strength);
@@ -389,13 +453,13 @@ export class Character {
     }
 
     get hitPointMaximum() {
+        // https://5ehpcalculator.com/
         return `${this._character.stats.hitPoints.base} + ${this.constitutionModifier}`
     }
 
     get initiativeModifier() {
-        return this._character.stats.initiative.base
-            + this._character.stats.initiative.misc
-            + this.dexterityModifier
+        return this.initiativeBase
+            + this.initiativeMisc
     }
 
 
@@ -564,11 +628,7 @@ export class Character {
     }
 
     get initiativeBase() {
-        return this._character.stats.initiative.base
-    }
-
-    set initiativeBase(value) {
-        this._character.stats.initiative.base = value
+        return this.dexterityModifier
     }
 
     get initiativeMisc() {

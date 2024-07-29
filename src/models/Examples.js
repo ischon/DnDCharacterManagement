@@ -9,7 +9,7 @@ exampleCharacter.weight = "25 kg"
 exampleCharacter.eyeColor = "Blue"
 exampleCharacter.hairColor = "green/blueish"
 exampleCharacter.skinColor = "Light blue grayish"
-exampleCharacter.backstory = ""+
+exampleCharacter.backstory = "" +
     "Owin is a simple gnome, of a humble bloodline. From child on he has been wondering how the world works. And tinkering with items to create all that he can imagine." +
     "\n\n" +
     "At his 28th birthday he departed from his hometown to study the world and learn about other cultures and societies. " +
@@ -19,7 +19,9 @@ exampleCharacter.backstory = ""+
     "During his travels he sometimes helped at taverns to earn a meal and a sleeping place. Other times he looked for a temporary job to make means end." +
     "\n\n" +
     "By now he is searching for a new subject to put his focus on as he just finished a year of study focused on Modron customs"
-exampleCharacter.personalityTraits = ""
+exampleCharacter.personalityTraits = "" +
+    "Loves to study the interaction between creatures\n" +
+    "Often scribbles some things that seem to be nonsense the others"
 exampleCharacter.ideals = ""
 exampleCharacter.bonds = ""
 exampleCharacter.flaws = ""
@@ -33,6 +35,20 @@ exampleCharacter.experiencePoints = "nvt"
 exampleCharacter.addLanguage("Common")
 exampleCharacter.addLanguage("Gnomish")
 exampleCharacter.addLanguage("Modron")
+exampleCharacter.addLanguage("...")
+exampleCharacter.addFeature("Dark vision")
+exampleCharacter.addFeature("Gnome Cunning")
+exampleCharacter.addFeature("Artificer's Lore")
+exampleCharacter.addFeature("Tinker")
+exampleCharacter.addFeature("Researcher")
+exampleCharacter.addFeature("Magical Tinkering")
+exampleCharacter.addFeature(
+    "Infuse Item (lv2)\n" +
+    "* enchanted arcane focus\n" +
+    "* Repeating shot\n" +
+    "* Replicate magical item (bag of holding)\n" +
+    "* Replicate magical item (alchemy jug)"
+)
 
 // character abilities
 exampleCharacter.strength = 8
@@ -52,7 +68,6 @@ exampleCharacter.addProficiency("intelligence", "History")
 exampleCharacter.addProficiency("intelligence", "Investigation")
 exampleCharacter.armorClassBase = 14
 exampleCharacter.armorClassHasDexModifier = true
-exampleCharacter.initiativeBase = 2
 exampleCharacter.speed = 25
 exampleCharacter.baseHitPoints = 13
 exampleCharacter.hitDice = "1d8"
@@ -63,3 +78,35 @@ exampleCharacter.addAttack("Dagger", 4, "1d4", "Piercing")
 exampleCharacter.addAttack("Quarterstaff", 0, "1d6", "Bludgeoning")
 exampleCharacter.addCantrip("Mending")
 exampleCharacter.addCantrip("Guidance")
+exampleCharacter.addSpell(1, "Tasha's caustic brew")
+exampleCharacter.addPreparedSpell(1, "Tasha's caustic brew")
+exampleCharacter.addSpell(1, "Detect Magic (Ritual)")
+exampleCharacter.addPreparedSpell(1, "Detect Magic (Ritual)")
+exampleCharacter.addSpell(1, "Absorb Element")
+exampleCharacter.addPreparedSpell(1, "Absorb Element")
+exampleCharacter.addSpell(1, "Feather fall")
+exampleCharacter.addPreparedSpell(1, "Feather fall")
+exampleCharacter.addEquipment("Light Crossbow", 1, 5)
+exampleCharacter.addEquipment("Bolts", 19, 0.075)
+exampleCharacter.addEquipment("Dagger", 1, 1)
+exampleCharacter.addEquipment("Quarterstaff", 1, 4)
+exampleCharacter.addEquipment("Scale Mail", 1, 45)
+exampleCharacter.addEquipment("Thieves' Tools", 1, 1)
+exampleCharacter.addEquipment("Thieves' Tools - small file", 1, 0)
+exampleCharacter.addEquipment("Thieves' Tools - set of lock picks", 1, 0)
+exampleCharacter.addEquipment("Thieves' Tools - small mirror", 1, 0)
+exampleCharacter.addEquipment("Thieves' Tools - set of narrow-bladed scissors", 1, 0)
+exampleCharacter.addEquipment("Thieves' Tools - pair of pliers", 1, 0)
+exampleCharacter.addEquipment("Dungeoneer's Pack", 1, 0)
+exampleCharacter.addEquipment("Dungeoneer's Pack - Backpack", 1, 5)
+exampleCharacter.addEquipment("Dungeoneer's Pack - Crowbar", 1, 5)
+exampleCharacter.addEquipment("Dungeoneer's Pack - Hammer", 1, 3)
+exampleCharacter.addEquipment("Dungeoneer's Pack - Pitons", 10, 0.25)
+exampleCharacter.addEquipment("Dungeoneer's Pack - Torches", 10, 1)
+exampleCharacter.addEquipment("Dungeoneer's Pack - Tinderbox", 1, 1)
+exampleCharacter.addEquipment("Dungeoneer's Pack - Rations", 10, 2)
+exampleCharacter.addEquipment("Dungeoneer's Pack - Waterskin (4 pints big)", 1, 5)
+exampleCharacter.addEquipment("Dungeoneer's Pack - Hempen rope", 50, 0.2)
+
+
+
