@@ -161,6 +161,7 @@ export class Character {
                     failures: 0
                 },
             },
+            coins: 0,
             equipment: {},
             languages: [],
             attacks: {},
@@ -266,6 +267,49 @@ export class Character {
 // CUSTOM LOGIC
     _calculateAbilityModifier(score) {
         return Math.floor((score - 10) / 2);
+    }
+
+    _toCopperCoins(coins, type) {
+        switch (type) {
+            case "COPPER":
+                return coins
+            case "SILVER":
+                return coins * 10
+            case "ELECTRUM":
+                return coins * 50
+            case "GOLD":
+                return coins * 100
+            case "PLATINUM":
+                return coins * 1000
+        }
+
+    }
+    _calculateCoins(coins) {
+        /*
+        Coin	            CP      SP	    EP	    GP	    PP
+        Copper Piece    (cp)    1       1/10    1/50    1/100	1/1,000
+        Silver Piece    (sp)    10      1       1/5	    1/10    1/100
+        Electrum Piece  (ep)    50      5       1       1/2     1/20
+        Gold Piece      (gp)    100     10      2       1       1/10
+        Platinum Piece  (pp)    1,000   100     20      10      1
+         */
+        let cp = coins.copy()
+        let pp = Math.floor(cp / 1000)
+        cp -= pp * 1000
+        let gp = Math.floor(cp / 100)
+        cp -= gp * 100
+        let ep = Math.floor(cp / 50)
+        cp -= ep * 50
+        let sp = Math.floor(cp / 10)
+        cp -= sp * 10
+
+        return {
+            cp: cp,
+            sp: sp,
+            ep: ep,
+            gp: gp,
+            pp: pp
+        }
     }
 
 // METHODS
@@ -391,6 +435,20 @@ export class Character {
         }
 
         delete this._character.equipment[name]
+    }
+
+    addCoins(coins, type) {
+        let cp = this._toCopperCoins(coins, type)
+        this._character.coins += cp
+    }
+
+    removeCoins(coins, type) {
+        let cp = this._toCopperCoins(coins, type)
+        if (this._character.coins < cp) {
+            console.log("ERROR: not enough coins")
+            return
+        }
+        this._character.coins -= cp
     }
 
 // COMPUTED PROPERTIES

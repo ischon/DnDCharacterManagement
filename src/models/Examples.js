@@ -107,6 +107,8 @@ exampleCharacter.addEquipment("Dungeoneer's Pack - Tinderbox", 1, 1)
 exampleCharacter.addEquipment("Dungeoneer's Pack - Rations", 10, 2)
 exampleCharacter.addEquipment("Dungeoneer's Pack - Waterskin (4 pints big)", 1, 5)
 exampleCharacter.addEquipment("Dungeoneer's Pack - Hempen rope", 50, 0.2)
+exampleCharacter.addCoins(9, "GOLD")
+exampleCharacter.addCoins(5, "SILVER") // TODO: Validate that this is correct
 
 
 
