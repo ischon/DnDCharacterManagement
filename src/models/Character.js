@@ -27,6 +27,15 @@ export const alignments = [
     "Chaotic evil"
 ];
 
+export const abilityTypes = [
+    "strength",
+    "dexterity",
+    "constitution",
+    "intelligence",
+    "wisdom",
+    "charisma"
+]
+
 export const abilities = {
     strength: [
         "Saving Throws",
@@ -65,6 +74,25 @@ export const abilities = {
         "Persuasion"
     ],
 };
+
+export const dice = [
+    "D2",
+    "D4",
+    "D6",
+    "D8",
+    "D10",
+    "D12",
+    "D20",
+]
+
+export class Attack {
+    constructor(name, bonus, damage, type) {
+        this.name = name;
+        this.bonus = bonus;
+        this.damage = damage;
+        this.type = type;
+    }
+}
 
 export class Character {
 
@@ -110,7 +138,10 @@ export class Character {
                     shield: 0,
                     misc: 0
                 },
-                initiative: 0,
+                initiative: {
+                    base: 0,
+                    misc: 0
+                },
                 speed: 30,
                 hitPoints: {
                     base: 8,
@@ -122,7 +153,109 @@ export class Character {
                     successes: 0,
                     failures: 0
                 },
-            }
+            },
+            equipment: [],
+            languages: [],
+            attacks: {},
+            spellcasting:
+                {
+                    cantrips: [],
+                    spells:
+                        {
+                            level1: {
+                                prepared: [],
+                                known:
+                                    [],
+                                spellSlots:
+                                    0,
+                                spellSlotsExpanded:
+                                    0
+                            }
+                            ,
+                            level2: {
+                                prepared: [],
+                                known:
+                                    [],
+                                spellSlots:
+                                    0,
+                                spellSlotsExpanded:
+                                    0
+                            }
+                            ,
+                            level3: {
+                                prepared: [],
+                                known:
+                                    [],
+                                spellSlots:
+                                    0,
+                                spellSlotsExpanded:
+                                    0
+                            }
+                            ,
+                            level4: {
+                                prepared: [],
+                                known:
+                                    [],
+                                spellSlots:
+                                    0,
+                                spellSlotsExpanded:
+                                    0
+                            }
+                            ,
+                            level5: {
+                                prepared: [],
+                                known:
+                                    [],
+                                spellSlots:
+                                    0,
+                                spellSlotsExpanded:
+                                    0
+                            }
+                            ,
+                            level6: {
+                                prepared: [],
+                                known:
+                                    [],
+                                spellSlots:
+                                    0,
+                                spellSlotsExpanded:
+                                    0
+                            }
+                            ,
+                            level7: {
+                                prepared: [],
+                                known:
+                                    [],
+                                spellSlots:
+                                    0,
+                                spellSlotsExpanded:
+                                    0
+                            }
+                            ,
+                            level8: {
+                                prepared: [],
+                                known:
+                                    [],
+                                spellSlots:
+                                    0,
+                                spellSlotsExpanded:
+                                    0
+                            }
+                            ,
+                            level9: {
+                                prepared: [],
+                                known:
+                                    [],
+                                spellSlots:
+                                    0,
+                                spellSlotsExpanded:
+                                    0
+                            }
+                            ,
+                        }
+                    ,
+                }
+
         }
     };
 
@@ -135,12 +268,68 @@ export class Character {
         this._character = object;
     }
 
-    // CUSTOM LOGIC
+// CUSTOM LOGIC
     _calculateAbilityModifier(score) {
         return Math.floor((score - 10) / 2);
     }
 
-    // COMPUTED PROPERTIES
+// METHODS
+    addProficiency(type, name) {
+        if (!abilityTypes.includes(type)) {
+            console.log("ERROR: ability type does not exists")
+            return;
+        }
+
+        if (abilities[type].includes(name)) {
+            console.log("ERROR: proficiency does not exists")
+            return;
+        }
+
+        if (this.proficiencies[type].includes(name)) {
+            return;
+        }
+
+        this.proficiencies[type].push(name)
+
+    }
+
+    removeProficiency(type, name) {
+        if (!abilityTypes.includes(type)) {
+            console.log("ERROR: ability type does not exists")
+            return;
+        }
+
+        if (abilities[type].includes(name)) {
+            console.log("ERROR: proficiency does not exists")
+            return;
+        }
+
+        if (this.proficiencies[type].includes(name)) {
+            this.proficiencies[type].splice(this.proficiencies[type].indexOf(name), 1)
+        }
+    }
+
+    addAttack(name, bonus, damage, type) {
+        this._character.attacks[name] = new Attack(name, bonus, damage, type)
+    }
+
+    removeAttack(name) {
+        delete this._character.attacks[name]
+    }
+
+    addLanguage(language) {
+        if (!this._character.languages.includes(language)) {
+            this._character.languages.push(language)
+        }
+    }
+
+    removeLanguage(language) {
+        if (this._character.languages.includes(language)) {
+            this._character.languages.splice(this._character.languages.indexOf(language), 1)
+        }
+    }
+
+// COMPUTED PROPERTIES
     get strengthModifier() {
         return this._calculateAbilityModifier(this.strength);
     }
@@ -203,8 +392,14 @@ export class Character {
         return `${this._character.stats.hitPoints.base} + ${this.constitutionModifier}`
     }
 
+    get initiativeModifier() {
+        return this._character.stats.initiative.base
+            + this._character.stats.initiative.misc
+            + this.dexterityModifier
+    }
 
-    // GLOBAL GETTERS AND SETTERS
+
+// GLOBAL GETTERS AND SETTERS
     get name() {
         return this._character.name;
     }
@@ -213,11 +408,15 @@ export class Character {
         this._character.name = value;
     }
 
-    get class() {
+    get class
+
+    () {
         return this._character.class;
     }
 
-    set class(value) {
+    set class
+
+    (value) {
         if (classes.includes(value)) {
             this._character.class = value;
         } else {
@@ -269,7 +468,7 @@ export class Character {
         this._character.experiencePoints = value;
     }
 
-    // ABILITIES GETTERS AND SETTERS
+// ABILITIES GETTERS AND SETTERS
     get proficiencyBonus() {
         return this._character.abilities.proficiencyBonus;
     }
@@ -338,14 +537,14 @@ export class Character {
         this._character.abilities.charisma = value;
     }
 
-    // LINKED ABILITIES GETTERS AND SETTERS
+// LINKED ABILITIES GETTERS AND SETTERS
     get passivePerception() {
         return this.wisdom
     }
 
-    // STATS GETTERS AND SETTERS
-    set armorClass(value) {
-        this._character.stats.armorClass.base = value
+// STATS GETTERS AND SETTERS
+    get armorClassBase() {
+        return this._character.stats.armorClass.base
     }
 
     set armorClassBase(value) {
@@ -364,12 +563,20 @@ export class Character {
         this._character.stats.armorClass.misc = value
     }
 
-    get initiative() {
-        return this._character.stats.initiative
+    get initiativeBase() {
+        return this._character.stats.initiative.base
     }
 
-    set initiative(value) {
-        this._character.stats.initiative = value
+    set initiativeBase(value) {
+        this._character.stats.initiative.base = value
+    }
+
+    get initiativeMisc() {
+        return this._character.stats.initiative.misc
+    }
+
+    set initiativeMisc(value) {
+        this._character.stats.initiative.misc = value
     }
 
     get speed() {
@@ -409,18 +616,22 @@ export class Character {
     }
 
     set hitDice(value) {
-        this._character.stats.hitDice = value
+        if (dice.includes(value)) {
+            this._character.stats.hitDice = value;
+        } else {
+            console.log("ERROR: Dice is not in the known list")
+        }
     }
 
     get deathSaves() {
         return this._character.stats.deathSaves
     }
 
-    set deathSavesSuccesses(value) {
+    set deathSaveSuccesses(value) {
         this._character.stats.deathSaves.successes = value
     }
 
-    set deathSavesFailures(value) {
+    set deathSaveFailures(value) {
         this._character.stats.deathSaves.failures = value
     }
 }
