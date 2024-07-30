@@ -32,6 +32,7 @@ const validToken = computed(() => {
     <RouterLink to="/">Go to Home</RouterLink>
     <RouterLink v-if="!validToken" to="/login">Go to login</RouterLink>
     <RouterLink v-else to="/logout">Go to logout</RouterLink>
+    <RouterLink to="/character/lz825uz4">Go to character</RouterLink>
 
   </nav>
   <br>

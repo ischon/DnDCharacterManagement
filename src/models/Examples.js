@@ -1,6 +1,6 @@
 import {Character} from "@/models/Character.js";
 
-export const exampleCharacter = new Character()
+export const exampleCharacter = new Character(undefined, "lz825uz4")
 // character personality
 exampleCharacter.name = "Owin Belling"
 exampleCharacter.age = 29
@@ -11,16 +11,16 @@ exampleCharacter.hairColor = "green/blueish"
 exampleCharacter.skinColor = "Light blue grayish"
 exampleCharacter.backstory = "" +
     "Owin is a simple gnome, of a humble bloodline. From child on he has been wondering how the world works. And tinkering with items to create all that he can imagine." +
-    "\n\n" +
+    "\\n\\n" +
     "At his 28th birthday he departed from his hometown to study the world and learn about other cultures and societies. " +
-    "\n\n" +
+    "\\n\\n" +
     "By now he has been traveling for almost two years. Enjoying each day where he seas something interesting happening" +
-    "\n\n" +
+    "\\n\\n" +
     "During his travels he sometimes helped at taverns to earn a meal and a sleeping place. Other times he looked for a temporary job to make means end." +
-    "\n\n" +
+    "\\n \n" +
     "By now he is searching for a new subject to put his focus on as he just finished a year of study focused on Modron customs"
 exampleCharacter.personalityTraits = "" +
-    "Loves to study the interaction between creatures\n" +
+    "Loves to study the interaction between creatures\\n" +
     "Often scribbles some things that seem to be nonsense the others"
 exampleCharacter.ideals = ""
 exampleCharacter.bonds = ""
@@ -30,7 +30,7 @@ exampleCharacter.class = "Artificer"
 exampleCharacter.level = 2
 exampleCharacter.race = "Rock Gnome"
 exampleCharacter.background = "Sage"
-exampleCharacter.alignment = "Chaotic Good"
+exampleCharacter.alignment = "Chaotic good"
 exampleCharacter.experiencePoints = "nvt"
 exampleCharacter.addLanguage("Common")
 exampleCharacter.addLanguage("Gnomish")
@@ -43,10 +43,10 @@ exampleCharacter.addFeature("Tinker")
 exampleCharacter.addFeature("Researcher")
 exampleCharacter.addFeature("Magical Tinkering")
 exampleCharacter.addFeature(
-    "Infuse Item (lv2)\n" +
-    "* enchanted arcane focus\n" +
-    "* Repeating shot\n" +
-    "* Replicate magical item (bag of holding)\n" +
+    "Infuse Item (lv2)\\n" +
+    "* enchanted arcane focus\\n" +
+    "* Repeating shot\\n" +
+    "* Replicate magical item (bag of holding)\\n" +
     "* Replicate magical item (alchemy jug)"
 )
 
@@ -70,7 +70,7 @@ exampleCharacter.armorClassBase = 14
 exampleCharacter.armorClassHasDexModifier = true
 exampleCharacter.speed = 25
 exampleCharacter.baseHitPoints = 13
-exampleCharacter.hitDice = "1d8"
+exampleCharacter.hitDice = "1D8"
 exampleCharacter.deathSaveSuccesses = 0
 exampleCharacter.deathSaveFailures = 0
 exampleCharacter.addAttack("light Crossbow", 4, "1d8", "Piercing")
@@ -86,6 +86,7 @@ exampleCharacter.addSpell(1, "Absorb Element")
 exampleCharacter.addPreparedSpell(1, "Absorb Element")
 exampleCharacter.addSpell(1, "Feather fall")
 exampleCharacter.addPreparedSpell(1, "Feather fall")
+exampleCharacter.addSpellSlot(1, 2)
 exampleCharacter.addEquipment("Light Crossbow", 1, 5)
 exampleCharacter.addEquipment("Bolts", 19, 0.075)
 exampleCharacter.addEquipment("Dagger", 1, 1)

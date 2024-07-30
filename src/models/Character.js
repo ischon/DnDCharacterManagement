@@ -76,13 +76,13 @@ export const abilities = {
 };
 
 export const dice = [
-    "D2",
-    "D4",
-    "D6",
-    "D8",
-    "D10",
-    "D12",
-    "D20",
+    "2",
+    "4",
+    "6",
+    "8",
+    "10",
+    "12",
+    "20",
 ]
 
 export class Attack {
@@ -104,16 +104,18 @@ export class Item {
 
 export class Character {
 
-    default() {
-        let id
-        if (this._character !== undefined) {
-            id = this._character.id;
+    default(id = undefined) {
+        let _id
+        if (id !== undefined) {
+            _id = id
+        } else if (this._character !== undefined) {
+            _id = this._character.id;
         } else {
-            id = Date.now().toString(36).slice(-8);
+            _id = Date.now().toString(36).slice(-8);
         }
 
         this._character = {
-            id: id,
+            id: _id,
             name: "",
             class: "",
             level: 0,
@@ -121,6 +123,17 @@ export class Character {
             background: "",
             alignment: "",
             experiencePoints: 0,
+            age: 0,
+            height: "",
+            weight: "",
+            eyeColor: "",
+            hairColor: "",
+            skinColor: "",
+            backstory: "",
+            personalityTraits: "",
+            ideals: "",
+            bonds: "",
+            flaws: "",
             abilities: {
                 proficiencyBonus: 0,
                 proficiencies: {
@@ -168,7 +181,7 @@ export class Character {
             spellcasting: {
                 cantrips: [],
                 spells: {
-                    level1: {
+                    1: {
                         prepared: [],
                         known:
                             [],
@@ -177,7 +190,7 @@ export class Character {
                         spellSlotsExpanded:
                             0
                     },
-                    level2: {
+                    2: {
                         prepared: [],
                         known:
                             [],
@@ -186,7 +199,7 @@ export class Character {
                         spellSlotsExpanded:
                             0
                     },
-                    level3: {
+                    3: {
                         prepared: [],
                         known:
                             [],
@@ -195,7 +208,7 @@ export class Character {
                         spellSlotsExpanded:
                             0
                     },
-                    level4: {
+                    4: {
                         prepared: [],
                         known:
                             [],
@@ -204,7 +217,7 @@ export class Character {
                         spellSlotsExpanded:
                             0
                     },
-                    level5: {
+                    5: {
                         prepared: [],
                         known:
                             [],
@@ -213,7 +226,7 @@ export class Character {
                         spellSlotsExpanded:
                             0
                     },
-                    level6: {
+                    6: {
                         prepared: [],
                         known:
                             [],
@@ -222,7 +235,7 @@ export class Character {
                         spellSlotsExpanded:
                             0
                     },
-                    level7: {
+                    7: {
                         prepared: [],
                         known:
                             [],
@@ -231,7 +244,7 @@ export class Character {
                         spellSlotsExpanded:
                             0
                     },
-                    level8: {
+                    8: {
                         prepared: [],
                         known:
                             [],
@@ -240,7 +253,7 @@ export class Character {
                         spellSlotsExpanded:
                             0
                     },
-                    level9: {
+                    9: {
                         prepared: [],
                         known:
                             [],
@@ -255,13 +268,18 @@ export class Character {
         }
     };
 
-    constructor(object = undefined) {
+    constructor(object = undefined, id = undefined) {
+        console.log("Character constructor")
+        console.log(object, "object")
         if (object === undefined) {
-            this.default();
+            this.default(id);
             return;
         }
 
         this._character = object;
+        if (id !== undefined) {
+            this._character.id = id
+        }
     }
 
 // CUSTOM LOGIC
@@ -284,6 +302,7 @@ export class Character {
         }
 
     }
+
     _calculateCoins(coins) {
         /*
         Coin	            CP      SP	    EP	    GP	    PP
@@ -319,8 +338,10 @@ export class Character {
             return;
         }
 
-        if (abilities[type].includes(name)) {
+        if (!abilities[type].includes(name)) {
             console.log("ERROR: proficiency does not exists")
+            console.log(abilities[type])
+            console.log(name)
             return;
         }
 
@@ -338,7 +359,7 @@ export class Character {
             return;
         }
 
-        if (abilities[type].includes(name)) {
+        if (!abilities[type].includes(name)) {
             console.log("ERROR: proficiency does not exists")
             return;
         }
@@ -402,6 +423,37 @@ export class Character {
         if (this._character.spellcasting.spells[level].prepared.includes(spell)) {
             this._character.spellcasting.spells[level].prepared.splice(this._character.spellcasting.spells[level].prepared.indexOf(spell), 1)
         }
+    }
+
+    addSpellSlot(level, slots = 1) {
+        this._character.spellcasting.spells[level].spellSlots += slots
+    }
+
+    removeSpellSlot(level, slots = 1) {
+        if (this._character.spellcasting.spells[level].spellSlots < slots) {
+            this._character.spellcasting.spells[level].spellSlots = 0
+            console.log("ERROR: not enough spell slots, reset to 0")
+            return
+        }
+        this._character.spellcasting.spells[level].spellSlots -= slots
+    }
+
+    restoreSpellSlots(level, slots = undefined) {
+        if (slots === undefined) {
+            this._character.spellcasting.spells[level].spellSlotsExpanded = 0
+            return
+        }
+        this._character.spellcasting.spells[level].spellSlotsExpanded += slots
+    }
+
+    useSpellSlot(level, slots = 1) {
+        if (
+            this._character.spellcasting.spells[level].spellSlotsExpanded < this._character.spellcasting.spells[level].spellSlots
+            && (this._character.spellcasting.spells[level].spellSlots - this._character.spellcasting.spells[level].spellSlotsExpanded) < slots
+        ) {
+            this._character.spellcasting.spells[level].spellSlotsExpanded += slots
+        }
+
     }
 
     addFeature(feature) {
@@ -522,6 +574,14 @@ export class Character {
 
 
 // GLOBAL GETTERS AND SETTERS
+    get id() {
+        return this._character.id;
+    }
+
+    get objectData() {
+        return JSON.parse(JSON.stringify(this._character));
+    }
+
     get name() {
         return this._character.name;
     }
@@ -589,6 +649,95 @@ export class Character {
     set experiencePoints(value) {
         this._character.experiencePoints = value;
     }
+
+    get age() {
+        return this._character.age;
+    }
+
+    set age(value) {
+        this._character.age = value;
+    }
+
+    get height() {
+        return this._character.height;
+    }
+
+    set height(value) {
+        this._character.height = value;
+    }
+
+    get weight() {
+        return this._character.weight;
+    }
+
+    set weight(value) {
+        this._character.weight = value;
+    }
+
+    get eyeColor() {
+        return this._character.eyeColor;
+    }
+
+    set eyeColor(value) {
+        this._character.eyeColor = value;
+    }
+
+    get hairColor() {
+        return this._character.hairColor;
+    }
+
+    set hairColor(value) {
+        this._character.hairColor = value;
+    }
+
+    get skinColor() {
+        return this._character.skinColor;
+    }
+
+    set skinColor(value) {
+        this._character.skinColor = value;
+    }
+
+    get backstory() {
+        return this._character.backstory;
+    }
+
+    set backstory(value) {
+        this._character.backstory = value;
+    }
+
+    get personalityTraits() {
+        return this._character.personalityTraits;
+    }
+
+    set personalityTraits(value) {
+        this._character.personalityTraits = value;
+    }
+
+    get ideals() {
+        return this._character.ideals;
+    }
+
+    set ideals(value) {
+        this._character.ideals = value;
+    }
+
+    get bonds() {
+        return this._character.bonds;
+    }
+
+    set bonds(value) {
+        this._character.bonds = value;
+    }
+
+    get flaws() {
+        return this._character.flaws;
+    }
+
+    set flaws(value) {
+        this._character.flaws = value;
+    }
+
 
 // ABILITIES GETTERS AND SETTERS
     get proficiencyBonus() {
@@ -734,11 +883,11 @@ export class Character {
     }
 
     set hitDice(value) {
-        if (dice.includes(value)) {
+        if (dice.includes(value.toLowerCase().split("d")[1])) {
             this._character.stats.hitDice = value;
-        } else {
-            console.log("ERROR: Dice is not in the known list")
+            return
         }
+        console.log("ERROR: Dice is not in the known list")
     }
 
     get deathSaves() {

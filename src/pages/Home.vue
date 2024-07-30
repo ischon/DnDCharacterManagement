@@ -34,7 +34,8 @@
 </script>
 
 <template>
-  <button @click="uploadToFirebase" content="hello world">Upload to firebase</button>
+<!--  <button @click="uploadToFirebase" content="hello world">Upload to firebase</button>-->
+  home
 </template>
 
 <style scoped>

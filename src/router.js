@@ -4,11 +4,14 @@ import LoginView from '@/pages/Login.vue'
 import HomeView from '@/pages/Home.vue'
 import {decodeCredential} from "vue3-google-login";
 import LogoutView from "@/pages/Logout.vue";
+import {Character} from "@/models/Character.js";
+import CharacterOverview from "@/pages/CharacterOverview.vue";
 
 const routes = [
-    { path: '/', component: HomeView, meta: {requireAuthentication: true} },
     { path: '/login', component: LoginView, meta: {requireAuthentication: false} },
     { path: '/logout', component: LogoutView, meta: {requireAuthentication: false} },
+    { path: '/', component: HomeView, meta: {requireAuthentication: true} },
+    { path: '/character/:id', component: CharacterOverview, meta: {requireAuthentication: true} },
 ]
 
 const router = createRouter({
