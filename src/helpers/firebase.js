@@ -49,7 +49,7 @@ export class FirebaseHandler {
         const credential = GoogleAuthProvider.credential(localStorage.getItem("Token"));
         await signInWithCredential(auth, credential);
         this.firebaseUser = getAuth().currentUser;
-        this.analytics = getAnalytics(app);
+        // this.analytics = getAnalytics(app);
         // Initialize Cloud Firestore and get a reference to the service
         this.db = getFirestore(app);
 

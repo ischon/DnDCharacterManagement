@@ -1,38 +1,32 @@
 <script setup>
 import router from "@/router.js";
 
-import { onBeforeMount } from 'vue'
+import { onBeforeMount, watch, computed, ref } from 'vue'
 // import {exampleCharacter} from "@/models/Examples.js";
 import {FirebaseHandler} from "@/helpers/firebase.js";
 
-const data = {
-  characterId: router.currentRoute.value.params.id,
-  characterData: {}
-}
-
+// setup() {
+const characterId = router.currentRoute.value.params.id
 const firebaseHandler = new FirebaseHandler()
-await firebaseHandler.setup()
-data.characterData = await firebaseHandler.getCharacterData(data.characterId)
-// firebaseHandler.setCharacterData(exampleCharacter.objectData)
-console.log(data.characterId)
-console.log(JSON.stringify(data.characterData))
+const characterData = ref(0)
+console.log(characterId)
 
-onBeforeMount(async ()=> {
-  console.log(data.characterId)
+onBeforeMount(async ()=>{
+  console.log("before mount")
+  await firebaseHandler.setup()
+  characterData.value = await firebaseHandler.getCharacterData(characterId)
+  console.log(characterId)
+  console.log(characterData.value)
 })
-
-
-
-
 </script>
 
 <template>
   character
   <br>
 
-  {{ data.characterId }}
+  {{ characterId }}
   <br>
-  {{ JSON.stringify(data.characterData) }}
+  {{ characterData.value }}
 
 </template>
 
