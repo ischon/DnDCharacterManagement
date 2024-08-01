@@ -5,6 +5,7 @@ import {getAnalytics} from "firebase/analytics";
 import {collection, addDoc} from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import {GoogleAuthProvider, signInWithCredential} from "@firebase/auth";
+import {Character} from "@/models/Character.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,6 +28,13 @@ const _firebaseConfig = {
 
 export class FirebaseHandler {
 
+    app = undefined;
+    auth = undefined;
+    credential = undefined;
+    firebaseUser = undefined;
+    analytics = undefined;
+    db = undefined;
+
     constructor() {
         this.paths = {
             user: "users/{uid}",
@@ -37,21 +45,21 @@ export class FirebaseHandler {
 
     async setup() {
         // Initialize Firebase
-        const app = initializeApp(_firebaseConfig);
+        this.app = initializeApp(_firebaseConfig);
 
         // const provider = new GoogleAuthProvider();
         // provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-        const auth = getAuth(app);
+        this.auth = getAuth(this.app);
         // auth.languageCode = 'it';
         // To apply the default browser preference instead of explicitly setting it.
-        auth.useDeviceLanguage();
+        this.auth.useDeviceLanguage();
 
-        const credential = GoogleAuthProvider.credential(localStorage.getItem("Token"));
-        await signInWithCredential(auth, credential);
+        this.credential = GoogleAuthProvider.credential(localStorage.getItem("Token"));
+        await signInWithCredential(this.auth, this.credential);
         this.firebaseUser = getAuth().currentUser;
         // this.analytics = getAnalytics(app);
         // Initialize Cloud Firestore and get a reference to the service
-        this.db = getFirestore(app);
+        this.db = getFirestore(this.app);
 
 
     }
@@ -101,7 +109,8 @@ export class FirebaseHandler {
             .replace("{uid}", this.firebaseUser.uid)
             .replace("{characterId}", characterId)
             .split("/");
-        return await this.getData(...path);
+        const data = await this.getData(...path)
+        return new Character(data);
     }
 }
 
