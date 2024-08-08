@@ -256,10 +256,23 @@
   p {
     font-size: 70%;
 
+    &.no-transform{
+      text-transform: none;
+    }
+
     &.value {
       align-content: center;
       font-size: 200%;
+
+      &.medium{
+        font-size: 150%;
+      }
     }
+
   }
 
+}
+
+.personality{
+  font-size: 70%;
 }

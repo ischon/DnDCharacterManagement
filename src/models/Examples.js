@@ -17,14 +17,22 @@ exampleCharacter.backstory = "" +
     "By now he has been traveling for almost two years. Enjoying each day where he seas something interesting happening" +
     "\\n\\n" +
     "During his travels he sometimes helped at taverns to earn a meal and a sleeping place. Other times he looked for a temporary job to make means end." +
-    "\\n \n" +
+    "\\n\\n" +
     "By now he is searching for a new subject to put his focus on as he just finished a year of study focused on Modron customs"
 exampleCharacter.personalityTraits = "" +
-    "Loves to study the interaction between creatures\\n" +
-    "Often scribbles some things that seem to be nonsense the others"
-exampleCharacter.ideals = ""
-exampleCharacter.bonds = ""
-exampleCharacter.flaws = ""
+    "Loves to study the interaction between creatures, often scribbles some things that seem to be nonsense the others" +
+    "\\n\\n" +
+    "I'm used to helping out those who aren't as smart as I am, and I patiently explain anything and everything to others."
+exampleCharacter.ideals = "" +
+    "Knowledge. The path to power and self-improvement is through knowledge." +
+    "\\n\\n" +
+    "Kindness. By understanding other creatures, we learn to understand ourselves."
+exampleCharacter.bonds = "" +
+    "I keep a journal where I record my observations about other creatures, and I would be devastated if I ever lost it. My entire life's work is in those pages." +
+    "\\n\\n" +
+    "I made a promise to a dying scholar to continue their research, and their notes are hidden within my journal. I’m determined to fulfill that promise, no matter the cost."
+exampleCharacter.flaws = "" +
+    "Most people scream and run when they see a demon. I stop and take notes on its anatomy."
 // character information
 exampleCharacter.class = "Artificer"
 exampleCharacter.level = 2
@@ -111,6 +119,12 @@ exampleCharacter.addEquipment("- Tinderbox", 1, 1)
 exampleCharacter.addEquipment("- Rations", 10, 2)
 exampleCharacter.addEquipment("- Waterskin (4 pints big)", 1, 5)
 exampleCharacter.addEquipment("- Hempen rope (feet)", 50, 0.2)
+exampleCharacter.addEquipment("Bottle of ink", 1, 0.0652)
+exampleCharacter.addEquipment("Quill", 1, 0)
+exampleCharacter.addEquipment("Small knife", 1, 0)
+exampleCharacter.addEquipment("Letter from a dead colleague posing a question you have not yet been able to answer https://t.ly/Ehh25", 1, 0)
+exampleCharacter.addEquipment("Set of common clothes", 1, 3)
+exampleCharacter.addEquipment("Belt pouch", 1, 1)
 exampleCharacter.addCoins(25, "GOLD")
 
 

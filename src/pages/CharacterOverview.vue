@@ -30,38 +30,38 @@ onBeforeMount(async () => {
   <div class="page container col"> <!-- Page 1 -->
     <div class="header container row flex-1"> <!-- Header -->
       <div class="container col flex-1"> <!-- Left Column -->
-        <div class="block top-item flex-1 no-border-top no-border-left" style="align-content: center">
-          <h1 class="content">{{ character.name }}</h1>
-          <h1 class="label">Character Name</h1>
+        <div class="container value-display col block flex-1 no-border-top no-border-left">
+          <p class="flex-1 value medium no-transform">{{ character.name }}</p>
+          <p>Character Name</p>
         </div>
       </div>
       <div class="container col flex-2"> <!-- Right Column -->
         <div class="container row">
-          <div class="block top-item flex-1  no-border-top">
-            <p class="content">{{ character.class }} {{ character.level }}</p>
-            <p class="label">Class & Level</p>
+          <div class="container block value-display col flex-1 no-border-top">
+            <p class="flex-1 value medium no-transform">{{ character.class }} lvl {{ character.level }}</p>
+            <p>Class & Level</p>
           </div>
-          <div class="block top-item flex-1  no-border-top">
-            <p class="content">{{ character.background }}</p>
-            <p class="label">Background</p>
+          <div class="container block value-display col flex-1 no-border-top">
+            <p class="flex-1 value medium no-transform">{{ character.background }}</p>
+            <p>Background</p>
           </div>
-          <div class="block top-item flex-1 no-border-right  no-border-top">
-            <p class="content">{{ firebaseHandler.firebaseUser.displayName }}</p>
-            <p class="label">Player Name</p>
+          <div class="container block value-display col flex-1 no-border-top no-border-right">
+            <p class="flex-1 value medium no-transform">{{ firebaseHandler.firebaseUser.displayName }}</p>
+            <p>Player Name</p>
           </div>
         </div>
         <div class="container row">
-          <div class="block top-item flex-1">
-            <p class="content">{{ character.race }}</p>
-            <p class="label">Race</p>
+          <div class="container block value-display col flex-1">
+            <p class="flex-1 value medium no-transform">{{ character.race }}</p>
+            <p>Race</p>
           </div>
-          <div class="block top-item flex-1">
-            <p class="content">{{ character.alignment }}</p>
-            <p class="label">Alignment</p>
+          <div class="container block value-display col flex-1">
+            <p class="flex-1 value medium no-transform">{{ character.alignment }}</p>
+            <p>Alignment</p>
           </div>
-          <div class="block top-item flex-1 no-border-right">
-            <p class="content">{{ character.experiencePoints }}</p>
-            <p class="label">Experience Points</p>
+          <div class="container block value-display col flex-1 no-border-right">
+            <p class="flex-1 value medium no-transform">{{ character.experiencePoints }}</p>
+            <p>Experience Points</p>
           </div>
         </div>
       </div>
@@ -172,49 +172,60 @@ onBeforeMount(async () => {
                   <p class="flex-1 value">{{ character.currentHitDice }}</p>
                   <p>Hit Dice</p>
                 </div>
-                <div class="block flex-1 container col">
-                  <div class="container row death-saves">
-                    <div class="label flex-2">successes</div>
-                    <div class="checks flex-1 container row">
-                      <div class="check" :class="{ selected: key < character.deathSaves.successes  }"
-                           v-for="(value, key) in new Array(3)"></div>
+                <div class="container block value-display col flex-1">
+                  <div class="container col flex-1 value">
+                    <div class="container row death-saves">
+                      <div class="label flex-2">successes</div>
+                      <div class="checks flex-1 container row">
+                        <div class="check" :class="{ selected: key < character.deathSaves.successes  }"
+                             v-for="(value, key) in new Array(3)"></div>
+                      </div>
+                    </div>
+                    <div class="container row death-saves">
+                      <div class="label flex-2">Failures</div>
+                      <div class="checks flex-1 container row">
+                        <div class="check" :class="{ selected: key < character.deathSaves.failures }"
+                             v-for="(value, key) in new Array(3)"></div>
+                      </div>
                     </div>
                   </div>
-                  <div class="container row death-saves">
-                    <div class="label flex-2">Failures</div>
-                    <div class="checks flex-1 container row">
-                      <div class="check" :class="{ selected: key < character.deathSaves.failures }"
-                           v-for="(value, key) in new Array(3)"></div>
-                    </div>
-                  </div>
-                  Death Saves
+                  <p>Death Saves</p>
                 </div>
               </div>
             </div>
             <div class="container col flex-1">
-              <div class="block no-border-right flex-1">
-                <p v-for="traits in character.personalityTraits.split('\\n')">
-                  {{ traits }}
-                </p>
-                Personality Traits
+              <div class="container block value-display col flex-1">
+                <div class="flex-1">
+                  <p class="no-transform" v-for="traits in character.personalityTraits.split('\\n')">
+                    {{ traits }}
+                  </p>
+                </div>
+                <p>Personality Traits</p>
               </div>
-              <div class="block no-border-right flex-1">
-                <p v-for="ideals in character.ideals.split('\\n')">
-                  {{ ideals }}
-                </p>
-                Ideals
+              <div class="container block value-display col flex-1">
+                <div class="flex-1">
+                  <p class="no-transform" v-for="ideals in character.ideals.split('\\n')">
+                    {{ ideals }}
+                  </p>
+                </div>
+                <p>Ideals</p>
               </div>
-              <div class="block no-border-right flex-1">
-                <p v-for="bonds in character.bonds.split('\\n')">
-                  {{ bonds }}
-                </p>
-                Bonds
+              <div class="container block value-display col flex-1">
+                <div class="flex-1">
+                  <p class="no-transform" v-for="bonds in character.bonds.split('\\n')">
+                    {{ bonds }}
+                  </p>
+                </div>
+                <p>Bonds</p>
               </div>
-              <div class="block no-border-right flex-1">
-                <p v-for="flaws in character.flaws.split('\\n')">
-                  {{ flaws }}
-                </p>
-                Flaws
+
+              <div class="container block value-display col flex-1">
+                <div class="flex-1">
+                  <p class="no-transform" v-for="flaws in character.flaws.split('\\n')">
+                    {{ flaws }}
+                  </p>
+                </div>
+                <p>Flaws</p>
               </div>
             </div>
           </div>
