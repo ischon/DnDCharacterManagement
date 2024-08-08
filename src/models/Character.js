@@ -533,21 +533,26 @@ export class Character {
         let result = {}
 
         for (const [key, value] of Object.entries(abilities)) {
-            result[key] = {}
+            result[key] = {
+                skills: {},
+                score: Reflect.get(this, `${key}`) ,
+                modifier:Reflect.get(this, `${key}Modifier`)
+            }
             value.forEach((item) => {
                 // console.log(key, item)
-                result[key][item] = {
+                result[key]["skills"][item] = {
                     value: Reflect.get(this, `${key}Modifier`),
                     proficient: false
                 }
 
                 if (this.proficiencies[key].includes(item)) {
                     // console.log("proficient", key, item)
-                    result[key][item].value += this.proficiencyBonus
-                    result[key][item].proficient = true
+                    result[key]["skills"][item].value += this.proficiencyBonus
+                    result[key]["skills"][item].proficient = true
                 }
             })
         }
+        console.log(result)
         return result
     }
 
