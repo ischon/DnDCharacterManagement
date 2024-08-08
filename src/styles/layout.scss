@@ -1,6 +1,6 @@
-@mixin space-children {
+@mixin space-children($margin-size: 0.5rem) {
   & > * {
-    margin: 0 0.5rem;
+    margin: 0 $margin-size;
   }
 
   & > *:first-child {
@@ -40,7 +40,7 @@
 
 .container {
   width: 100%;
-  height: 100%;
+  height: auto;
 
   display: flex;
   align-items: stretch;
@@ -87,12 +87,26 @@
 
 .block {
   padding: .5rem 0.25rem;
-  border-top: .25rem solid var(--color-border);
-  border-right: .25rem solid var(--color-border);
+  border-top: .125rem solid var(--color-border);
+  border-bottom: .125rem solid var(--color-border);
+  border-right: .125rem solid var(--color-border);
+  border-left: .125rem solid var(--color-border);
   background: var(--color-background-soft);
 
   &.no-border-right {
-    border-right: none;
+    border-right: .125rem solid transparent;
+  }
+
+  &.no-border-top {
+    border-top: .125rem solid transparent;
+  }
+
+  &.no-border-bottom {
+    border-bottom: .125rem solid transparent;
+  }
+
+  &.no-border-left {
+    border-left: .125rem solid transparent;
   }
 }
 
@@ -116,6 +130,8 @@
   }
 
   .label {
+    align-content: center;
+
     p {
       font-size: 70%;
     }
@@ -188,4 +204,62 @@
       }
     }
   }
+}
+
+.equipment-item {
+
+  @include space-children;
+
+  .count {
+    font-size: 70%;
+  }
+
+  .name {
+    text-transform: capitalize;
+    font-size: 70%;
+  }
+
+  .weight {
+    font-size: 70%;
+  }
+}
+
+.death-saves {
+  padding: .25rem;
+
+  .checks {
+    @include space-children(0.25rem);
+
+    .check {
+      width: 1rem;
+      height: 1rem;
+      background-color: var(--color-border);
+      border-radius: 999999px;
+
+      &.selected {
+        background: var(--vt-c-indigo);
+      }
+    }
+  }
+
+  .label {
+    text-transform: uppercase;
+    font-size: 70%;
+
+  }
+}
+
+.block.value-display {
+  align-items: center;
+  text-transform: uppercase;
+
+  p {
+    font-size: 70%;
+
+    &.value {
+      align-content: center;
+      font-size: 200%;
+    }
+  }
+
 }

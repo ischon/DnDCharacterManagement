@@ -70,7 +70,10 @@ exampleCharacter.armorClassBase = 14
 exampleCharacter.armorClassHasDexModifier = true
 exampleCharacter.speed = 25
 exampleCharacter.baseHitPoints = 13
-exampleCharacter.hitDice = "1D8"
+exampleCharacter.currentHitPoints = exampleCharacter.hitPointMaximumValue
+
+exampleCharacter.hitDice = "2D8"
+exampleCharacter.currentHitDice = 2
 exampleCharacter.deathSaveSuccesses = 0
 exampleCharacter.deathSaveFailures = 0
 exampleCharacter.addAttack("light Crossbow", 4, "1d8", "Piercing")
@@ -93,23 +96,22 @@ exampleCharacter.addEquipment("Dagger", 1, 1)
 exampleCharacter.addEquipment("Quarterstaff", 1, 4)
 exampleCharacter.addEquipment("Scale Mail", 1, 45)
 exampleCharacter.addEquipment("Thieves' Tools", 1, 1)
-exampleCharacter.addEquipment("Thieves' Tools - small file", 1, 0)
-exampleCharacter.addEquipment("Thieves' Tools - set of lock picks", 1, 0)
-exampleCharacter.addEquipment("Thieves' Tools - small mirror", 1, 0)
-exampleCharacter.addEquipment("Thieves' Tools - set of narrow-bladed scissors", 1, 0)
-exampleCharacter.addEquipment("Thieves' Tools - pair of pliers", 1, 0)
+exampleCharacter.addEquipment("- small file", 1, 0)
+exampleCharacter.addEquipment("- set of lock picks", 1, 0)
+exampleCharacter.addEquipment("- small mirror", 1, 0)
+exampleCharacter.addEquipment("- set of narrow-bladed scissors", 1, 0)
+exampleCharacter.addEquipment("- pair of pliers", 1, 0)
 exampleCharacter.addEquipment("Dungeoneer's Pack", 1, 0)
-exampleCharacter.addEquipment("Dungeoneer's Pack - Backpack", 1, 5)
-exampleCharacter.addEquipment("Dungeoneer's Pack - Crowbar", 1, 5)
-exampleCharacter.addEquipment("Dungeoneer's Pack - Hammer", 1, 3)
-exampleCharacter.addEquipment("Dungeoneer's Pack - Pitons", 10, 0.25)
-exampleCharacter.addEquipment("Dungeoneer's Pack - Torches", 10, 1)
-exampleCharacter.addEquipment("Dungeoneer's Pack - Tinderbox", 1, 1)
-exampleCharacter.addEquipment("Dungeoneer's Pack - Rations", 10, 2)
-exampleCharacter.addEquipment("Dungeoneer's Pack - Waterskin (4 pints big)", 1, 5)
-exampleCharacter.addEquipment("Dungeoneer's Pack - Hempen rope", 50, 0.2)
-exampleCharacter.addCoins(9, "GOLD")
-exampleCharacter.addCoins(5, "SILVER") // TODO: Validate that this is correct
+exampleCharacter.addEquipment("- Backpack", 1, 5)
+exampleCharacter.addEquipment("- Crowbar", 1, 5)
+exampleCharacter.addEquipment("- Hammer", 1, 3)
+exampleCharacter.addEquipment("- Pitons", 10, 0.25)
+exampleCharacter.addEquipment("- Torches", 10, 1)
+exampleCharacter.addEquipment("- Tinderbox", 1, 1)
+exampleCharacter.addEquipment("- Rations", 10, 2)
+exampleCharacter.addEquipment("- Waterskin (4 pints big)", 1, 5)
+exampleCharacter.addEquipment("- Hempen rope (feet)", 50, 0.2)
+exampleCharacter.addCoins(25, "GOLD")
 
 
 

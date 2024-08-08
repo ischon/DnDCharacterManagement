@@ -168,7 +168,11 @@ export class Character {
                     current: 0,
                     temp: 0
                 },
-                hitDice: "D8",
+                hitDice: {
+                    die: "D8",
+                    total: 1,
+                    current: 1
+                },
                 deathSaves: {
                     successes: 0,
                     failures: 0
@@ -305,14 +309,14 @@ export class Character {
 
     _calculateCoins(coins) {
         /*
-        Coin	            CP      SP	    EP	    GP	    PP
+        Coin	                CP      SP	    EP	    GP	    PP
         Copper Piece    (cp)    1       1/10    1/50    1/100	1/1,000
         Silver Piece    (sp)    10      1       1/5	    1/10    1/100
         Electrum Piece  (ep)    50      5       1       1/2     1/20
         Gold Piece      (gp)    100     10      2       1       1/10
         Platinum Piece  (pp)    1,000   100     20      10      1
          */
-        let cp = coins.copy()
+        let cp = coins
         let pp = Math.floor(cp / 1000)
         cp -= pp * 1000
         let gp = Math.floor(cp / 100)
@@ -377,6 +381,11 @@ export class Character {
         delete this._character.attacks[name]
     }
 
+    get attacks() {
+        // TODO: move to correct position
+        return this._character.attacks
+    }
+
     addLanguage(language) {
         if (!this._character.languages.includes(language)) {
             this._character.languages.push(language)
@@ -389,6 +398,10 @@ export class Character {
         }
     }
 
+    get languages() {
+        return this._character.languages
+    }
+
     addCantrip(cantrip) {
         if (!this._character.spellcasting.cantrips.includes(cantrip)) {
             this._character.spellcasting.cantrips.push(cantrip)
@@ -399,6 +412,19 @@ export class Character {
         if (this._character.spellcasting.cantrips.includes(cantrip)) {
             this._character.spellcasting.cantrips.splice(this._character.spellcasting.cantrips.indexOf(cantrip), 1)
         }
+    }
+
+    get usableSpells() {
+        let result = {
+            cantrips: [],
+            spells: {}
+        }
+        result['cantrips'] = this._character.spellcasting.cantrips
+        // prepaired spells
+        for (const [key, value] of Object.entries(this._character.spellcasting.spells)) {
+            result['spells'][key] = value.prepared
+        }
+        return result
     }
 
     addSpell(level, spell) {
@@ -468,6 +494,10 @@ export class Character {
         }
     }
 
+    get features() {
+        return this._character.features
+    }
+
     addEquipment(name, count, weight) {
         if (this._character.equipment[name] !== undefined) {
             this._character.equipment[name].count += count
@@ -489,6 +519,10 @@ export class Character {
         delete this._character.equipment[name]
     }
 
+    get equipment() {
+        return this._character.equipment
+    }
+
     addCoins(coins, type) {
         let cp = this._toCopperCoins(coins, type)
         this._character.coins += cp
@@ -501,6 +535,10 @@ export class Character {
             return
         }
         this._character.coins -= cp
+    }
+
+    get coins() {
+        return this._calculateCoins(this._character.coins)
     }
 
 // COMPUTED PROPERTIES
@@ -535,8 +573,8 @@ export class Character {
         for (const [key, value] of Object.entries(abilities)) {
             result[key] = {
                 skills: {},
-                score: Reflect.get(this, `${key}`) ,
-                modifier:Reflect.get(this, `${key}Modifier`)
+                score: Reflect.get(this, `${key}`),
+                modifier: Reflect.get(this, `${key}Modifier`)
             }
             value.forEach((item) => {
                 // console.log(key, item)
@@ -570,6 +608,10 @@ export class Character {
     get hitPointMaximum() {
         // https://5ehpcalculator.com/
         return `${this._character.stats.hitPoints.base} + ${this.constitutionModifier}`
+    }
+
+    get hitPointMaximumValue() {
+        return this.baseHitPoints + this.constitutionModifier
     }
 
     get initiativeModifier() {
@@ -884,15 +926,40 @@ export class Character {
     }
 
     get hitDice() {
-        return this._character.stats.hitDice
+        return this._character.stats.hitDice.die
     }
 
     set hitDice(value) {
-        if (dice.includes(value.toLowerCase().split("d")[1])) {
-            this._character.stats.hitDice = value;
+        const die = value.toLowerCase().split("d")
+        if (die.length === 2 && dice.includes(die[1]) && Number.isInteger(Number(die[0]))) {
+            this._character.stats.hitDice.die = die[1];
+            this._character.stats.hitDice.total = Number(die[0]);
             return
         }
         console.log("ERROR: Dice is not in the known list")
+    }
+
+    get maxHitDice() {
+        return this._character.stats.hitDice.total
+    }
+
+    set maxHitDice(value) {
+        if (Number.isInteger(value)) {
+            this._character.stats.hitDice.total = value
+        }
+    }
+
+    get currentHitDice() {
+        return this._character.stats.hitDice.current  + 'D' + this._character.stats.hitDice.die
+    }
+
+    set currentHitDice(value) {
+        value = Number(value)
+        if (Number.isInteger(value) && value <= this._character.stats.hitDice.total) {
+            this._character.stats.hitDice.current = value
+            return;
+        }
+        console.log("ERROR: not enough hit dice")
     }
 
     get deathSaves() {
