@@ -6,25 +6,9 @@ import {collection, addDoc} from "firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 import {GoogleAuthProvider, signInWithCredential} from "@firebase/auth";
 import {Character} from "@/models/Character.js";
+import _firebaseConfig from "@/firebase-settings.json";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-
-const _firebaseConfig = {
-    apiKey: "AIzaSyCGqv0Va9Zsc1UQQiYZ-dV6F9yy2ADTptU",
-    authDomain: "dnd-character-management.firebaseapp.com",
-    projectId: "dnd-character-management",
-    storageBucket: "dnd-character-management.appspot.com",
-    messagingSenderId: "640359260149",
-    appId: "1:640359260149:web:71a021fb14eb388535cabc",
-    measurementId: "G-0327ZHFLB7"
-};
-
-
-
 
 export class FirebaseHandler {
 
