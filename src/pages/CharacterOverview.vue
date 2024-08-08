@@ -78,7 +78,6 @@ onBeforeMount(async () => {
                 Proficiency Bonus
               </p>
             </div>
-            <!--PROFICIENCY BONUS-->
           </div>
           <div class="container flex-1 block row labeled-row">
             <div class="value flex-1">
@@ -91,19 +90,16 @@ onBeforeMount(async () => {
                 Inspiration
               </p>
             </div>
-            <!--INSPIRATION-->
           </div>
           <div v-for="(ability, ability_name) in character.abilities" class="container row flex-2 block ability-block">
             <!--ABILITY-->
             <div class="container ability col flex-1">
               <div class="ability-modifier flex-1">
-                <!--MODIFIER-->
                 <p class="content no-label">
                   {{ ability.modifier }}
                 </p>
               </div>
               <div class="ability-score flex-1">
-                <!--SCORE-->
                 <p class="ability-score-value">
                   {{ ability.score }}
                 </p>
@@ -116,8 +112,12 @@ onBeforeMount(async () => {
               <!--SKILLS-->
               <div v-for="(skill_stats, skill_name) in ability.skills" class="skill-row flex-1">
                 <div class="proficient" :class="{ selected: skill_stats.proficient }"></div>
-                <div class="skill-score">{{ (skill_stats.value > 0) ? '+' : '' }}{{ skill_stats.value }}</div>
-                <div class="skill-name">{{ skill_name }}</div>
+                <div class="skill-score">
+                  {{ (skill_stats.value > 0) ? '+' : '' }}{{ skill_stats.value }}
+                </div>
+                <div class="skill-name">
+                  {{ skill_name }}
+                </div>
               </div>
             </div>
           </div>
@@ -132,7 +132,6 @@ onBeforeMount(async () => {
                 Passive Wisdom (Perception)
               </p>
             </div>
-            <!--PASSIVE WISDOM (PERCEPTION)-->
           </div>
         </div>
         <div class="container col flex-2">
@@ -141,52 +140,51 @@ onBeforeMount(async () => {
               <!--STATS-->
               <div class="container row flex-1">
                 <div class="block flex-1">
-                  <!--ARMOR CLASS-->
-
+                  Armor Class
                 </div>
                 <div class="block flex-1">
-                  <!--INITIATIVE-->
+                  Initiative
                 </div>
                 <div class="block flex-1">
-                  <!--SPEED-->
+                  Speed
                 </div>
               </div>
               <div class="container block row flex-1">
-                <!--CURRENT HIT POINTS-->
+                Current Hit Points
               </div>
               <div class="container block row flex-1">
-                <!--TEMPORARY HIT POINTS-->
+                Temporary Hit Points
               </div>
               <div class="container row flex-1">
                 <div class="block flex-1">
-                  <!--HIT DICE-->
+                  Hit Dice
                 </div>
                 <div class="block flex-1">
-                  <!--DEATH SAVES-->
+                  Death Saves
                 </div>
               </div>
             </div>
             <div class="container col flex-1">
               <div class="block no-border-right flex-1">
-                <!--PERSONALITY TRAITS-->
+                Personality Traits
               </div>
               <div class="block no-border-right flex-1">
-                <!--IDEALS-->
+                Ideals
               </div>
               <div class="block no-border-right flex-1">
-                <!--BONDS-->
+                Bonds
               </div>
               <div class="block no-border-right flex-1">
-                <!--FLAWS-->
+                Flaws
               </div>
             </div>
           </div>
           <div class="container row flex-1">
             <div class="container block col flex-1">
-              <!--ATTACKS & SPELLCASTING-->
+              Attacks & Spellcasting
             </div>
             <div class="container block no-border-right col flex-1">
-              <!--FEATURES & TRAITS-->
+              Features & Traits
             </div>
           </div>
         </div>
@@ -195,12 +193,12 @@ onBeforeMount(async () => {
       <div class="container row flex-1">
         <div class="container row flex-1">
           <div class="block container">
-            <!--OTHER PROFICIENCIES & LANGUAGES-->
+            Other Proficiencies & Languages
           </div>
         </div>
         <div class="container row flex-2">
           <div class="block no-border-right container">
-            <!--EQUIPMENT (including coin) & CHARACTER NOTES-->
+            Equipment (including coin) & Character Notes
           </div>
         </div>
       </div>
