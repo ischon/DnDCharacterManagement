@@ -253,8 +253,16 @@
   align-items: center;
   text-transform: uppercase;
 
+  &.align-start {
+    align-items: start;
+  }
+
   p {
     font-size: 70%;
+
+    &.align-center{
+        align-self: center;
+    }
 
     &.no-transform{
       text-transform: none;
@@ -271,8 +279,4 @@
 
   }
 
-}
-
-.personality{
-  font-size: 70%;
 }

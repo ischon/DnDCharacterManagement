@@ -36,6 +36,16 @@ export const abilityTypes = [
     "charisma"
 ]
 
+export const proficiencyTypes = [
+    "strength",
+    "dexterity",
+    "constitution",
+    "intelligence",
+    "wisdom",
+    "charisma",
+    "items"
+]
+
 export const abilities = {
     strength: [
         "Saving Throws",
@@ -142,7 +152,8 @@ export class Character {
                     constitution: [],
                     intelligence: [],
                     wisdom: [],
-                    charisma: []
+                    charisma: [],
+                    items: []
                 },
                 inspiration: 0,
                 strength: 10,
@@ -337,12 +348,12 @@ export class Character {
 
 // METHODS
     addProficiency(type, name) {
-        if (!abilityTypes.includes(type)) {
+        if (!proficiencyTypes.includes(type)) {
             console.log("ERROR: ability type does not exists")
             return;
         }
 
-        if (!abilities[type].includes(name)) {
+        if (type !== 'items' && !abilities[type].includes(name)) {
             console.log("ERROR: proficiency does not exists")
             console.log(abilities[type])
             console.log(name)

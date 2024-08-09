@@ -230,30 +230,43 @@ onBeforeMount(async () => {
             </div>
           </div>
           <div class="container row flex-1">
-            <div class="container block col flex-1">
-              <div v-for="row in character.attacks">
-                attacks: {{ row.name }}
-              </div>
-              <div v-for="row in character.usableSpells.cantrips">
-                cantrips: {{ row }}
-              </div>
-              <div v-for="(spells, lvl) in character.usableSpells.spells">
-                <div v-if="spells.length > 0">
-
-                  <div v-for="spell in spells">
-                    spell {{ lvl }}: {{ spell }}
-                  </div>
+            <div class="container block value-display align-start col flex-1">
+              <div class="container col">
+                <div class="container row">
+                  <p class="flex-2">Weapon</p>
+                  <p class="flex-1">Damage</p>
+                  <p class="flex-1">Damage type</p>
+                </div>
+                <div class="container row" v-for="row in character.attacks">
+                  <p class="flex-2">{{ row.name }}</p>
+                  <p class="flex-1">{{ row.damage }} {{ row.bonus !== 0 ? '+ ' + row.bonus : '' }}</p>
+                  <p class="flex-1">{{ row.type }}</p>
                 </div>
               </div>
-              Attacks & Spellcasting
-            </div>
-            <div class="container block no-border-right col flex-1">
-              <div class="feature" v-for="feature in character.features">
-                <p v-for="feat in feature.split('\\n')">
-                  {{ feat }}
+              <br />
+              <p>Cantrips</p>
+              <p v-for="row in character.usableSpells.cantrips">
+                - {{ row }}
+              </p>
+              <br />
+              <p>Spells</p>
+              <div class="flex-1" v-for="(spells, lvl) in character.usableSpells.spells">
+                <p v-if="spells.length > 0">Level {{ lvl }}</p>
+                <p v-if="spells.length > 0" v-for="spell in spells">
+                  - {{ spell }}
                 </p>
               </div>
-              Features & Traits
+              <p class="align-center">Attacks & Spellcasting</p>
+            </div>
+            <div class="container value-display align-start block no-border-right col flex-1">
+              <div class="flex-1">
+                <div v-for="feature in character.features">
+                  <p v-for="feat in feature.split('\\n')">
+                    {{ feat }}
+                  </p>
+                </div>
+              </div>
+              <p class="align-center">Features & Traits</p>
             </div>
           </div>
         </div>
@@ -261,11 +274,23 @@ onBeforeMount(async () => {
       </div>
       <div class="container row flex-1">
         <div class="container row flex-1">
-          <div class="block container col no-border-left no-border-bottom">
-            <div class="language" v-for="language in character.languages">
-              {{ language }}
+          <div class="block container value-display col no-border-left no-border-bottom align-start">
+            <div class="flex-1">
+              <p>Languages</p>
+              <p v-for="language in character.languages">
+                - {{ language }}
+              </p>
+              <br />
+              <p>Proficiencies</p>
+              <div v-for="(items, category) in character.proficiencies">
+                <p v-if="items.length > 0">{{category}}</p>
+                <p v-if="items.length > 0" v-for="proficiency in items">
+                  - {{proficiency}}
+                </p>
+                <br v-if="items.length > 0" />
+              </div>
             </div>
-            Other Proficiencies & Languages
+            <p class="align-center">Other Proficiencies & Languages</p>
           </div>
         </div>
         <div class="container block col flex-2 no-border-right no-border-bottom">

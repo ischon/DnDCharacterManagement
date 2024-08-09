@@ -40,14 +40,14 @@ exampleCharacter.race = "Rock Gnome"
 exampleCharacter.background = "Sage"
 exampleCharacter.alignment = "Chaotic good"
 exampleCharacter.experiencePoints = "nvt"
-exampleCharacter.addLanguage("Common")
-exampleCharacter.addLanguage("Gnomish")
-exampleCharacter.addLanguage("Modron")
-exampleCharacter.addLanguage("...")
-exampleCharacter.addFeature("Dark vision")
-exampleCharacter.addFeature("Gnome Cunning")
-exampleCharacter.addFeature("Artificer's Lore")
-exampleCharacter.addFeature("Tinker")
+exampleCharacter.addLanguage("Common") // https://www.dndbeyond.com/races/18-gnome#GnomeTraits// https://forgottenrealms.fandom.com/wiki/Common
+exampleCharacter.addLanguage("Gnomish (Dwarvish script)") // https://www.dndbeyond.com/races/18-gnome#GnomeTraits // https://forgottenrealms.fandom.com/wiki/Gnome_language
+exampleCharacter.addLanguage("Modron") // study // https://www.dndbeyond.com/backgrounds/11-sage // https://forgottenrealms.fandom.com/wiki/Modron_language
+exampleCharacter.addLanguage("...") // ... // https://www.dndbeyond.com/backgrounds/11-sage // ...
+exampleCharacter.addFeature("Dark vision") // https://www.dndbeyond.com/races/18-gnome#GnomeTraits
+exampleCharacter.addFeature("Gnome Cunning") // https://www.dndbeyond.com/races/18-gnome#GnomeTraits
+exampleCharacter.addFeature("Artificer's Lore") // https://www.dndbeyond.com/races/18-gnome#RockGnome
+exampleCharacter.addFeature("Tinker") // https://www.dndbeyond.com/races/18-gnome#RockGnome
 exampleCharacter.addFeature("Researcher")
 exampleCharacter.addFeature("Magical Tinkering")
 exampleCharacter.addFeature(
@@ -71,9 +71,10 @@ exampleCharacter.proficiencyBonus = 2
 exampleCharacter.addProficiency("dexterity", "Sleight of Hand")
 exampleCharacter.addProficiency("constitution", "Saving Throws")
 exampleCharacter.addProficiency("intelligence", "Saving Throws")
-exampleCharacter.addProficiency("intelligence", "Arcana")
-exampleCharacter.addProficiency("intelligence", "History")
+exampleCharacter.addProficiency("intelligence", "Arcana") // https://www.dndbeyond.com/backgrounds/11-sage
+exampleCharacter.addProficiency("intelligence", "History") // https://www.dndbeyond.com/backgrounds/11-sage
 exampleCharacter.addProficiency("intelligence", "Investigation")
+exampleCharacter.addProficiency("items", "artisan’s tools (tinker’s tools)")
 exampleCharacter.armorClassBase = 14
 exampleCharacter.armorClassHasDexModifier = true
 exampleCharacter.speed = 25
@@ -86,7 +87,7 @@ exampleCharacter.deathSaveSuccesses = 0
 exampleCharacter.deathSaveFailures = 0
 exampleCharacter.addAttack("light Crossbow", 4, "1d8", "Piercing")
 exampleCharacter.addAttack("Dagger", 4, "1d4", "Piercing")
-exampleCharacter.addAttack("Quarterstaff", 0, "1d6", "Bludgeoning")
+exampleCharacter.addAttack("Quarterstaff", 0, "1d6 (1d8)", "Bludgeoning")
 exampleCharacter.addCantrip("Mending")
 exampleCharacter.addCantrip("Guidance")
 exampleCharacter.addSpell(1, "Tasha's caustic brew")
@@ -125,6 +126,8 @@ exampleCharacter.addEquipment("Small knife", 1, 0)
 exampleCharacter.addEquipment("Letter from a dead colleague posing a question you have not yet been able to answer https://t.ly/Ehh25", 1, 0)
 exampleCharacter.addEquipment("Set of common clothes", 1, 3)
 exampleCharacter.addEquipment("Belt pouch", 1, 1)
+// https://www.dndbeyond.com/equipment/7-book as a journal mentioned in the backstory
+exampleCharacter.addEquipment("Book (Journal)", 1, 5)
 exampleCharacter.addCoins(25, "GOLD")
 
 
