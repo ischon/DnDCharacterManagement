@@ -1,10 +1,10 @@
 import {initializeApp} from "firebase/app";
 import {getDoc, getFirestore} from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import {getAuth} from "firebase/auth";
 import {getAnalytics} from "firebase/analytics";
-import {collection, addDoc} from "firebase/firestore";
-import { doc, setDoc } from "firebase/firestore";
+import {doc, setDoc} from "firebase/firestore";
 import {GoogleAuthProvider, signInWithCredential} from "@firebase/auth";
+import {getStorage, ref, uploadString, uploadBytes, getDownloadURL} from "firebase/storage";
 import {Character} from "@/models/Character.js";
 import _firebaseConfig from "@/firebase-settings.json";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -18,6 +18,7 @@ export class FirebaseHandler {
     firebaseUser = undefined;
     analytics = undefined;
     db = undefined;
+    storage = undefined;
 
     constructor() {
         this.paths = {
@@ -41,9 +42,10 @@ export class FirebaseHandler {
         this.credential = GoogleAuthProvider.credential(localStorage.getItem("Token"));
         await signInWithCredential(this.auth, this.credential);
         this.firebaseUser = getAuth().currentUser;
-        // this.analytics = getAnalytics(app);
+        this.analytics = getAnalytics(this.app);
         // Initialize Cloud Firestore and get a reference to the service
         this.db = getFirestore(this.app);
+        this.storage = getStorage(this.app);
 
 
     }
@@ -54,13 +56,8 @@ export class FirebaseHandler {
     }
 
     async setData(data, path, ...pathSegments) {
-        console.log("path", path);
-        console.log("pathSegments", pathSegments);
         // return
-        await setDoc(
-            doc(this.db, path, ...pathSegments),
-            data
-        );
+        await setDoc(doc(this.db, path, ...pathSegments), data);
     }
 
     async getData(path, ...pathSegments) {
@@ -82,19 +79,61 @@ export class FirebaseHandler {
                 .replace("{characterId}", object.id)
                 .split("/");
             await this.setData(object, ...path);
-            // console.log("Document written with ID: ", docRef.id);
         } catch (e) {
             console.error("Error adding document: ", e);
         }
     }
 
     async getCharacterData(characterId) {
-        let path = this.paths["character"]
+        const path = this.paths["character"]
             .replace("{uid}", this.firebaseUser.uid)
             .replace("{characterId}", characterId)
             .split("/");
         const data = await this.getData(...path)
         return new Character(data);
+    }
+
+    async getCharacterImage(characterId) {
+        const path = this.paths["character"]
+            .replace("{uid}", this.firebaseUser.uid)
+            .replace("{characterId}", characterId)
+        const storageRef = ref(this.storage, path);
+        return await getDownloadURL(storageRef).catch((error) => {
+            console.log("Error getting document:", error);
+            // A full list of error codes is available at
+            // https://firebase.google.com/docs/storage/web/handle-errors
+            switch (error.code) {
+                case 'storage/object-not-found':
+                    // File doesn't exist
+                    break;
+                case 'storage/unauthorized':
+                    // User doesn't have permission to access the object
+                    break;
+                case 'storage/canceled':
+                    // User canceled the upload
+                    break;
+                case 'storage/unknown':
+                    // Unknown error occurred, inspect the server response
+                    break;
+            }
+        });
+    }
+
+    async setCharacterImage(characterId, file) {
+        const path = this.paths["character"]
+            .replace("{uid}", this.firebaseUser.uid)
+            .replace("{characterId}", characterId)
+        console.log("path", path);
+        const storageRef = ref(this.storage, path);
+        // await storageRef.put(file);
+        console.log(storageRef)
+        await uploadBytes(storageRef, file).then((snapshot) => {
+            console.log(snapshot);
+            console.log('Uploaded a blob or file!');
+        }).catch((error) => {
+            console.error("Error adding document: ", error);
+        });
+        // await uploadString(storageRef, data, 'data_url');
     }
 }
 

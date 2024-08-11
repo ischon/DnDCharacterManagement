@@ -4,8 +4,8 @@ export const exampleCharacter = new Character(undefined, "lz825uz4")
 // character personality
 exampleCharacter.name = "Owin Belling"
 exampleCharacter.age = 29
-exampleCharacter.height = "0.99 m"
-exampleCharacter.weight = "25 kg"
+exampleCharacter.height = 4
+exampleCharacter.weight = 44
 exampleCharacter.eyeColor = "Blue"
 exampleCharacter.hairColor = "green/blueish"
 exampleCharacter.skinColor = "Light blue grayish"
@@ -33,6 +33,19 @@ exampleCharacter.bonds = "" +
     "I made a promise to a dying scholar to continue their research, and their notes are hidden within my journal. I’m determined to fulfill that promise, no matter the cost."
 exampleCharacter.flaws = "" +
     "Most people scream and run when they see a demon. I stop and take notes on its anatomy."
+exampleCharacter.allies = "" +
+    "Allies: \\n" +
+    "- Captain ... - is a captain working for the Thurnborrow Trading Company. Has offered to help if ever needing to travel by ship\\n" +
+    "\\n" +
+    "Companies: \\n" +
+    "- Thurnborrow Trading Company - Big company at the docks in Babble brook\\n" +
+    "\\n" +
+    "Enemies: \\n" +
+    "\\n" +
+    "Passerby's: \\n" +
+    "Dotty - Assistant at the Thurnborrow Trading Company\\n" +
+    "Oswald Thurnborrow - Owner of the Thurnborrow Trading Company\\n"
+
 // character information
 exampleCharacter.class = "Artificer" // // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 exampleCharacter.level = 2
@@ -68,11 +81,11 @@ exampleCharacter.charisma = 10
 exampleCharacter.proficiencyBonus = 2
 exampleCharacter.inspiration = 0
 exampleCharacter.proficiencyBonus = 2
-exampleCharacter.addProficiency("intelligence", "Arcana") // https://www.dndbeyond.com/backgrounds/11-sage
-exampleCharacter.addProficiency("intelligence", "History") // https://www.dndbeyond.com/backgrounds/11-sage
 exampleCharacter.addProficiency("constitution", "Saving Throws") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 exampleCharacter.addProficiency("intelligence", "Saving Throws") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 exampleCharacter.addProficiency("intelligence", "Investigation") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
+exampleCharacter.addProficiency("intelligence", "Arcana") // https://www.dndbeyond.com/backgrounds/11-sage
+exampleCharacter.addProficiency("intelligence", "History") // https://www.dndbeyond.com/backgrounds/11-sage
 exampleCharacter.addProficiency("dexterity", "Sleight of Hand")  // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 exampleCharacter.addProficiency("items", "Armor: Light armor, medium armor, shields") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 exampleCharacter.addProficiency("items", "Weapons: Simple weapons") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
@@ -91,6 +104,8 @@ exampleCharacter.deathSaveFailures = 0
 exampleCharacter.addAttack("light Crossbow", 4, "1d8", "Piercing") // https://roll20.net/compendium/dnd5e/Light%20Crossbow#content
 exampleCharacter.addAttack("Dagger", 4, "1d4", "Piercing") // https://roll20.net/compendium/dnd5e/Items:Dagger/#h-Dagger
 exampleCharacter.addAttack("Quarterstaff", 0, "1d6 (1d8)", "Bludgeoning") //https://roll20.net/compendium/dnd5e/Items:Quarterstaff/#h-Quarterstaff
+exampleCharacter.spellcastingClass = "Artificer"
+exampleCharacter.spellcastingAbility = "intelligence"
 exampleCharacter.addCantrip("Mending")
 exampleCharacter.addCantrip("Guidance")
 exampleCharacter.addSpell(1, "Tasha's caustic brew")
@@ -108,11 +123,11 @@ exampleCharacter.addEquipment("Dagger", 1, 1) // https://drive.google.com/file/d
 exampleCharacter.addEquipment("Quarterstaff", 1, 4) // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 exampleCharacter.addEquipment("Scale Mail", 1, 45) // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 exampleCharacter.addEquipment("Thieves' Tools", 1, 1) // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
-exampleCharacter.addEquipment("- small file", 1, 0)
-exampleCharacter.addEquipment("- set of lock picks", 1, 0)
-exampleCharacter.addEquipment("- small mirror", 1, 0)
-exampleCharacter.addEquipment("- set of narrow-bladed scissors", 1, 0)
-exampleCharacter.addEquipment("- pair of pliers", 1, 0)
+exampleCharacter.addEquipment("- Small file", 1, 0)
+exampleCharacter.addEquipment("- Set of lock picks", 1, 0)
+exampleCharacter.addEquipment("- Small mirror", 1, 0)
+exampleCharacter.addEquipment("- Set of narrow-bladed scissors", 1, 0)
+exampleCharacter.addEquipment("- Pair of pliers", 1, 0)
 exampleCharacter.addEquipment("Dungeoneer's Pack", 1, 0) // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 exampleCharacter.addEquipment("- Backpack", 1, 5)
 exampleCharacter.addEquipment("- Crowbar", 1, 5)
@@ -123,14 +138,14 @@ exampleCharacter.addEquipment("- Tinderbox", 1, 1)
 exampleCharacter.addEquipment("- Rations", 10, 2)
 exampleCharacter.addEquipment("- Waterskin (4 pints big)", 1, 5)
 exampleCharacter.addEquipment("- Hempen rope (feet)", 50, 0.2)
-exampleCharacter.addEquipment("Bottle of ink", 1, 0.0652)
-exampleCharacter.addEquipment("Quill", 1, 0)
-exampleCharacter.addEquipment("Small knife", 1, 0)
-exampleCharacter.addEquipment("Letter from a dead colleague posing a question you have not yet been able to answer https://t.ly/Ehh25", 1, 0)
-exampleCharacter.addEquipment("Set of common clothes", 1, 3)
-exampleCharacter.addEquipment("Belt pouch", 1, 1)
+exampleCharacter.addEquipment("Bottle of ink", 1, 0.0652) // https://www.dndbeyond.com/backgrounds/11-sage
+exampleCharacter.addEquipment("Quill", 1, 0) // https://www.dndbeyond.com/backgrounds/11-sage
+exampleCharacter.addEquipment("Small knife", 1, 0) // https://www.dndbeyond.com/backgrounds/11-sage
+exampleCharacter.addEquipment("Letter from a dead colleague posing a question you have not yet been able to answer https://t.ly/Ehh25", 1, 0) // https://www.dndbeyond.com/backgrounds/11-sage
+exampleCharacter.addEquipment("Set of common clothes", 1, 3) // https://www.dndbeyond.com/backgrounds/11-sage
+exampleCharacter.addEquipment("Belt pouch", 1, 1) // https://www.dndbeyond.com/backgrounds/11-sage
 // https://www.dndbeyond.com/equipment/7-book as a journal mentioned in the backstory
-exampleCharacter.addEquipment("Book (Journal)", 1, 5)
+exampleCharacter.addEquipment("Book (Journal)", 1, 5) // backstory
 exampleCharacter.addCoins(25, "GOLD")
 
 

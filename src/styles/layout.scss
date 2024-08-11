@@ -13,7 +13,6 @@
 }
 
 .page {
-  flex-direction: column;
   margin-bottom: 2rem;
   min-height: 100vh;
 
@@ -107,6 +106,10 @@
 
   &.no-border-left {
     border-left: .125rem solid transparent;
+  }
+
+  &.no-border {
+    border: .125rem solid transparent;
   }
 }
 
@@ -207,21 +210,9 @@
 }
 
 .equipment-item {
-
   @include space-children;
-
-  .count {
-    font-size: 70%;
-  }
-
-  .name {
-    text-transform: capitalize;
-    font-size: 70%;
-  }
-
-  .weight {
-    font-size: 70%;
-  }
+  font-size: 70%;
+  text-transform: none;
 }
 
 .death-saves {
@@ -260,6 +251,10 @@
   p {
     font-size: 70%;
 
+    &:empty{
+      padding: .25rem;
+    }
+
     &.align-center{
         align-self: center;
     }
@@ -279,4 +274,8 @@
 
   }
 
+}
+
+.character-appearance{
+  max-width: 100%;
 }

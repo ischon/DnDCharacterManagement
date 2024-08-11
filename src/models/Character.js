@@ -37,12 +37,7 @@ export const abilityTypes = [
 ]
 
 export const proficiencyTypes = [
-    "strength",
-    "dexterity",
-    "constitution",
-    "intelligence",
-    "wisdom",
-    "charisma",
+    ...abilityTypes,
     "items"
 ]
 
@@ -105,7 +100,8 @@ export class Attack {
 }
 
 export class Item {
-    constructor(name, count, weight) {
+    constructor(index, name, count, weight) {
+        this.index = index
         this.name = name;
         this.count = count;
         this.weight = weight;
@@ -134,8 +130,8 @@ export class Character {
             alignment: "",
             experiencePoints: 0,
             age: 0,
-            height: "",
-            weight: "",
+            height: 0,
+            weight: 0,
             eyeColor: "",
             hairColor: "",
             skinColor: "",
@@ -144,6 +140,9 @@ export class Character {
             ideals: "",
             bonds: "",
             flaws: "",
+            allies: "",
+            additionalFeatures: "",
+            treasure: "",
             abilities: {
                 proficiencyBonus: 0,
                 proficiencies: {
@@ -180,7 +179,7 @@ export class Character {
                     temp: 0
                 },
                 hitDice: {
-                    die: "D8",
+                    die: "8",
                     total: 1,
                     current: 1
                 },
@@ -194,6 +193,8 @@ export class Character {
             languages: [],
             attacks: {},
             spellcasting: {
+                class: "",
+                ability: "",
                 cantrips: [],
                 spells: {
                     1: {
@@ -284,8 +285,6 @@ export class Character {
     };
 
     constructor(object = undefined, id = undefined) {
-        console.log("Character constructor")
-        console.log(object, "object")
         if (object === undefined) {
             this.default(id);
             return;
@@ -338,11 +337,11 @@ export class Character {
         cp -= sp * 10
 
         return {
-            cp: cp,
-            sp: sp,
-            ep: ep,
-            gp: gp,
-            pp: pp
+            'Copper Coins': cp,
+            'Silver Coins': sp,
+            'Electrum Coins': ep,
+            'Gold Coins': gp,
+            'Platinum Coins': pp
         }
     }
 
@@ -369,7 +368,7 @@ export class Character {
     }
 
     removeProficiency(type, name) {
-        if (!abilityTypes.includes(type)) {
+        if (!proficiencyTypes.includes(type)) {
             console.log("ERROR: ability type does not exists")
             return;
         }
@@ -413,6 +412,40 @@ export class Character {
         return this._character.languages
     }
 
+    get spellcastingClass() {
+        return this._character.spellcasting.class
+    }
+
+    set spellcastingClass(value) {
+        if (!classes.includes(value)) {
+            console.log("ERROR: class does not exists")
+            return;
+        }
+        this._character.spellcasting.class = value
+    }
+
+    get spellcastingAbility() {
+        return this._character.spellcasting.ability
+    }
+
+    set spellcastingAbility(value) {
+        if (!abilityTypes.includes(value)) {
+            console.log("ERROR: ability type does not exists")
+            return;
+        }
+        this._character.spellcasting.ability = value
+    }
+
+    get spellSaveDc() {
+        const modifier = Reflect.get(this, `${this.spellcastingAbility}Modifier`)
+        return 8 + modifier + this.proficiencyBonus
+    }
+
+    get spellAttackBonus() {
+        const modifier = Reflect.get(this, `${this.spellcastingAbility}Modifier`)
+        return modifier + this.proficiencyBonus
+    }
+
     addCantrip(cantrip) {
         if (!this._character.spellcasting.cantrips.includes(cantrip)) {
             this._character.spellcasting.cantrips.push(cantrip)
@@ -433,7 +466,7 @@ export class Character {
         result['cantrips'] = this._character.spellcasting.cantrips
         // prepaired spells
         for (const [key, value] of Object.entries(this._character.spellcasting.spells)) {
-            result['spells'][key] = value.prepared
+            result['spells'][key] = value
         }
         return result
     }
@@ -514,7 +547,7 @@ export class Character {
             this._character.equipment[name].count += count
             return
         }
-        this._character.equipment[name] = new Item(name, count, weight)
+        this._character.equipment[name] = new Item(Object.keys(this._character.equipment).length, name, count, weight)
     }
 
     removeEquipment(name, count) {
@@ -531,7 +564,20 @@ export class Character {
     }
 
     get equipment() {
-        return this._character.equipment
+        let objects = Object.entries(this._character.equipment)
+        objects.sort((a, b) => {
+            if (a[1].index < b[1].index) {
+                return -1;
+            } else if (b[1].index > a[1].index) {
+                return 1;
+            }
+            // a must be equal to b
+            return 0;
+
+        })
+        const result = {}
+        objects.forEach((item) => result[item[0]] = item[1]);
+        return result
     }
 
     addCoins(coins, type) {
@@ -601,7 +647,6 @@ export class Character {
                 }
             })
         }
-        console.log(result)
         return result
     }
 
@@ -796,6 +841,30 @@ export class Character {
         this._character.flaws = value;
     }
 
+    get allies() {
+        return this._character.allies;
+    }
+
+    set allies(value) {
+        this._character.allies = value;
+    }
+
+    get additionalFeatures() {
+        return this._character.additionalFeatures;
+    }
+
+    set additionalFeatures(value) {
+        this._character.additionalFeatures = value;
+    }
+
+    get treasure() {
+        return this._character.treasure;
+    }
+
+    set treasure(value) {
+        this._character.treasure = value;
+    }
+
 
 // ABILITIES GETTERS AND SETTERS
     get proficiencyBonus() {
@@ -961,7 +1030,7 @@ export class Character {
     }
 
     get currentHitDice() {
-        return this._character.stats.hitDice.current  + 'D' + this._character.stats.hitDice.die
+        return this._character.stats.hitDice.current + 'D' + this._character.stats.hitDice.die
     }
 
     set currentHitDice(value) {

@@ -5,11 +5,11 @@ const validToken = computed(() => {
   let token = localStorage.getItem('Token')
 
   if (token){
-    console.log("token found")
+    // console.log("token found")
     return true
   }
   else {
-    console.log("no token found")
+    // console.log("no token found")
     return false
   }
 })
