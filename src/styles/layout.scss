@@ -219,25 +219,25 @@
 .death-saves {
   padding: .25rem;
 
-  .checks {
-    @include space-children(0.25rem);
-
-    .check {
-      width: 1rem;
-      height: 1rem;
-      background-color: var(--color-border);
-      border-radius: 999999px;
-
-      &.selected {
-        background: var(--vt-c-indigo);
-      }
-    }
-  }
-
   .label {
     text-transform: uppercase;
     font-size: 70%;
 
+  }
+}
+
+.checks {
+  @include space-children(0.25rem);
+}
+
+.check {
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--color-border);
+  border-radius: 999999px;
+
+  &.selected {
+    background: var(--vt-c-indigo);
   }
 }
 

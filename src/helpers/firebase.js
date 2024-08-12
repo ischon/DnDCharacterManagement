@@ -7,6 +7,7 @@ import {GoogleAuthProvider, signInWithCredential} from "@firebase/auth";
 import {getStorage, ref, uploadString, uploadBytes, getDownloadURL} from "firebase/storage";
 import {Character} from "@/models/Character.js";
 import {firebaseSettings} from "@/firebase-settings.js";
+import {exampleCharacter} from "@/models/Examples.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -90,6 +91,10 @@ export class FirebaseHandler {
             .replace("{characterId}", characterId)
             .split("/");
         const data = await this.getData(...path)
+            .catch((error) => {
+                console.error(error)
+            }
+        )
         return new Character(data);
     }
 

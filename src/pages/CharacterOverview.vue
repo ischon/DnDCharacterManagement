@@ -122,6 +122,7 @@ onBeforeMount(async () => {
     loading.value.character = false
   }).catch((error) => {
     loading.value.character = false
+    character.value = exampleCharacter
     console.error(error, 'No character found')
   })
   firebaseHandler.getCharacterImage(characterId).then((image) => {
@@ -365,8 +366,8 @@ onBeforeMount(async () => {
                 <br/>
                 <p>Spells</p>
                 <div class="flex-1" v-for="(spells, lvl) in character.usableSpells.spells">
-                  <p v-if="spells.length > 0">Level {{ lvl }}</p>
-                  <p v-if="spells.length > 0" v-for="spell in spells">
+                  <p v-if="spells.prepared.length > 0">Level {{ lvl }}</p>
+                  <p v-if="spells.prepared.length > 0" v-for="spell in spells.prepared">
                     - {{ spell }}
                   </p>
                 </div>
@@ -514,29 +515,37 @@ onBeforeMount(async () => {
             <p>Character Appearance</p>
           </div>
           <div class="container block value-display col flex-2 no-border-left no-border-bottom">
-            <p class="flex-1 no-transform" v-for="line in character.backstory.split('\\n')">
-              {{ line }}
-            </p>
+            <div class="flex-1">
+              <p class="no-transform" v-for="line in character.backstory.split('\\n')">
+                {{ line }}
+              </p>
+            </div>
             <p>Character Backstory</p>
           </div>
         </div>
         <div class="container col flex-2">
           <div class="container block value-display align-start col flex-1 no-border-right">
-            <p class="flex-1 no-transform" v-for="line in character.allies.split('\\n')">
-              {{ line }}
-            </p>
+            <div class="flex-1">
+              <p class="no-transform" v-for="line in character.allies.split('\\n')">
+                {{ line }}
+              </p>
+            </div>
             <p class="align-center">Allies & Organizations</p>
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right">
-            <p class="flex-1 no-transform" v-for="line in character.additionalFeatures.split('\\n')">
-              {{ line }}
-            </p>
+            <div class="flex-1">
+              <p class="no-transform" v-for="line in character.additionalFeatures.split('\\n')">
+                {{ line }}
+              </p>
+            </div>
             <p class="align-center">Additional Features & Traits</p>
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right no-border-bottom">
-            <p class="flex-1 no-transform" v-for="line in character.treasure.split('\\n')">
-              {{ line }}
-            </p>
+            <div class="flex-1">
+              <p class="flex-1 no-transform" v-for="line in character.treasure.split('\\n')">
+                {{ line }}
+              </p>
+            </div>
             <p class="align-center">Treasure</p>
           </div>
         </div>
@@ -551,7 +560,8 @@ onBeforeMount(async () => {
               <p>Spellcasting Class</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top">
-              <p class="flex-1 value medium no-transform" style="text-transform: capitalize">{{ character.spellcastingAbility }}</p>
+              <p class="flex-1 value medium no-transform" style="text-transform: capitalize">
+                {{ character.spellcastingAbility }}</p>
               <p>Spellcasting Ability</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top">
@@ -566,186 +576,45 @@ onBeforeMount(async () => {
         </div>
       </div>
       <div class="body container row">
-        <div class="container col flex-1">
-          <div class="container block value-display col flex-1 no-border-left">
+        <div class="container col flex-1" v-for="(i, key) in [[0,1,2],[3,4,5],[6,7,8,9]]">
+          <div class="container block value-display col flex-1" v-for="j in i"
+               :class="{'no-border-bottom': [2,5,9].includes(j), 'no-border-left': key===0, 'no-border-right': key===2}">
             <div class="container row labeled-row">
               <div class="value flex-1">
-                <p>0</p>
+                <p>lvl {{ j }}</p>
               </div>
-              <div class="label flex-2">
+              <div class="label flex-3" v-if="j===0">
                 <p>Cantrips</p>
               </div>
+              <div class="flex-3 container row" v-if="j!==0">
+                <div class="value flex-1">
+                  <p>{{ character.usableSpells.spells[j].spellSlots }}</p>
+                </div>
+                <div class="label flex-2">
+                  <p>Total</p>
+                </div>
+                <div class="value flex-1">
+                  <p>{{ character.usableSpells.spells[j].spellSlotsExpanded }}</p>
+                </div>
+                <div class="label flex-2">
+                  <p>Expanded</p>
+                </div>
+              </div>
             </div>
-            <div class="container col">
-              <p v-for="spell in character.usableSpells.cantrips">
+            <div class="container col block no-border">
+              <p v-if="j===0" v-for="spell in character.usableSpells.cantrips">
                 {{ spell }}
               </p>
-            </div>
-          </div>
-          <div class="container block value-display col flex-1 no-border-left">
-            <div class="container row labeled-row">
-              <div class="value flex-1">
-                <p>1</p>
+              <div v-if="j!==0" class="container row">
+                <p class="flex-1" style="margin-right: .25rem">prepaired</p>
+                <p class="flex-4" style="text-align: center">Spell Name</p>
               </div>
-              <div class="value flex-1">
-                <p>{{character.usableSpells.spells[1].spellSlots}}</p>
+              <div v-if="j!==0" v-for="spell in character.usableSpells.spells[j].known" class="container row">
+                <div class="flex-1 container" style="justify-content: center">
+                  <div class="check" style="margin-right: .25rem"></div>
+                </div>
+                <p class="flex-4">{{ spell }}</p>
               </div>
-              <div class="value flex-2">
-                <p>{{character.usableSpells.spells[1].spellSlotsExpanded}}</p>
-              </div>
-            </div>
-            <div class="container col">
-              <p v-for="spell in character.usableSpells.spells[1].prepared">
-                {{ spell }}
-              </p>
-            </div>
-          </div>
-          <div class="container block value-display col flex-1 no-border-left">
-            <div class="container row labeled-row">
-              <div class="value flex-1">
-                <p>2</p>
-              </div>
-              <div class="value flex-1">
-                <p>{{character.usableSpells.spells[2].spellSlots}}</p>
-              </div>
-              <div class="value flex-2">
-                <p>{{character.usableSpells.spells[2].spellSlotsExpanded}}</p>
-              </div>
-            </div>
-            <div class="container col">
-              <p v-for="spell in character.usableSpells.spells[2].prepared">
-                {{ spell }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="container col flex-1">
-          <div class="container block value-display col flex-1 no-border-left">
-            <div class="container row labeled-row">
-              <div class="value flex-1">
-                <p>3</p>
-              </div>
-              <div class="value flex-1">
-                <p>{{character.usableSpells.spells[3].spellSlots}}</p>
-              </div>
-              <div class="value flex-2">
-                <p>{{character.usableSpells.spells[3].spellSlotsExpanded}}</p>
-              </div>
-            </div>
-            <div class="container col">
-              <p v-for="spell in character.usableSpells.spells[3].prepared">
-                {{ spell }}
-              </p>
-            </div>
-          </div>
-          <div class="container block value-display col flex-1 no-border-left">
-            <div class="container row labeled-row">
-              <div class="value flex-1">
-                <p>4</p>
-              </div>
-              <div class="value flex-1">
-                <p>{{character.usableSpells.spells[4].spellSlots}}</p>
-              </div>
-              <div class="value flex-2">
-                <p>{{character.usableSpells.spells[4].spellSlotsExpanded}}</p>
-              </div>
-            </div>
-            <div class="container col">
-              <p v-for="spell in character.usableSpells.spells[4].prepared">
-                {{ spell }}
-              </p>
-            </div>
-          </div>
-          <div class="container block value-display col flex-1 no-border-left">
-            <div class="container row labeled-row">
-              <div class="value flex-1">
-                <p>5</p>
-              </div>
-              <div class="value flex-1">
-                <p>{{character.usableSpells.spells[5].spellSlots}}</p>
-              </div>
-              <div class="value flex-2">
-                <p>{{character.usableSpells.spells[5].spellSlotsExpanded}}</p>
-              </div>
-            </div>
-            <div class="container col">
-              <p v-for="spell in character.usableSpells.spells[5].prepared">
-                {{ spell }}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="container col flex-1">
-          <div class="container block value-display col flex-1 no-border-left">
-            <div class="container row labeled-row">
-              <div class="value flex-1">
-                <p>6</p>
-              </div>
-              <div class="value flex-1">
-                <p>{{character.usableSpells.spells[6].spellSlots}}</p>
-              </div>
-              <div class="value flex-2">
-                <p>{{character.usableSpells.spells[6].spellSlotsExpanded}}</p>
-              </div>
-            </div>
-            <div class="container col">
-              <p v-for="spell in character.usableSpells.spells[6].prepared">
-                {{ spell }}
-              </p>
-            </div>
-          </div>
-          <div class="container block value-display col flex-1 no-border-left">
-            <div class="container row labeled-row">
-              <div class="value flex-1">
-                <p>7</p>
-              </div>
-              <div class="value flex-1">
-                <p>{{character.usableSpells.spells[7].spellSlots}}</p>
-              </div>
-              <div class="value flex-2">
-                <p>{{character.usableSpells.spells[7].spellSlotsExpanded}}</p>
-              </div>
-            </div>
-            <div class="container col">
-              <p v-for="spell in character.usableSpells.spells[7].prepared">
-                {{ spell }}
-              </p>
-            </div>
-          </div>
-          <div class="container block value-display col flex-1 no-border-left">
-            <div class="container row labeled-row">
-              <div class="value flex-1">
-                <p>8</p>
-              </div>
-              <div class="value flex-1">
-                <p>{{character.usableSpells.spells[8].spellSlots}}</p>
-              </div>
-              <div class="value flex-2">
-                <p>{{character.usableSpells.spells[8].spellSlotsExpanded}}</p>
-              </div>
-            </div>
-            <div class="container col">
-              <p v-for="spell in character.usableSpells.spells[8].prepared">
-                {{ spell }}
-              </p>
-            </div>
-          </div>
-          <div class="container block value-display col flex-1 no-border-left">
-            <div class="container row labeled-row">
-              <div class="value flex-1">
-                <p>9</p>
-              </div>
-              <div class="value flex-1">
-                <p>{{character.usableSpells.spells[9].spellSlots}}</p>
-              </div>
-              <div class="value flex-2">
-                <p>{{character.usableSpells.spells[9].spellSlotsExpanded}}</p>
-              </div>
-            </div>
-            <div class="container col">
-              <p v-for="spell in character.usableSpells.spells[9].prepared">
-                {{ spell }}
-              </p>
             </div>
           </div>
         </div>
