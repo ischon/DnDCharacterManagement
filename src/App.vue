@@ -14,6 +14,8 @@ const validToken = computed(() => {
   }
 })
 
+const email = localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem("UserData")).email : undefined
+
 </script>
 
 <template>
@@ -21,7 +23,8 @@ const validToken = computed(() => {
     <RouterLink to="/">Go to Home</RouterLink>
     <RouterLink v-if="!validToken" to="/login">Go to login</RouterLink>
     <RouterLink v-else to="/logout">Go to logout</RouterLink>
-    <RouterLink to="/character/lz825uz4">Go to character</RouterLink>
+    <RouterLink to="/character/lzrh8rb4">Go to default</RouterLink>
+    <RouterLink v-if="email === 'ian@schon.dev'" to="/character/lz825uz4">Go to owin</RouterLink>
 
   </nav>
   <br>

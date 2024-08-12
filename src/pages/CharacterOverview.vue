@@ -122,7 +122,6 @@ onBeforeMount(async () => {
     loading.value.character = false
   }).catch((error) => {
     loading.value.character = false
-    character.value = exampleCharacter
     console.error(error, 'No character found')
   })
   firebaseHandler.getCharacterImage(characterId).then((image) => {
@@ -349,13 +348,13 @@ onBeforeMount(async () => {
                 <div class="container col">
                   <div class="container row">
                     <p class="flex-2">Weapon</p>
-                    <p class="flex-1">Damage</p>
-                    <p class="flex-1">Damage type</p>
+                    <p class="flex-1">Bonus</p>
+                    <p class="flex-2">Damage/ type</p>
                   </div>
                   <div class="container row" v-for="row in character.attacks">
                     <p class="flex-2">{{ row.name }}</p>
-                    <p class="flex-1">{{ row.damage }} {{ row.bonus !== 0 ? '+ ' + row.bonus : '' }}</p>
-                    <p class="flex-1">{{ row.type }}</p>
+                    <p class="flex-1">{{ row.bonus > 0 ? '+ ' + row.bonus : row.bonus }}</p>
+                    <p class="flex-2">{{ row.damage }} / {{ row.type }}</p>
                   </div>
                 </div>
                 <br/>
@@ -569,7 +568,7 @@ onBeforeMount(async () => {
               <p>Spell Save DC</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top no-border-right">
-              <p class="flex-1 value medium no-transform">{{ character.spellAttackBonus }}</p>
+              <p class="flex-1 value medium no-transform">{{ character.spellAttackBonus > 0 ? '+ ' + character.spellAttackBonus : character.spellAttackBonus }}</p>
               <p>Spell Attack Bonus</p>
             </div>
           </div>
@@ -579,7 +578,7 @@ onBeforeMount(async () => {
         <div class="container col flex-1" v-for="(i, key) in [[0,1,2],[3,4,5],[6,7,8,9]]">
           <div class="container block value-display col flex-1" v-for="j in i"
                :class="{'no-border-bottom': [2,5,9].includes(j), 'no-border-left': key===0, 'no-border-right': key===2}">
-            <div class="container row labeled-row">
+            <div class="container row labeled-row" style="margin-bottom: .5rem">
               <div class="value flex-1">
                 <p>lvl {{ j }}</p>
               </div>
@@ -601,19 +600,26 @@ onBeforeMount(async () => {
                 </div>
               </div>
             </div>
+            <div v-if="j!==0" class="container row">
+              <div class="flex-1">
+                <p style="text-align: center">Prepared</p>
+              </div>
+              <p class="flex-3">Spell Name</p>
+            </div>
+
+            <div v-if="j===0" class="container row">
+              <p class="flex-3">Cantrip Name</p>
+            </div>
             <div class="container col block no-border">
-              <p v-if="j===0" v-for="spell in character.usableSpells.cantrips">
-                {{ spell }}
-              </p>
-              <div v-if="j!==0" class="container row">
-                <p class="flex-1" style="margin-right: .25rem">prepaired</p>
-                <p class="flex-4" style="text-align: center">Spell Name</p>
+              <div v-if="j===0" v-for="cantrip in character.usableSpells.cantrips" class="container row">
+                <p>{{ cantrip }}</p>
               </div>
               <div v-if="j!==0" v-for="spell in character.usableSpells.spells[j].known" class="container row">
-                <div class="flex-1 container" style="justify-content: center">
-                  <div class="check" style="margin-right: .25rem"></div>
+                <div class="flex-1 container row" style="justify-content: center">
+                  <div class="check"
+                       :class="{selected:character.usableSpells.spells[j].prepared.includes(spell)}"></div>
                 </div>
-                <p class="flex-4">{{ spell }}</p>
+                <p class="flex-3">{{ spell }}</p>
               </div>
             </div>
           </div>

@@ -175,6 +175,7 @@ export class Character {
                 speed: 30,
                 hitPoints: {
                     base: 8,
+                    misc: 0,
                     current: 0,
                     temp: 0
                 },
@@ -663,7 +664,7 @@ export class Character {
 
     get hitPointMaximum() {
         // https://5ehpcalculator.com/
-        return `${this._character.stats.hitPoints.base} + ${this.constitutionModifier}`
+        return `${this._character.stats.hitPoints.base} + ${this.constitutionModifier} + ${this._character.stats.hitPoints.misc}`
     }
 
     get hitPointMaximumValue() {
@@ -937,7 +938,7 @@ export class Character {
 
 // LINKED ABILITIES GETTERS AND SETTERS
     get passivePerception() {
-        return this.wisdom
+        return 10 + this.wisdomModifier
     }
 
 // STATS GETTERS AND SETTERS
@@ -987,6 +988,14 @@ export class Character {
 
     set baseHitPoints(value) {
         this._character.stats.hitPoints.base = value
+    }
+
+    get hitPointsMisc() {
+        return this._character.stats.hitPoints.misc
+    }
+
+    set hitPointsMisc(value) {
+        this._character.stats.hitPoints.misc = value
     }
 
     get currentHitPoints() {
