@@ -551,7 +551,7 @@ onBeforeMount(async () => {
               <p>Spellcasting Class</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top">
-              <p class="flex-1 value medium no-transform">{{ character.spellcastingAbility }}</p>
+              <p class="flex-1 value medium no-transform" style="text-transform: capitalize">{{ character.spellcastingAbility }}</p>
               <p>Spellcasting Ability</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top">

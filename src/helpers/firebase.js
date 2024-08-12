@@ -6,7 +6,7 @@ import {doc, setDoc} from "firebase/firestore";
 import {GoogleAuthProvider, signInWithCredential} from "@firebase/auth";
 import {getStorage, ref, uploadString, uploadBytes, getDownloadURL} from "firebase/storage";
 import {Character} from "@/models/Character.js";
-import _firebaseConfig from "@/firebase-settings.json";
+import {firebaseSettings} from "@/firebase-settings.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -30,7 +30,7 @@ export class FirebaseHandler {
 
     async setup() {
         // Initialize Firebase
-        this.app = initializeApp(_firebaseConfig);
+        this.app = initializeApp(firebaseSettings);
 
         // const provider = new GoogleAuthProvider();
         // provider.addScope('https://www.googleapis.com/auth/contacts.readonly');

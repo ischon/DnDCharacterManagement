@@ -30,5 +30,3 @@ coverage
 *.tsbuildinfo
 
 .idea/
-
-src/firebase-settings.json
