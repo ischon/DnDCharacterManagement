@@ -664,11 +664,20 @@ export class Character {
 
     get hitPointMaximum() {
         // https://5ehpcalculator.com/
-        return `${this._character.stats.hitPoints.base} + ${this.constitutionModifier} + ${this._character.stats.hitPoints.misc}`
+        const values = []
+        values.push(this.baseHitPoints)
+        values.push(this.constitutionModifier)
+        if (this.hitPointsMisc && this.hitPointsMisc !== 0) {
+            values.push(this.hitPointsMisc)
+        }
+
+        return values.join(" + ")
     }
 
     get hitPointMaximumValue() {
-        return this.baseHitPoints + this.constitutionModifier
+        return this.baseHitPoints
+        + this.constitutionModifier
+        + (this.hitPointsMisc && this.hitPointsMisc > 0) ? this.hitPointsMisc : 0;
     }
 
     get initiativeModifier() {

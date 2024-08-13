@@ -1,9 +1,8 @@
 <script setup>
 import router from "@/router.js";
 
-import {onBeforeMount, ref} from 'vue'
+import {onBeforeMount, ref, watch} from 'vue'
 import {FirebaseHandler} from "@/helpers/firebase.js";
-import {exampleCharacter} from "@/models/Examples.js";
 
 // setup() {
 let loading = ref({
@@ -15,6 +14,13 @@ const firebaseHandler = new FirebaseHandler()
 const character = ref({})
 
 const characterImage = ref(undefined)
+
+watch(
+    () => router.currentRoute.value.params.id,
+    async () => {
+      window.location.reload();
+    }
+);
 
 const uploadImage = async (e) => {
   const image = e.target.files[0];
