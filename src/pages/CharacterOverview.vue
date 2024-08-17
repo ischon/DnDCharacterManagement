@@ -1,26 +1,49 @@
 <script setup>
 import router from "@/router.js";
 
-import {onBeforeMount, ref, watch} from 'vue'
+import {onBeforeMount, ref, reactive, watch} from 'vue'
 import {FirebaseHandler} from "@/helpers/firebase.js";
-import {cloneDeep} from 'lodash';
+import {range} from 'lodash';
+
+import {classes, alignments, abilityTypes, proficiencyTypes, abilities, dice} from "@/models/Character.js";
 
 // setup() {
-const loading = ref({
+const loading = reactive({
   character: true,
   image: true
 })
-const editing = ref({
+const editing = reactive({
   open: false,
-  name: undefined,
-  key: undefined,
-  value: undefined,
-  oldValue: undefined
+  items: []
 })
+
+class ModelTypes {
+  static disabled = new ModelTypes('disabled', 'input')
+  static color = new ModelTypes('color', 'input')
+  static date = new ModelTypes('date', 'input')
+  static file = new ModelTypes('file', 'input')
+  static image = new ModelTypes('image', 'input')
+  static number = new ModelTypes('number', 'input')
+  static checkbox = new ModelTypes('checkbox', 'input')
+  static text = new ModelTypes('text', 'input')
+  static textarea = new ModelTypes('textarea', 'textarea')
+  static classes = new ModelTypes('classes', 'select', classes)
+  static alignments = new ModelTypes('alignments', 'select', alignments)
+  static abilityTypes = new ModelTypes('abilityTypes', 'select', abilityTypes)
+  static proficiencyTypes = new ModelTypes('proficiencyTypes', 'select', proficiencyTypes)
+  static abilities = new ModelTypes('abilities', 'select', abilities)
+  static die = new ModelTypes('dice', 'dice', dice)
+
+  constructor(type, element, options = undefined) {
+    this.type = type;
+    this.element = element;
+    this.options = options;
+  }
+}
 
 const characterId = router.currentRoute.value.params.id
 const firebaseHandler = new FirebaseHandler()
-const character = ref({})
+let character = undefined
 
 const characterImage = ref(undefined)
 
@@ -31,30 +54,37 @@ watch(
     }
 );
 
-const atClickEdit = (name, key, value) => {
-  editing.value.name = name
-  editing.value.key = key
-  editing.value.oldValue = cloneDeep(value)
-  editing.value.value = value
-  editing.value.open = true
+const atClickEdit = (items) => {
+  editing.open = true
+  items.forEach((item) => {
+    editing.items.push({
+      name: item[0],
+      key: item[1],
+      value: item[2],
+      type: item[3]
+    })
+  })
+}
+
+const atClickProficiency = (ability_name, skill_name) => {
+  character.toggleProficiency(ability_name, skill_name);
+  firebaseHandler.setCharacterData(character.objectData);
 }
 
 const resetModelData = () => {
-  editing.value.open = false;
-  editing.value.name = undefined;
-  editing.value.key = undefined;
-  editing.value.value = undefined;
-  editing.value.oldValue = undefined;
+  editing.open = false;
+  editing.items = []
 }
 
-const atClickSave = () => {
-  editing.value.open = false;
-  firebaseHandler.setCharacterData(character.value.objectData)
+const atClickSave = async () => {
+  editing.items.forEach((item) => {
+    Reflect.set(character, item.key, item.value)
+  })
+  await firebaseHandler.setCharacterData(character.objectData)
   resetModelData()
 }
 
 const atClickCancel = () => {
-  editing.value.value = editing.value.oldValue
   resetModelData()
 }
 
@@ -78,7 +108,7 @@ const uploadImage = async (e) => {
 }
 
 const formatScore = (score) => {
-  return ((score > 0) ? '+' : '') + score
+  return score !== 0 ?((score > 0) ? '+' : '') + score : '-'
 }
 
 // 1 lb = 0.45359237 kg
@@ -159,25 +189,20 @@ const formatLength = (foot) => {
 }
 onBeforeMount(async () => {
   await firebaseHandler.setup()
-  // TODO: flip back
   firebaseHandler.getCharacterData(characterId).then((data) => {
-    character.value = data
-    loading.value.character = false
+    character = reactive(data)
+    loading.character = false
   }).catch((error) => {
-    loading.value.character = false
+    loading.character = false
     console.error(error, 'No character found')
   })
   firebaseHandler.getCharacterImage(characterId).then((image) => {
     characterImage.value = image
-    loading.value.image = false
+    loading.image = false
   }).catch((error) => {
-    loading.value.image = false
+    loading.image = false
     console.error(error, 'No image found')
   })
-
-  // await firebaseHandler.setCharacterData(exampleCharacter.objectData)
-  // character.value = exampleCharacter
-  // loading.value.character = false
 })
 
 </script>
@@ -187,18 +212,26 @@ onBeforeMount(async () => {
     <div class="page container col" id="page-1"> <!-- Page 1 -->
       <div class="header container row flex-1"> <!-- Header -->
         <div class="container col flex-1"> <!-- Left Column -->
-          <div class="container value-display col block flex-1 no-border-top no-border-left">
+          <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
+               @click="atClickEdit([['Character Name', 'name', character.name, ModelTypes.text]])">
             <p class="flex-1 value medium no-transform">{{ character.name }}</p>
             <p>Character Name</p>
           </div>
         </div>
         <div class="container col flex-2"> <!-- Right Column -->
           <div class="container row">
-            <div class="container block value-display col flex-1 no-border-top">
+            <div class="container block value-display col flex-1 no-border-top clickable"
+                 @click="atClickEdit([
+                     ['Class', 'class', character.class, ModelTypes.classes],
+                     ['Level', 'level', character.level, ModelTypes.number]
+                     ])">
               <p class="flex-1 value medium no-transform">{{ character.class }} lvl {{ character.level }}</p>
               <p>Class & Level</p>
             </div>
-            <div class="container block value-display col flex-1 no-border-top">
+            <div class="container block value-display col flex-1 no-border-top clickable"
+                 @click="atClickEdit([
+                     ['Background', 'background', character.background, ModelTypes.text],
+                     ])">
               <p class="flex-1 value medium no-transform">{{ character.background }}</p>
               <p>Background</p>
             </div>
@@ -208,16 +241,26 @@ onBeforeMount(async () => {
             </div>
           </div>
           <div class="container row">
-            <div class="container block value-display col flex-1">
+            <div class="container block value-display col flex-1 clickable"
+                 @click="atClickEdit([
+                     ['Race', 'race', character.race, ModelTypes.text],
+                     ])">
               <p class="flex-1 value medium no-transform">{{ character.race }}</p>
               <p>Race</p>
             </div>
-            <div class="container block value-display col flex-1">
+            <div class="container block value-display col flex-1 clickable"
+                 @click="atClickEdit([
+                     ['Alignment', 'alignment', character.alignment, ModelTypes.alignments],
+                     ])">
               <p class="flex-1 value medium no-transform">{{ character.alignment }}</p>
               <p>Alignment</p>
             </div>
-            <div class="container block value-display col flex-1 no-border-right">
-              <p class="flex-1 value medium no-transform">{{ character.experiencePoints }}</p>
+            <div class="container block value-display col flex-1 no-border-right clickable"
+                 @click="atClickEdit([
+                     ['Experience points', 'experiencePoints', character.experiencePoints, ModelTypes.number],
+                     ])">
+              <p class="flex-1 value medium no-transform">
+                {{ character.experiencePoints !== 0 ? character.experiencePoints : '-' }}</p>
               <p>Experience Points</p>
             </div>
           </div>
@@ -228,73 +271,47 @@ onBeforeMount(async () => {
         <div class="container row flex-2">
           <div class="container col flex-1">
             <!-- ABILITY SCORES -->
-            <div class="container flex-1 block row labeled-row no-border-left">
-              <div class="value flex-1"
-                   @click="atClickEdit('Proficiency Bonus', 'proficiencyBonus', character.proficiencyBonus)">
-                <p>
-                  {{ formatScore(character.proficiencyBonus) }}
-                </p>
-              </div>
-              <div class="label flex-2">
-                <p>
-                  Proficiency Bonus
-                </p>
-              </div>
+            <div class="container flex-1 block row labeled-row no-border-left clickable"
+                 @click="atClickEdit([
+                      ['Proficiency Bonus', 'proficiencyBonus', character.proficiencyBonus, ModelTypes.number]
+                 ])">
+              <div class="value flex-1"><p>{{ formatScore(character.proficiencyBonus) }}</p></div>
+              <div class="label flex-2"><p>Proficiency Bonus</p></div>
             </div>
-            <div class="container flex-1 block row labeled-row no-border-left">
-              <div class="value flex-1">
-                <p>
-                  {{ formatScore(character.inspiration) }}
-                </p>
-              </div>
-              <div class="label flex-2">
-                <p>
-                  Inspiration
-                </p>
-              </div>
+            <div class="container flex-1 block row labeled-row no-border-left clickable"
+                 @click="atClickEdit([
+                      ['Inspiration', 'inspiration', character.inspiration, ModelTypes.number],
+                 ])">
+              <div class="value flex-1"><p>{{ formatScore(character.inspiration) }}</p></div>
+              <div class="label flex-2"><p>Inspiration</p></div>
             </div>
             <div v-for="(ability, ability_name) in character.abilities"
                  class="container row flex-2 block ability-block no-border-left">
               <!--ABILITY-->
-              <div class="container ability col flex-1">
-                <div class="ability-modifier flex-1">
-                  <p class="content no-label">
-                    {{ formatScore(ability.modifier) }}
-                  </p>
+              <div class="container ability col flex-1 clickable"
+                   @click="atClickEdit([
+                      [ability_name, ability_name, ability.score, ModelTypes.number],
+                 ])">
+                <div class="ability-modifier flex-1"><p class="content no-label">{{ formatScore(ability.modifier) }}</p>
                 </div>
                 <div class="ability-score flex-1">
-                  <p class="ability-score-value">
-                    {{ ability.score }}
-                  </p>
-                  <p class="ability-score-label">
-                    {{ ability_name }}
-                  </p>
+                  <p class="ability-score-value">{{ ability.score }}</p>
+                  <p class="ability-score-label">{{ ability_name }}</p>
                 </div>
               </div>
               <div class="container skill col flex-2">
                 <!--SKILLS-->
                 <div v-for="(skill_stats, skill_name) in ability.skills" class="skill-row flex-1">
-                  <div class="proficient" :class="{ selected: skill_stats.proficient }"></div>
-                  <div class="skill-score">
-                    {{ formatScore(skill_stats.value) }}
-                  </div>
-                  <div class="skill-name">
-                    {{ skill_name }}
-                  </div>
+                  <div class="proficient clickable" :class="{ selected: skill_stats.proficient }"
+                       @click="atClickProficiency(ability_name, skill_name)"></div>
+                  <div class="skill-score">{{ formatScore(skill_stats.value) }}</div>
+                  <div class="skill-name">{{ skill_name }}</div>
                 </div>
               </div>
             </div>
             <div class="container flex-1 block row labeled-row  no-border-left">
-              <div class="value flex-1">
-                <p>
-                  {{ formatScore(character.passivePerception) }}
-                </p>
-              </div>
-              <div class="label flex-2">
-                <p>
-                  Passive Wisdom (Perception)
-                </p>
-              </div>
+              <div class="value flex-1"><p>{{ formatScore(character.passivePerception) }}</p></div>
+              <div class="label flex-2"><p>Passive Wisdom (Perception)</p></div>
             </div>
           </div>
           <div class="container col flex-2">
@@ -302,48 +319,80 @@ onBeforeMount(async () => {
               <div class="container col flex-1">
                 <!--STATS-->
                 <div class="container row flex-1">
-                  <div class="container block value-display col flex-1">
+                  <div class="container block value-display col flex-1 clickable"
+                       @click="atClickEdit([
+                          ['Armor class basis', 'armorClassBase', character.armorClassBase, ModelTypes.number],
+                          [`Uses dexterity modifier (${formatScore(character.dexterityModifier)})`, 'armorClassHasDexModifier', character.armorClassHasDexModifier, ModelTypes.checkbox],
+                          ['Added protection from a shield', 'armorClassShield', character.armorClassShield, ModelTypes.number],
+                          ['Additional modifier', 'armorClassMisc', character.armorClassMisc, ModelTypes.number]
+                       ])">
                     <p class="flex-1 value">{{ character.armorClass }}</p>
                     <p>Armor Class</p>
                   </div>
-                  <div class="container block value-display col flex-1">
+                  <div class="container block value-display col flex-1 clickable"
+                       @click="atClickEdit([
+                          ['Dexterity modifier', 'dexterityModifier', character.dexterityModifier, ModelTypes.disabled],
+                          [`Additional modifier`, 'initiativeMisc', character.initiativeMisc, ModelTypes.number],
+                       ])">
                     <p class="flex-1 value">{{ formatScore(character.initiativeModifier) }}</p>
                     <p>Initiative</p>
                   </div>
-                  <div class="container block value-display col flex-1">
+                  <div class="container block value-display col flex-1 clickable"
+                       @click="atClickEdit([
+                          ['Speed', 'speed', character.speed, ModelTypes.number],
+                       ])">
                     <p class="flex-1 value">{{ character.speed }}</p>
                     <p>Speed</p>
                   </div>
                 </div>
-                <div class="container block value-display col flex-1">
+                <div class="container block value-display col flex-1 clickable"
+                     @click="atClickEdit([
+                          ['Hit points basis', 'baseHitPoints', character.baseHitPoints, ModelTypes.number],
+                          ['constitution modifier', 'constitutionModifier', character.constitutionModifier, ModelTypes.disabled],
+                          ['Additional hit points', 'hitPointsMisc', character.hitPointsMisc, ModelTypes.number],
+                          [`Current hit points`, 'currentHitPoints', character.currentHitPoints, ModelTypes.number],
+                       ])">
                   <p>Hit Point Maximum: {{ character.hitPointMaximum }}</p>
                   <p class="flex-1 value">{{ character.currentHitPoints }}</p>
                   <p>Current Hit Points</p>
                 </div>
-                <div class="container block value-display col flex-1">
-                  <p class="flex-1 value">{{ character.tempHitPoints }}</p>
+                <div class="container block value-display col flex-1 clickable"
+                     @click="atClickEdit([
+                          ['Temporary hit points', 'tempHitPoints', character.tempHitPoints, ModelTypes.number],
+                       ])">
+                  <p class="flex-1 value">{{ character.tempHitPoints !== 0 ? character.tempHitPoints : '-' }}</p>
                   <p>Temporary Hit Points</p>
                 </div>
                 <div class="container row flex-1">
-                  <div class="container block value-display col flex-1">
+                  <div class="container block value-display col flex-1 clickable"
+                       @click="atClickEdit([
+                          ['Total Hit Dice', 'maxHitDice', character.maxHitDice, ModelTypes.number],
+                          ['Hit Die', 'hitDice', character.hitDice, ModelTypes.die],
+                          ['Usable hit Dice', 'currentAmountHitDice', character.currentAmountHitDice, ModelTypes.number],
+                       ])">
                     <p>Total Hit Dice: {{ character.maxHitDice }}</p>
                     <p class="flex-1 value">{{ character.currentHitDice }}</p>
                     <p>Hit Dice</p>
                   </div>
-                  <div class="container block value-display col flex-1">
+                  <div class="container block value-display col flex-1 clickable"
+                       @click="atClickEdit([
+                         ['Successful rolls', 'deathSaveSuccesses', character.deathSaves.successes, ModelTypes.number],
+                         ['Failed rolls', 'deathSaveFailures', character.deathSaves.failures, ModelTypes.number],
+                  ])">
                     <div class="container col flex-1 value">
                       <div class="container row death-saves">
                         <div class="label flex-2">successes</div>
                         <div class="checks flex-1 container row">
                           <div class="check" :class="{ selected: key < character.deathSaves.successes  }"
-                               v-for="(value, key) in new Array(3)"></div>
+                               v-for="key in range(0,3)">
+                          </div>
                         </div>
                       </div>
                       <div class="container row death-saves">
                         <div class="label flex-2">Failures</div>
                         <div class="checks flex-1 container row">
                           <div class="check" :class="{ selected: key < character.deathSaves.failures }"
-                               v-for="(value, key) in new Array(3)"></div>
+                               v-for="key in range(0,3)"></div>
                         </div>
                       </div>
                     </div>
@@ -352,7 +401,10 @@ onBeforeMount(async () => {
                 </div>
               </div>
               <div class="container col flex-1">
-                <div class="container block value-display col flex-1 no-border-right">
+                <div class="container block value-display col flex-1 no-border-right clickable"
+                     @click="atClickEdit([
+                         ['Traits', 'personalityTraits', character.personalityTraits, ModelTypes.textarea],
+                  ])">
                   <div class="flex-1">
                     <p class="no-transform" v-for="traits in character.personalityTraits.split('\\n')">
                       {{ traits }}
@@ -360,7 +412,10 @@ onBeforeMount(async () => {
                   </div>
                   <p>Personality Traits</p>
                 </div>
-                <div class="container block value-display col flex-1 no-border-right">
+                <div class="container block value-display col flex-1 no-border-right clickable"
+                     @click="atClickEdit([
+                         ['Ideals', 'ideals', character.ideals, ModelTypes.textarea],
+                  ])">
                   <div class="flex-1">
                     <p class="no-transform" v-for="ideals in character.ideals.split('\\n')">
                       {{ ideals }}
@@ -368,7 +423,10 @@ onBeforeMount(async () => {
                   </div>
                   <p>Ideals</p>
                 </div>
-                <div class="container block value-display col flex-1 no-border-right">
+                <div class="container block value-display col flex-1 no-border-right clickable"
+                     @click="atClickEdit([
+                         ['Bonds', 'bonds', character.bonds, ModelTypes.textarea],
+                  ])">
                   <div class="flex-1">
                     <p class="no-transform" v-for="bonds in character.bonds.split('\\n')">
                       {{ bonds }}
@@ -377,7 +435,10 @@ onBeforeMount(async () => {
                   <p>Bonds</p>
                 </div>
 
-                <div class="container block value-display col flex-1 no-border-right">
+                <div class="container block value-display col flex-1 no-border-right clickable"
+                     @click="atClickEdit([
+                         ['Flaws', 'flaws', character.flaws, ModelTypes.textarea],
+                  ])">
                   <div class="flex-1">
                     <p class="no-transform" v-for="flaws in character.flaws.split('\\n')">
                       {{ flaws }}
@@ -387,6 +448,7 @@ onBeforeMount(async () => {
                 </div>
               </div>
             </div>
+            <!-- TODO: Continue from here with setting the @click property -->
             <div class="container row flex-1">
               <div class="container block value-display align-start col flex-1">
                 <div class="container col">
@@ -397,7 +459,7 @@ onBeforeMount(async () => {
                   </div>
                   <div class="container row" v-for="row in character.attacks">
                     <p class="flex-2">{{ row.name }}</p>
-                    <p class="flex-1">{{ row.bonus > 0 ? '+ ' + row.bonus : row.bonus }}</p>
+                    <p class="flex-1">{{ formatScore(row.bonus) }}</p>
                     <p class="flex-2">{{ row.damage }} / {{ row.type }}</p>
                   </div>
                 </div>
@@ -676,13 +738,40 @@ onBeforeMount(async () => {
   <div v-if="editing.open" class="popup container col" style="align-items: center">
     <div class="container row popup-display">
       <div class="container block value-display col">
-        <div id="title-row" class="container row">
-          <p>{{ editing.name }}</p>
+
+        <div class="container row input-row" v-for="item in editing.items">
+          <div class="container col">
+            <label :for="item.name">{{ item.name }}</label>
+            <input v-if="item.type.element === 'input' && item.type.type !== 'disabled'"
+                   :type="item.type.type"
+                   :name="item.name"
+                   v-model="item.value"
+                   @keydown.enter="atClickSave"
+                   @keydown.esc="atClickCancel"/>
+            <input v-if="item.type.element === 'input' && item.type.type === 'disabled'"
+                   type="text"
+                   disabled
+                   :name="item.name"
+                   v-model="item.value" />
+            <textarea v-if="item.type.element === 'textarea'"
+                      :name="item.name"
+                      rows="5" cols="40"
+                      v-model="item.value"
+                      @keydown.esc="atClickCancel"/>
+            <select v-if="item.type.element === 'select'" :name="item.name" v-model="item.value">
+              <option v-for="option in item.type.options" :value="option">
+                {{ option }}
+              </option>
+            </select>
+            <select v-if="item.type.element === 'dice'" :name="item.name" v-model="item.value">
+              <option v-for="option in item.type.options" :value="option">
+                D{{ option }}
+              </option>
+            </select>
+          </div>
         </div>
-        <div id="input-row" class="container row">
-          <input type="text" v-model="editing.value" @keydown.enter="atClickSave" @keydown.esc="atClickCancel">
-        </div>
-        <div id="button-row" class="container row">
+
+        <div class="container row button-row">
           <button @click="atClickSave">Save</button>
           <button @click="atClickCancel">Cancel</button>
         </div>
@@ -710,45 +799,60 @@ onBeforeMount(async () => {
     .value-display {
       padding: 4rem 2rem;
       min-width: 15rem;
+      border-radius: 1rem;
+      border-width: .25rem;
 
-      #title-row {
+      .input-row, .button-row {
+        justify-content: center;
+      }
+
+      .input-row {
         margin-bottom: 1rem;
+
+        > div {
+          align-items: center;
+        }
+
+        label {
+          text-transform: none;
+        }
+
+        input, textarea, select {
+          padding: .5rem;
+          border-radius: .5rem;
+        }
+
+        input {
+          text-align: center;
+
+          &[type="text"] {
+            width: 15rem;
+          }
+
+          &[type="number"] {
+            text-align: start;
+            width: 5rem;
+          }
+        }
+
+        textarea {
+          min-width: 15rem;
+        }
+
+        select {
+          width: 15rem;
+        }
+
+      }
+
+      .button-row {
+        button {
+          padding: .5rem;
+          border-radius: .5rem;
+          margin-right: 1rem;
+        }
       }
     }
-  }
-}
-
-
-//.block {
-//  margin: .25rem
-//}
-$radio-size: 0.5rem;
-input[type="radio"] {
-  appearance: none;
-  background-color: #fff;
-  margin: 0;
-  font: inherit;
-  color: currentColor;
-  width: $radio-size;
-  height: $radio-size;
-  //border: 0.15em solid currentColor;
-  border-radius: 50%;
-  transform: translateY(-0.075em);
-  display: grid;
-  place-content: center;
-
-  &::before {
-    content: "";
-    width: .5rem;
-    height: .5rem;
-    border-radius: 50%;
-    transform: scale(0);
-    transition: 120ms transform ease-in-out;
-    box-shadow: inset $radio-size $radio-size red;
-  }
-
-  &:checked::before {
-    transform: scale(1);
   }
 }
 </style>

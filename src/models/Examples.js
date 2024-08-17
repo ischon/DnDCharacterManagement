@@ -53,7 +53,7 @@ owin.level = 2
 owin.race = "Rock Gnome" // https://www.dndbeyond.com/races/18-gnome
 owin.background = "Sage" // https://www.dndbeyond.com/backgrounds/11-sage
 owin.alignment = "Chaotic good"
-owin.experiencePoints = "-"
+owin.experiencePoints = 0
 owin.addLanguage("Common") // https://www.dndbeyond.com/races/18-gnome#GnomeTraits// https://forgottenrealms.fandom.com/wiki/Common
 owin.addLanguage("Gnomish (Dwarvish script)") // https://www.dndbeyond.com/races/18-gnome#GnomeTraits // https://forgottenrealms.fandom.com/wiki/Gnome_language
 owin.addLanguage("Modron") // study // https://www.dndbeyond.com/backgrounds/11-sage // https://forgottenrealms.fandom.com/wiki/Modron_language

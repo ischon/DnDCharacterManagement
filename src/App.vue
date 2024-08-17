@@ -19,42 +19,45 @@ const email = localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem
 </script>
 
 <template>
-<!--  TODO: fix layout-->
   <nav>
-    <RouterLink to="/">Go to Home</RouterLink>
-    <RouterLink v-if="!validToken" to="/login">Go to login</RouterLink>
-    <RouterLink v-else to="/logout">Go to logout</RouterLink>
-    <RouterLink to="/character/lzrh8rb4">Go to default</RouterLink>
-    <RouterLink v-if="email === 'ian@schon.dev'" to="/character/lz825uz4">Go to owin</RouterLink>
-
+    <RouterLink v-if="validToken" to="/">Go to Home</RouterLink>
+    <RouterLink v-if="validToken" to="/character/lzrh8rb4">Go to default</RouterLink>
+    <RouterLink v-if="validToken && email === 'ian@schon.dev'" to="/character/lz825uz4">Go to owin</RouterLink>
+    <RouterLink v-if="!validToken" style="align-self: end" to="/login">Go to login</RouterLink>
+    <RouterLink v-else style="align-self: end" to="/logout">logout</RouterLink>
   </nav>
-  <br>
   <main>
     <RouterView />
   </main>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
+nav {
+  display: flex;
+  justify-content: left;
+  margin: 1rem 0;
 
+  * {
+    padding: 1rem;
+    margin: 0 1rem;
+    background-color: var(--color-background-mute);
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+    &:hover {
+      background-color: var(--color-background-soft);
+    }
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+    &.exact-active {
+      background-color: var(--color-background-soft);
+      color: var(--color-text);
+    }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }
 </style>

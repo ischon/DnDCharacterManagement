@@ -353,6 +353,14 @@ export class Character {
 
     }
 
+    toggleProficiency(type, name) {
+        if (this.proficiencies[type].includes(name)) {
+            this.removeProficiency(type, name)
+            return;
+        }
+        this.addProficiency(type, name)
+    }
+
     addProficiency(type, name) {
         if (!proficiencyTypes.includes(type)) {
             console.log("ERROR: ability type does not exists")
@@ -659,12 +667,12 @@ export class Character {
 
     get armorClass() {
         let result = 0
-        result += this._character.stats.armorClass.base
-        if (this._character.stats.armorClass.hasDexModifier) {
+        result += this.armorClassBase
+        if (this.armorClassHasDexModifier) {
             result += ((this.dexterityModifier < 2) ? this.dexterityModifier : 2)
         }
-        result += this._character.stats.armorClass.shield
-        result += this._character.stats.armorClass.misc
+        result += this.armorClassShield
+        result += this.armorClassMisc
         return result
     }
 
@@ -681,9 +689,14 @@ export class Character {
     }
 
     get hitPointMaximumValue() {
-        return this.baseHitPoints
-        + this.constitutionModifier
-        + (this.hitPointsMisc && this.hitPointsMisc > 0) ? this.hitPointsMisc : 0;
+        let value = 0
+        value += this.baseHitPoints
+        value += this.constitutionModifier
+        if (this.hitPointsMisc && this.hitPointsMisc !== 0) {
+            value += this.hitPointsMisc
+        }
+
+        return value
     }
 
     get initiativeModifier() {
@@ -965,12 +978,24 @@ export class Character {
         this._character.stats.armorClass.base = value
     }
 
+    get armorClassHasDexModifier() {
+        return this._character.stats.armorClass.hasDexModifier
+    }
+
     set armorClassHasDexModifier(value) {
         this._character.stats.armorClass.hasDexModifier = value
     }
 
+    get armorClassShield() {
+        return this._character.stats.armorClass.shield
+    }
+
     set armorClassShield(value) {
         this._character.stats.armorClass.shield = value
+    }
+
+    get armorClassMisc() {
+        return this._character.stats.armorClass.misc
     }
 
     set armorClassMisc(value) {
@@ -1018,6 +1043,12 @@ export class Character {
     }
 
     set currentHitPoints(value) {
+        if (value >= this.hitPointMaximumValue) {
+            console.log("ERROR: hit points are higher than maximum hit points")
+            this._character.stats.hitPoints.current = this.hitPointMaximumValue
+            return
+        }
+
         this._character.stats.hitPoints.current = value
     }
 
@@ -1025,7 +1056,7 @@ export class Character {
         return this._character.stats.hitPoints.temp
     }
 
-    set hitPointsTemp(value) {
+    set tempHitPoints(value) {
         this._character.stats.hitPoints.temp = value
     }
 
@@ -1053,17 +1084,24 @@ export class Character {
         }
     }
 
-    get currentHitDice() {
-        return this._character.stats.hitDice.current + 'D' + this._character.stats.hitDice.die
+    get currentAmountHitDice() {
+        return this._character.stats.hitDice.current
     }
 
-    set currentHitDice(value) {
-        value = Number(value)
-        if (Number.isInteger(value) && value <= this._character.stats.hitDice.total) {
+    set currentAmountHitDice(value) {
+        if (Number.isInteger(value) && value <= this._character.stats.hitDice.total && value >= 0) {
             this._character.stats.hitDice.current = value
             return;
         }
         console.log("ERROR: not enough hit dice")
+    }
+
+    get currentHitDice() {
+        return this.currentAmountHitDice + 'D' + this._character.stats.hitDice.die
+    }
+
+    set currentHitDice(value) {
+        this.currentAmountHitDice = Number(value)
     }
 
     get deathSaves() {
