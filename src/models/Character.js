@@ -1043,7 +1043,7 @@ export class Character {
     }
 
     set currentHitPoints(value) {
-        if (value >= this.hitPointMaximumValue) {
+        if (value > this.hitPointMaximumValue) {
             console.log("ERROR: hit points are higher than maximum hit points")
             this._character.stats.hitPoints.current = this.hitPointMaximumValue
             return
