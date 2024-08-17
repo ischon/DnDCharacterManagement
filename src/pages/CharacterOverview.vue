@@ -3,12 +3,21 @@ import router from "@/router.js";
 
 import {onBeforeMount, ref, watch} from 'vue'
 import {FirebaseHandler} from "@/helpers/firebase.js";
+import {cloneDeep} from 'lodash';
 
 // setup() {
-let loading = ref({
+const loading = ref({
   character: true,
   image: true
 })
+const editing = ref({
+  open: false,
+  name: undefined,
+  key: undefined,
+  value: undefined,
+  oldValue: undefined
+})
+
 const characterId = router.currentRoute.value.params.id
 const firebaseHandler = new FirebaseHandler()
 const character = ref({})
@@ -21,6 +30,34 @@ watch(
       window.location.reload();
     }
 );
+
+const atClickEdit = (name, key, value) => {
+  editing.value.name = name
+  editing.value.key = key
+  editing.value.oldValue = cloneDeep(value)
+  editing.value.value = value
+  editing.value.open = true
+}
+
+const resetModelData = () => {
+  editing.value.open = false;
+  editing.value.name = undefined;
+  editing.value.key = undefined;
+  editing.value.value = undefined;
+  editing.value.oldValue = undefined;
+}
+
+const atClickSave = () => {
+  editing.value.open = false;
+  firebaseHandler.setCharacterData(character.value.objectData)
+  resetModelData()
+}
+
+const atClickCancel = () => {
+  editing.value.value = editing.value.oldValue
+  resetModelData()
+}
+
 
 const uploadImage = async (e) => {
   const image = e.target.files[0];
@@ -192,7 +229,8 @@ onBeforeMount(async () => {
           <div class="container col flex-1">
             <!-- ABILITY SCORES -->
             <div class="container flex-1 block row labeled-row no-border-left">
-              <div class="value flex-1">
+              <div class="value flex-1"
+                   @click="atClickEdit('Proficiency Bonus', 'proficiencyBonus', character.proficiencyBonus)">
                 <p>
                   {{ formatScore(character.proficiencyBonus) }}
                 </p>
@@ -393,8 +431,8 @@ onBeforeMount(async () => {
 
         </div>
         <div class="container row flex-1">
-          <div class="container row flex-1">
-            <div class="block container value-display col no-border-left no-border-bottom align-start">
+          <div class="container block value-display col flex-1 no-border-left no-border-bottom">
+            <div class="container col flex-1">
               <div class="flex-1">
                 <p>Languages</p>
                 <p v-for="language in character.languages">
@@ -410,7 +448,6 @@ onBeforeMount(async () => {
                   <br v-if="items.length > 0"/>
                 </div>
               </div>
-              <br>
               <p class="align-center">Languages & Other Proficiencies</p>
             </div>
           </div>
@@ -574,7 +611,9 @@ onBeforeMount(async () => {
               <p>Spell Save DC</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top no-border-right">
-              <p class="flex-1 value medium no-transform">{{ character.spellAttackBonus > 0 ? '+ ' + character.spellAttackBonus : character.spellAttackBonus }}</p>
+              <p class="flex-1 value medium no-transform">{{
+                  character.spellAttackBonus > 0 ? '+ ' + character.spellAttackBonus : character.spellAttackBonus
+                }}</p>
               <p>Spell Attack Bonus</p>
             </div>
           </div>
@@ -633,9 +672,53 @@ onBeforeMount(async () => {
       </div>
     </div>
   </div>
+
+  <div v-if="editing.open" class="popup container col" style="align-items: center">
+    <div class="container row popup-display">
+      <div class="container block value-display col">
+        <div id="title-row" class="container row">
+          <p>{{ editing.name }}</p>
+        </div>
+        <div id="input-row" class="container row">
+          <input type="text" v-model="editing.value" @keydown.enter="atClickSave" @keydown.esc="atClickCancel">
+        </div>
+        <div id="button-row" class="container row">
+          <button @click="atClickSave">Save</button>
+          <button @click="atClickCancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped lang="scss">
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  justify-content: center;
+
+  .popup-display {
+    min-width: 20rem;
+    width: 50%;
+    justify-content: center;
+
+    .value-display {
+      padding: 4rem 2rem;
+      min-width: 15rem;
+
+      #title-row {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}
+
+
 //.block {
 //  margin: .25rem
 //}

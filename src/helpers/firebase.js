@@ -73,13 +73,13 @@ export class FirebaseHandler {
         }
     }
 
-    async setCharacterData(object) {
+    async setCharacterData(character) {
         try {
             let path = this.paths["character"]
                 .replace("{uid}", this.firebaseUser.uid)
-                .replace("{characterId}", object.id)
+                .replace("{characterId}", character.id)
                 .split("/");
-            await this.setData(object, ...path);
+            await this.setData(character, ...path);
         } catch (e) {
             console.error("Error adding document: ", e);
         }

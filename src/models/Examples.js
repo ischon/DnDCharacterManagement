@@ -35,16 +35,17 @@ owin.flaws = "" +
     "Most people scream and run when they see a demon. I stop and take notes on its anatomy."
 owin.allies = "" +
     "Allies: \\n" +
-    "- Captain ... - is a captain working for the Thurnborrow Trading Company. Has offered to help if ever needing to travel by ship\\n" +
+    "- Captain Pier Monocker - is a captain working for the Thornberrow Trading Company. Has offered to help if ever needing to travel by ship, instruction is to knock twice on the door of his cabin\\n" +
     "\\n" +
     "Companies: \\n" +
-    "- Thurnborrow Trading Company - Big company at the docks in Babble brook\\n" +
+    "- Thornberrow Trading Company - Big company at the docks in Babble brook\\n" +
     "\\n" +
     "Enemies: \\n" +
+    "- Local Bandit - HP 7 - AC 15 - Speed 30\\n" +
     "\\n" +
     "Passerby's: \\n" +
-    "Dotty - Assistant at the Thurnborrow Trading Company\\n" +
-    "Oswald Thurnborrow - Owner of the Thurnborrow Trading Company\\n"
+    "Dotty - Assistant at the Thornberrow Trading Company\\n" +
+    "Oswald Thornberrow - Owner of the Thornberrow Trading Company\\n"
 
 // character information
 owin.class = "Artificer" // // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q

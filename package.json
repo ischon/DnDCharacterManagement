@@ -12,6 +12,7 @@
     "@firebase/auth": "^1.7.5",
     "@firebase/firestore": "^4.6.4",
     "firebase": "^10.12.4",
+    "lodash": "^4.17.21",
     "vue": "^3.4.29",
     "vue-router": "^4.4.0",
     "vue3-google-login": "^2.0.27"

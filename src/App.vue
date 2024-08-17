@@ -19,6 +19,7 @@ const email = localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem
 </script>
 
 <template>
+<!--  TODO: fix layout-->
   <nav>
     <RouterLink to="/">Go to Home</RouterLink>
     <RouterLink v-if="!validToken" to="/login">Go to login</RouterLink>
@@ -38,10 +39,6 @@ header {
   line-height: 1.5;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
 
 @media (min-width: 1024px) {
   header {

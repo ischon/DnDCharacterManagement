@@ -347,6 +347,12 @@ export class Character {
     }
 
 // METHODS
+    save(key, value) {
+        this._character[key] = value;
+
+
+    }
+
     addProficiency(type, name) {
         if (!proficiencyTypes.includes(type)) {
             console.log("ERROR: ability type does not exists")

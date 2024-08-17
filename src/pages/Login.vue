@@ -5,7 +5,6 @@ const callback = async (response) => {
   // decodeCredential will retrieve the JWT payload from the credential
   localStorage.setItem("Token", response.credential)
   const userData = decodeCredential(response.credential)
-  console.log("Handle the userData", userData)
   localStorage.setItem("UserData", JSON.stringify(userData))
   await router.push({path: "/", replace: true})
   window.location.reload()
