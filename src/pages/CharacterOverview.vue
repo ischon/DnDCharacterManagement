@@ -33,6 +33,7 @@ class ModelTypes {
   static proficiencyTypes = new ModelTypes('proficiencyTypes', 'select', proficiencyTypes)
   static abilities = new ModelTypes('abilities', 'select', abilities)
   static die = new ModelTypes('dice', 'dice', dice)
+  static weapon = new ModelTypes('weapon', 'weapon')
 
   constructor(type, element, options = undefined) {
     this.type = type;
@@ -406,7 +407,7 @@ onBeforeMount(async () => {
                          ['Traits', 'personalityTraits', character.personalityTraits, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
-                    <p class="no-transform" v-for="traits in character.personalityTraits.split('\\n')">
+                    <p class="no-transform" v-for="traits in character.personalityTraits.split('\n')">
                       {{ traits }}
                     </p>
                   </div>
@@ -417,7 +418,7 @@ onBeforeMount(async () => {
                          ['Ideals', 'ideals', character.ideals, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
-                    <p class="no-transform" v-for="ideals in character.ideals.split('\\n')">
+                    <p class="no-transform" v-for="ideals in character.ideals.split('\n')">
                       {{ ideals }}
                     </p>
                   </div>
@@ -428,7 +429,7 @@ onBeforeMount(async () => {
                          ['Bonds', 'bonds', character.bonds, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
-                    <p class="no-transform" v-for="bonds in character.bonds.split('\\n')">
+                    <p class="no-transform" v-for="bonds in character.bonds.split('\n')">
                       {{ bonds }}
                     </p>
                   </div>
@@ -440,7 +441,7 @@ onBeforeMount(async () => {
                          ['Flaws', 'flaws', character.flaws, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
-                    <p class="no-transform" v-for="flaws in character.flaws.split('\\n')">
+                    <p class="no-transform" v-for="flaws in character.flaws.split('\n')">
                       {{ flaws }}
                     </p>
                   </div>
@@ -451,7 +452,11 @@ onBeforeMount(async () => {
             <!-- TODO: Continue from here with setting the @click property -->
             <div class="container row flex-1">
               <div class="container block value-display align-start col flex-1">
-                <div class="container col">
+                <div class="container col clickable" @click="atClickEdit(
+                    [
+                        ['Attacks', 'attacks', character.attacks, ModelTypes.weapon]
+                    ]
+                )">
                   <div class="container row">
                     <p class="flex-2">Weapon</p>
                     <p class="flex-1">Bonus</p>
@@ -481,7 +486,7 @@ onBeforeMount(async () => {
               <div class="container value-display align-start block no-border-right col flex-1">
                 <div class="flex-1">
                   <div v-for="feature in character.features">
-                    <p v-for="feat in feature.split('\\n')">
+                    <p v-for="feat in feature.split('\n')">
                       {{ feat }}
                     </p>
                   </div>
@@ -620,7 +625,7 @@ onBeforeMount(async () => {
           </div>
           <div class="container block value-display col flex-2 no-border-left no-border-bottom">
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.backstory.split('\\n')">
+              <p class="no-transform" v-for="line in character.backstory.split('\n')">
                 {{ line }}
               </p>
             </div>
@@ -630,7 +635,7 @@ onBeforeMount(async () => {
         <div class="container col flex-2">
           <div class="container block value-display align-start col flex-1 no-border-right">
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.allies.split('\\n')">
+              <p class="no-transform" v-for="line in character.allies.split('\n')">
                 {{ line }}
               </p>
             </div>
@@ -638,7 +643,7 @@ onBeforeMount(async () => {
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right">
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.additionalFeatures.split('\\n')">
+              <p class="no-transform" v-for="line in character.additionalFeatures.split('\n')">
                 {{ line }}
               </p>
             </div>
@@ -646,7 +651,7 @@ onBeforeMount(async () => {
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right no-border-bottom">
             <div class="flex-1">
-              <p class="flex-1 no-transform" v-for="line in character.treasure.split('\\n')">
+              <p class="flex-1 no-transform" v-for="line in character.treasure.split('\n')">
                 {{ line }}
               </p>
             </div>
@@ -768,6 +773,14 @@ onBeforeMount(async () => {
                 D{{ option }}
               </option>
             </select>
+            <div v-if="item.type.element === 'weapon'">
+              <div class="container row" v-for="row in item.value">
+                <input type="text" v-model="row.name" placeholder="Name">
+                <input type="number" v-model="row.bonus" placeholder="Bonus">
+                <input type="text" v-model="row.damage" placeholder="Damage">
+                <input type="text" v-model="row.type" placeholder="Type">
+              </div>
+            </div>
           </div>
         </div>
 

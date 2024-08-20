@@ -11,41 +11,41 @@ owin.hairColor = "green/blueish"
 owin.skinColor = "Light blue grayish"
 owin.backstory = "" +
     "Owin is a simple gnome, of a humble bloodline. From child on he has been wondering how the world works. And tinkering with items to create all that he can imagine." +
-    "\\n\\n" +
+    "\n\n" +
     "At his 28th birthday he departed from his hometown to study the world and learn about other cultures and societies. " +
-    "\\n\\n" +
+    "\n\n" +
     "By now he has been traveling for almost two years. Enjoying each day where he seas something interesting happening" +
-    "\\n\\n" +
+    "\n\n" +
     "During his travels he sometimes helped at taverns to earn a meal and a sleeping place. Other times he looked for a temporary job to make means end." +
-    "\\n\\n" +
+    "\n\n" +
     "By now he is searching for a new subject to put his focus on as he just finished a year of study focused on Modron customs"
 owin.personalityTraits = "" +
     "Loves to study the interaction between creatures, often scribbles some things that seem to be nonsense the others" +
-    "\\n\\n" +
+    "\n\n" +
     "I'm used to helping out those who aren't as smart as I am, and I patiently explain anything and everything to others."
 owin.ideals = "" +
     "Knowledge. The path to power and self-improvement is through knowledge." +
-    "\\n\\n" +
+    "\n\n" +
     "Kindness. By understanding other creatures, we learn to understand ourselves."
 owin.bonds = "" +
     "I keep a journal where I record my observations about other creatures, and I would be devastated if I ever lost it. My entire life's work is in those pages." +
-    "\\n\\n" +
+    "\n\n" +
     "I made a promise to a dying scholar to continue their research, and their notes are hidden within my journal. I’m determined to fulfill that promise, no matter the cost."
 owin.flaws = "" +
     "Most people scream and run when they see a demon. I stop and take notes on its anatomy."
 owin.allies = "" +
-    "Allies: \\n" +
-    "- Captain Pier Monocker - is a captain working for the Thornberrow Trading Company. Has offered to help if ever needing to travel by ship, instruction is to knock twice on the door of his cabin\\n" +
-    "\\n" +
-    "Companies: \\n" +
-    "- Thornberrow Trading Company - Big company at the docks in Babble brook\\n" +
-    "\\n" +
-    "Enemies: \\n" +
-    "- Local Bandit - HP 7 - AC 15 - Speed 30\\n" +
-    "\\n" +
-    "Passerby's: \\n" +
-    "Dotty - Assistant at the Thornberrow Trading Company\\n" +
-    "Oswald Thornberrow - Owner of the Thornberrow Trading Company\\n"
+    "Allies: \n" +
+    "- Captain Pier Monocker - is a captain working for the Thornberrow Trading Company. Has offered to help if ever needing to travel by ship, instruction is to knock twice on the door of his cabin\n" +
+    "\n" +
+    "Companies: \n" +
+    "- Thornberrow Trading Company - Big company at the docks in Babble brook\n" +
+    "\n" +
+    "Enemies: \n" +
+    "- Local Bandit - HP 7 - AC 15 - Speed 30\n" +
+    "\n" +
+    "Passerby's: \n" +
+    "Dotty - Assistant at the Thornberrow Trading Company\n" +
+    "Oswald Thornberrow - Owner of the Thornberrow Trading Company\n"
 
 // character information
 owin.class = "Artificer" // // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
@@ -65,10 +65,10 @@ owin.addFeature("Tinker") // https://www.dndbeyond.com/races/18-gnome#RockGnome
 owin.addFeature("Researcher")
 owin.addFeature("Magical Tinkering") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 owin.addFeature(
-    "Infuse Item (lv2)\\n" + // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
-    "* enchanted arcane focus\\n" +
-    "* Repeating shot\\n" +
-    "* Replicate magical item (bag of holding)\\n" +
+    "Infuse Item (lv2)\n" + // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
+    "* enchanted arcane focus\n" +
+    "* Repeating shot\n" +
+    "* Replicate magical item (bag of holding)\n" +
     "* Replicate magical item (alchemy jug)"
 )
 
@@ -221,25 +221,25 @@ exampleCharacter.backstory = "" +
     " You traveled to the city of Neverwinter with your company to serve in both the army and city watch." +
     " Over time, you grew disillusioned with many of your fellow soldiers." +
     " They seemed to enjoy their authority at the expense of the people they’re supposed to protect." +
-    "\\n\\n" +
+    "\n\n" +
     "Your background shaped your character in important ways." +
     " You learned several languages in the course of your military career." +
     " Your skill proficiencies in Athletics and Intimidation reflect your physical training and an ability to overawe foes." +
-    "\\n\\n" +
+    "\n\n" +
     " Recently you’ve had dreams of a shadow creeping across the sea like a shroud, swallowing an island in darkness." +
     " Though you dismissed the dreams at first, you began to hear a voice calling you to stand against death’s endless hunger." +
     " Certain of your deity’s wishes, you resigned your post and set out on your quest" +
-    "\\n\\n" +
+    "\n\n" +
     "Banish a Shadow of Death." +
-    "\\n" +
+    "\n" +
     "Researching images from your dreams pointed you to Stormwreck Isle, not far from Neverwinter." +
     " A remote cloister there holds a temple to the dragon god Bahamut, who is a patron of heroes and a champion of justice." +
     " Someone at the cloister may hold the key to the impending doom your deity wishes you to avert."
 exampleCharacter.allies = "" +
-    "Deity\\n" +
+    "Deity\n" +
     "- Marthammor Duin" +
-    "\\n\\n" +
-    "Organizations\\n" +
+    "\n\n" +
+    "Organizations\n" +
     "- The army of Mintarn"
 exampleCharacter.addEquipment("Chain mail", 1, 55)
 exampleCharacter.addEquipment("Shield", 1, 6)
