@@ -17,12 +17,14 @@ const editing = reactive({
   items: []
 })
 
+const showImageModel = ref(false)
+
 class ModelTypes {
   static disabled = new ModelTypes('disabled', 'input')
-  static color = new ModelTypes('color', 'input')
-  static date = new ModelTypes('date', 'input')
-  static file = new ModelTypes('file', 'input')
-  static image = new ModelTypes('image', 'input')
+  // static color = new ModelTypes('color', 'input')
+  // static date = new ModelTypes('date', 'input')
+  // static file = new ModelTypes('file', 'input')
+  // static image = new ModelTypes('image', 'input')
   static number = new ModelTypes('number', 'input')
   static checkbox = new ModelTypes('checkbox', 'input')
   static text = new ModelTypes('text', 'input')
@@ -34,6 +36,8 @@ class ModelTypes {
   static abilities = new ModelTypes('abilities', 'select', abilities)
   static die = new ModelTypes('dice', 'dice', dice)
   static weapon = new ModelTypes('weapon', 'weapon')
+  static spell = new ModelTypes('spell', 'spell')
+  static cantrips = new ModelTypes('cantrips', 'spell')
 
   constructor(type, element, options = undefined) {
     this.type = type;
@@ -106,10 +110,14 @@ const uploadImage = async (e) => {
 
   await firebaseHandler.setCharacterImage(characterId, image)
 
+  if (showImageModel.value) {
+    showImageModel.value = false
+  }
+
 }
 
 const formatScore = (score) => {
-  return score !== 0 ?((score > 0) ? '+' : '') + score : '-'
+  return score !== 0 ? ((score > 0) ? '+' : '') + score : '-'
 }
 
 // 1 lb = 0.45359237 kg
@@ -572,36 +580,43 @@ onBeforeMount(async () => {
     <div class="page container col" id="page-2"> <!-- Page 2 -->
       <div class="header container row"> <!-- Header -->
         <div class="container col flex-1"> <!-- Left Column -->
-          <div class="container value-display col block flex-1 no-border-top no-border-left">
+          <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
+               @click="atClickEdit([['Character Name', 'name', character.name, ModelTypes.text]])">
             <p class="flex-1 value medium no-transform">{{ character.name }}</p>
             <p>Character Name</p>
           </div>
         </div>
         <div class="container col flex-2"> <!-- Right Column -->
           <div class="container row">
-            <div class="container block value-display col flex-1 no-border-top">
+            <div class="container block value-display col flex-1 no-border-top clickable"
+                 @click="atClickEdit([['Character Age', 'age', character.age, ModelTypes.number]])">
               <p class="flex-1 value medium no-transform">{{ character.age }}</p>
               <p>Age</p>
             </div>
-            <div class="container block value-display col flex-1 no-border-top">
+            <div class="container block value-display col flex-1 no-border-top clickable"
+                 @click="atClickEdit([['Character Height', 'height', character.height, ModelTypes.number]])">
               <p class="flex-1 value medium no-transform">{{ formatLength(character.height) }}</p>
               <p>Height</p>
             </div>
-            <div class="container block value-display col flex-1 no-border-top no-border-right">
+            <div class="container block value-display col flex-1 no-border-top no-border-right clickable"
+                 @click="atClickEdit([['Character Weight', 'weight', character.weight, ModelTypes.number]])">
               <p class="flex-1 value medium no-transform">{{ formatWeight(character.weight) }}</p>
               <p>Weight</p>
             </div>
           </div>
           <div class="container row">
-            <div class="container block value-display col flex-1">
+            <div class="container block value-display col flex-1 clickable"
+                 @click="atClickEdit([['Character Eyes', 'eyeColor', character.eyeColor, ModelTypes.text]])">
               <p class="flex-1 value medium no-transform">{{ character.eyeColor }}</p>
               <p>Eyes</p>
             </div>
-            <div class="container block value-display col flex-1">
+            <div class="container block value-display col flex-1 clickable"
+                 @click="atClickEdit([['Character Skin', 'skinColor', character.skinColor, ModelTypes.text]])">
               <p class="flex-1 value medium no-transform">{{ character.skinColor }}</p>
               <p>Skin</p>
             </div>
-            <div class="container block value-display col flex-1 no-border-right">
+            <div class="container block value-display col flex-1 no-border-right clickable"
+                 @click="atClickEdit([['Character Hair', 'hairColor', character.hairColor, ModelTypes.text]])">
               <p class="flex-1 value medium no-transform">{{ character.hairColor }}</p>
               <p>Hair</p>
             </div>
@@ -613,17 +628,17 @@ onBeforeMount(async () => {
           <div class="container block value-display col flex-1 no-border-left">
             <div class="flex-1">
               <img v-if="!loading.image && characterImage"
-                   :src="characterImage" class="character-appearance" alt="Character Appearance"
+                   :src="characterImage" class="character-appearance clickable" alt="Character Appearance"
+                   @click="showImageModel = true"
               />
             </div>
             <div v-if="!characterImage">
-              <input type="file" accept="image/jpeg" @change=uploadImage>
+              <input type="file" accept="image/*" @change=uploadImage>
             </div>
-            <p><input type="file" accept="image/*" name="image" id="file" onchange="loadFile" style="display: none;">
-            </p>
             <p>Character Appearance</p>
           </div>
-          <div class="container block value-display col flex-2 no-border-left no-border-bottom">
+          <div class="container block value-display col flex-2 no-border-left no-border-bottom clickable"
+               @click="atClickEdit([['Character Backstory', 'backstory', character.backstory, ModelTypes.textarea]])">
             <div class="flex-1">
               <p class="no-transform" v-for="line in character.backstory.split('\n')">
                 {{ line }}
@@ -633,7 +648,8 @@ onBeforeMount(async () => {
           </div>
         </div>
         <div class="container col flex-2">
-          <div class="container block value-display align-start col flex-1 no-border-right">
+          <div class="container block value-display align-start col flex-1 no-border-right clickable"
+               @click="atClickEdit([['Allies & Organizations', 'allies', character.allies, ModelTypes.textarea]])">
             <div class="flex-1">
               <p class="no-transform" v-for="line in character.allies.split('\n')">
                 {{ line }}
@@ -641,7 +657,8 @@ onBeforeMount(async () => {
             </div>
             <p class="align-center">Allies & Organizations</p>
           </div>
-          <div class="container block value-display align-start col flex-1 no-border-right">
+          <div class="container block value-display align-start col flex-1 no-border-right clickable"
+               @click="atClickEdit([['Additional Features & Traits', 'additionalFeatures', character.additionalFeatures, ModelTypes.textarea]])">
             <div class="flex-1">
               <p class="no-transform" v-for="line in character.additionalFeatures.split('\n')">
                 {{ line }}
@@ -649,7 +666,8 @@ onBeforeMount(async () => {
             </div>
             <p class="align-center">Additional Features & Traits</p>
           </div>
-          <div class="container block value-display align-start col flex-1 no-border-right no-border-bottom">
+          <div class="container block value-display align-start col flex-1 no-border-right no-border-bottom clickable"
+               @click="atClickEdit([['Treasure', 'treasure', character.treasure, ModelTypes.textarea]])">
             <div class="flex-1">
               <p class="flex-1 no-transform" v-for="line in character.treasure.split('\n')">
                 {{ line }}
@@ -664,11 +682,13 @@ onBeforeMount(async () => {
       <div class="header container row"> <!-- Header -->
         <div class="container col flex-1">
           <div class="container row">
-            <div class="container value-display col block flex-3 no-border-top no-border-left">
+            <div class="container value-display col block flex-3 no-border-top no-border-left clickable"
+                 @click="atClickEdit([['Spellcasting Class', 'spellcastingClass', character.spellcastingClass, ModelTypes.classes]])">
               <p class="flex-1 value medium no-transform">{{ character.spellcastingClass }}</p>
               <p>Spellcasting Class</p>
             </div>
-            <div class="container block value-display col flex-2 no-border-top">
+            <div class="container block value-display col flex-2 no-border-top clickable"
+                 @click="atClickEdit([['Spellcasting Ability', 'spellcastingAbility', character.spellcastingAbility, ModelTypes.abilityTypes]])">
               <p class="flex-1 value medium no-transform" style="text-transform: capitalize">
                 {{ character.spellcastingAbility }}</p>
               <p>Spellcasting Ability</p>
@@ -678,18 +698,18 @@ onBeforeMount(async () => {
               <p>Spell Save DC</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top no-border-right">
-              <p class="flex-1 value medium no-transform">{{
-                  character.spellAttackBonus > 0 ? '+ ' + character.spellAttackBonus : character.spellAttackBonus
-                }}</p>
+              <p class="flex-1 value medium no-transform">{{ formatScore(character.spellAttackBonus) }}</p>
               <p>Spell Attack Bonus</p>
             </div>
           </div>
         </div>
       </div>
+      <!-- TODO: Working On Cantrip Editing  -->
       <div class="body container row">
         <div class="container col flex-1" v-for="(i, key) in [[0,1,2],[3,4,5],[6,7,8,9]]">
           <div class="container block value-display col flex-1" v-for="j in i"
-               :class="{'no-border-bottom': [2,5,9].includes(j), 'no-border-left': key===0, 'no-border-right': key===2}">
+               :class="{'no-border-bottom': [2,5,9].includes(j), 'no-border-left': key===0, 'no-border-right': key===2}"
+          >
             <div class="container row labeled-row" style="margin-bottom: .5rem">
               <div class="value flex-1">
                 <p>lvl {{ j }}</p>
@@ -740,6 +760,8 @@ onBeforeMount(async () => {
     </div>
   </div>
 
+  <!--  MODALS  -->
+
   <div v-if="editing.open" class="popup container col" style="align-items: center">
     <div class="container row popup-display">
       <div class="container block value-display col">
@@ -757,15 +779,16 @@ onBeforeMount(async () => {
                    type="text"
                    disabled
                    :name="item.name"
-                   v-model="item.value" />
-            <textarea v-if="item.type.element === 'textarea'"
-                      :name="item.name"
-                      rows="5" cols="40"
-                      v-model="item.value"
-                      @keydown.esc="atClickCancel"/>
+                   value="{{item.value}}"/>
+            <textarea
+                v-if="item.type.element === 'textarea'"
+                :name="item.name"
+                rows="5" cols="40"
+                v-model="item.value"
+                @keydown.esc="atClickCancel"/>
             <select v-if="item.type.element === 'select'" :name="item.name" v-model="item.value">
               <option v-for="option in item.type.options" :value="option">
-                {{ option }}
+                {{ option[0].toUpperCase() + option.slice(1) }}
               </option>
             </select>
             <select v-if="item.type.element === 'dice'" :name="item.name" v-model="item.value">
@@ -787,6 +810,22 @@ onBeforeMount(async () => {
         <div class="container row button-row">
           <button @click="atClickSave">Save</button>
           <button @click="atClickCancel">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="showImageModel" class="popup container col" style="align-items: center">
+    <div class="container row popup-display">
+      <div class="container block value-display col">
+        <div class="container row input-row">
+          <div class="container col">
+            <label for="characterImage">Character Appearance</label>
+            <input type="file" accept="image/*" name="Character Appearance" id="characterImage" @change="uploadImage">
+          </div>
+        </div>
+        <div class="container row button-row">
+          <button @click="showImageModel=false">Cancel</button>
         </div>
       </div>
     </div>
