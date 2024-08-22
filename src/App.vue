@@ -4,14 +4,7 @@ import {computed} from "vue";
 const validToken = computed(() => {
   let token = localStorage.getItem('Token')
 
-  if (token){
-    // console.log("token found")
-    return true
-  }
-  else {
-    // console.log("no token found")
-    return false
-  }
+  return !!token;
 })
 
 const email = localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem("UserData")).email : undefined
@@ -23,8 +16,8 @@ const email = localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem
     <RouterLink v-if="validToken" to="/">Go to Home</RouterLink>
     <RouterLink v-if="validToken" to="/character/lzrh8rb4">Go to default</RouterLink>
     <RouterLink v-if="validToken && email === 'ian@schon.dev'" to="/character/lz825uz4">Go to owin</RouterLink>
-    <RouterLink v-if="!validToken" style="align-self: end" to="/login">Go to login</RouterLink>
-    <RouterLink v-else style="align-self: end" to="/logout">logout</RouterLink>
+    <RouterLink v-if="!validToken" to="/login">Go to login</RouterLink>
+    <RouterLink v-else to="/logout">logout</RouterLink>
   </nav>
   <main>
     <RouterView />
@@ -37,17 +30,18 @@ nav {
   justify-content: left;
   margin: 1rem 0;
 
+
   * {
     padding: 1rem;
     margin: 0 1rem;
-    background-color: var(--color-background-mute);
+    background-color: var(--color-background-soft);
 
     &:hover {
-      background-color: var(--color-background-soft);
+      background-color: var(--color-background-mute);
     }
 
     &.exact-active {
-      background-color: var(--color-background-soft);
+      background-color: var(--color-background-mute);
       color: var(--color-text);
     }
 
@@ -57,6 +51,7 @@ nav {
 
     &:last-child {
       margin-right: 0;
+      margin-left: auto;
     }
   }
 }

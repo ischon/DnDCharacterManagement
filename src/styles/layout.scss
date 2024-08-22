@@ -197,7 +197,7 @@
         border-radius: 999999px;
 
         &.selected {
-          background: var(--vt-c-indigo);
+          background: var(--color-filler);
         }
       }
 
@@ -241,7 +241,7 @@
   border-radius: 999999px;
 
   &.selected {
-    background: var(--vt-c-indigo);
+    background: var(--color-filler);
   }
 }
 

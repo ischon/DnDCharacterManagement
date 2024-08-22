@@ -589,17 +589,17 @@ onBeforeMount(async () => {
         <div class="container col flex-2"> <!-- Right Column -->
           <div class="container row">
             <div class="container block value-display col flex-1 no-border-top clickable"
-                 @click="atClickEdit([['Character Age', 'age', character.age, ModelTypes.number]])">
+                 @click="atClickEdit([['Character Age in years', 'age', character.age, ModelTypes.number]])">
               <p class="flex-1 value medium no-transform">{{ character.age }}</p>
               <p>Age</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top clickable"
-                 @click="atClickEdit([['Character Height', 'height', character.height, ModelTypes.number]])">
+                 @click="atClickEdit([['Character Height in foot', 'height', character.height, ModelTypes.number]])">
               <p class="flex-1 value medium no-transform">{{ formatLength(character.height) }}</p>
               <p>Height</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top no-border-right clickable"
-                 @click="atClickEdit([['Character Weight', 'weight', character.weight, ModelTypes.number]])">
+                 @click="atClickEdit([['Character Weight in pounds', 'weight', character.weight, ModelTypes.number]])">
               <p class="flex-1 value medium no-transform">{{ formatWeight(character.weight) }}</p>
               <p>Weight</p>
             </div>
@@ -762,9 +762,9 @@ onBeforeMount(async () => {
 
   <!--  MODALS  -->
 
-  <div v-if="editing.open" class="popup container col" style="align-items: center">
+  <div v-if="editing.open" class="popup container col" style="align-items: center"  @click="atClickCancel">
     <div class="container row popup-display">
-      <div class="container block value-display col">
+      <div class="container block value-display col" @click.stop>
 
         <div class="container row input-row" v-for="item in editing.items">
           <div class="container col">
@@ -779,7 +779,7 @@ onBeforeMount(async () => {
                    type="text"
                    disabled
                    :name="item.name"
-                   value="{{item.value}}"/>
+                   :value="item.value"/>
             <textarea
                 v-if="item.type.element === 'textarea'"
                 :name="item.name"
