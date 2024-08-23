@@ -5,7 +5,7 @@ import {onBeforeMount, ref, reactive, watch} from 'vue'
 import {FirebaseHandler} from "@/helpers/firebase.js";
 import {range} from 'lodash';
 
-import {classes, alignments, abilityTypes, proficiencyTypes, abilities, dice} from "@/models/Character.js";
+import {classes, alignments, abilityTypes, proficiencyTypes, abilities, dice, Character} from "@/models/Character.js";
 
 // setup() {
 const loading = reactive({
@@ -36,8 +36,7 @@ class ModelTypes {
   static abilities = new ModelTypes('abilities', 'select', abilities)
   static die = new ModelTypes('dice', 'dice', dice)
   static weapon = new ModelTypes('weapon', 'weapon')
-  static spell = new ModelTypes('spell', 'spell')
-  static cantrips = new ModelTypes('cantrips', 'spell')
+  static coins = new ModelTypes('coins', 'coins')
 
   constructor(type, element, options = undefined) {
     this.type = type;
@@ -75,15 +74,28 @@ const atClickProficiency = (ability_name, skill_name) => {
   character.toggleProficiency(ability_name, skill_name);
   firebaseHandler.setCharacterData(character.objectData);
 }
+const atClickPrepared = (spell_lvl, spell_name) => {
+  character.togglePrepared(spell_lvl, spell_name);
+  firebaseHandler.setCharacterData(character.objectData);
+}
 
 const resetModelData = () => {
   editing.open = false;
   editing.items = []
 }
 
+const saveWithReflect = (base, path, value) => {
+  if (path.includes('.')) {
+    const [head, ...tail] = path.split('.')
+    saveWithReflect(base[head], tail.join('.'), value)
+  } else {
+    Reflect.set(base, path, value)
+  }
+}
+
 const atClickSave = async () => {
   editing.items.forEach((item) => {
-    Reflect.set(character, item.key, item.value)
+    saveWithReflect(character, item.key, item.value)
   })
   await firebaseHandler.setCharacterData(character.objectData)
   resetModelData()
@@ -372,7 +384,6 @@ onBeforeMount(async () => {
                 <div class="container row flex-1">
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
-                          ['Total Hit Dice', 'maxHitDice', character.maxHitDice, ModelTypes.number],
                           ['Hit Die', 'hitDice', character.hitDice, ModelTypes.die],
                           ['Usable hit Dice', 'currentAmountHitDice', character.currentAmountHitDice, ModelTypes.number],
                        ])">
@@ -454,7 +465,6 @@ onBeforeMount(async () => {
                 </div>
               </div>
             </div>
-            <!-- TODO: Continue from here with setting the @click property -->
             <div class="container row flex-1">
               <div class="container block value-display align-start col flex-1">
                 <div class="container col clickable" @click="atClickEdit(
@@ -490,7 +500,9 @@ onBeforeMount(async () => {
               </div>
               <div class="container value-display align-start block no-border-right col flex-1">
                 <div class="flex-1">
-                  <div v-for="feature in character.features">
+                  <div v-for="(feature, index) in character.features" class="clickable" @click="atClickEdit([
+                    ['Features & Traits', `_character.features.${index}`, feature, ModelTypes.textarea]
+                  ])">
                     <p v-for="feat in feature.split('\n')">
                       {{ feat }}
                     </p>
@@ -507,14 +519,22 @@ onBeforeMount(async () => {
             <div class="container col flex-1">
               <div class="flex-1">
                 <p>Languages</p>
-                <p v-for="language in character.languages">
+                <p v-for="(language, index) in character.languages" class="clickable" @click="atClickEdit([
+                    ['Languages', `_character.languages.${index}`, language, ModelTypes.text]
+                ])">
                   - {{ language }}
                 </p>
                 <br/>
                 <p>Proficiencies</p>
                 <div v-for="(items, category) in character.proficiencies">
                   <p v-if="items.length > 0">{{ category }}</p>
-                  <p v-if="items.length > 0" v-for="proficiency in items">
+                  <p v-if="items.length > 0 && ['items'].includes(category)" v-for="proficiency in items"
+                     class="clickable" @click="atClickEdit([
+                      ['Proficiencies', `_character.proficiencies.${category}.${proficiency}`, proficiency, ModelTypes.text]
+                  ])">
+                    - {{ proficiency }}
+                  </p>
+                  <p v-if="items.length > 0 && category!=='items'" v-for="proficiency in items">
                     - {{ proficiency }}
                   </p>
                   <br v-if="items.length > 0"/>
@@ -525,7 +545,9 @@ onBeforeMount(async () => {
           </div>
           <div class="container block value-display col flex-2 no-border-right no-border-bottom">
             <div class="container row">
-              <div class="container col flex-1">
+              <div class="container col flex-1 clickable" @click="atClickEdit([
+                  ['Copper Coins', 'this._character.coins', character._character.coins, ModelTypes.coins],
+              ])">
                 <div class="container col block value-display no-border" v-for="(value, type) in character.coins">
                   <p class="value flex-1">
                     {{ value }}
@@ -548,9 +570,13 @@ onBeforeMount(async () => {
                     <div class="flex-2">
                       Weight
                     </div>
-
                   </div>
-                  <div class="equipment-item container row" v-for="item in character.equipment">
+                  <div v-for="item in character.equipment" class="equipment-item container row clickable" @click="atClickEdit([
+                      ['Position', `_character.equipment.${item.name}.index`, item.index, ModelTypes.number],
+                      ['Amount', `_character.equipment.${item.name}.count`, item.count, ModelTypes.number],
+                      ['Name', `_character.equipment.${item.name}.name`, item.name, ModelTypes.text],
+                      ['Weight', `_character.equipment.${item.name}.weight`, item.weight, ModelTypes.number],
+                  ])">
                     <div class="flex-1"></div>
                     <div class="flex-1">
                       {{ item.count }}
@@ -561,7 +587,6 @@ onBeforeMount(async () => {
                     <div class="flex-2">
                       {{ formatWeight(item.weight * item.count) }}
                     </div>
-
                   </div>
                 </div>
               </div>
@@ -701,11 +726,29 @@ onBeforeMount(async () => {
           </div>
         </div>
       </div>
-      <!-- TODO: Working On Cantrip Editing  -->
       <div class="body container row">
         <div class="container col flex-1" v-for="(i, key) in [[0,1,2],[3,4,5],[6,7,8,9]]">
-          <div class="container block value-display col flex-1" v-for="j in i"
+          <div class="container block value-display col flex-1 clickable" v-for="j in i"
                :class="{'no-border-bottom': [2,5,9].includes(j), 'no-border-left': key===0, 'no-border-right': key===2}"
+               @click="()=>{
+                 if (j === 0){
+                   const items = []
+                   character.usableSpells.cantrips.forEach((item, index)=>{
+                     console.log(item, 'item')
+                     items.push([`Cantrip  ${index+1}`, `usableSpells.cantrips.${index}`, character.usableSpells.cantrips[index], ModelTypes.text])
+                   })
+                    atClickEdit(items)
+                  } else {
+                    const items = [
+                        ['Spell Slots', `usableSpells.spells.${j}.spellSlots`, character.usableSpells.spells[j].spellSlots, ModelTypes.number],
+                        ['Spell Slots Expanded', `usableSpells.spells.${j}.spellSlotsExpanded`, character.usableSpells.spells[j].spellSlotsExpanded, ModelTypes.number],
+                    ]
+                    character.usableSpells.spells[j].known.forEach((item, index)=>{
+                      items.push([`Spell ${index+1}`, `usableSpells.spells.${j}.known.${index}`, item, ModelTypes.text])
+                    })
+                    atClickEdit(items)
+                 }
+               }"
           >
             <div class="container row labeled-row" style="margin-bottom: .5rem">
               <div class="value flex-1">
@@ -715,16 +758,24 @@ onBeforeMount(async () => {
                 <p>Cantrips</p>
               </div>
               <div class="flex-3 container row" v-if="j!==0">
-                <div class="value flex-1">
+                <div class="value flex-1" @click.stop @click="atClickEdit([
+                  ['Spell Slots', `usableSpells.spells.${j}.spellSlots`, character.usableSpells.spells[j].spellSlots, ModelTypes.number],
+              ])">
                   <p>{{ character.usableSpells.spells[j].spellSlots }}</p>
                 </div>
-                <div class="label flex-2">
+                <div class="label flex-2" @click.stop @click="atClickEdit([
+                  ['Spell Slots', `usableSpells.spells.${j}.spellSlots`, character.usableSpells.spells[j].spellSlots, ModelTypes.number],
+              ])">
                   <p>Total</p>
                 </div>
-                <div class="value flex-1">
+                <div class="value flex-1" @click.stop @click="atClickEdit([
+                  ['Spell Slots Expanded', `usableSpells.spells.${j}.spellSlotsExpanded`, character.usableSpells.spells[j].spellSlotsExpanded, ModelTypes.number],
+              ])">
                   <p>{{ character.usableSpells.spells[j].spellSlotsExpanded }}</p>
                 </div>
-                <div class="label flex-2">
+                <div class="label flex-2" @click.stop @click="atClickEdit([
+                  ['Spell Slots Expanded', `usableSpells.spells.${j}.spellSlotsExpanded`, character.usableSpells.spells[j].spellSlotsExpanded, ModelTypes.number],
+              ])">
                   <p>Expanded</p>
                 </div>
               </div>
@@ -746,7 +797,9 @@ onBeforeMount(async () => {
               <div v-if="j!==0" v-for="spell in character.usableSpells.spells[j].known" class="container row">
                 <div class="flex-1 container row" style="justify-content: center">
                   <div class="check"
-                       :class="{selected:character.usableSpells.spells[j].prepared.includes(spell)}"></div>
+                       :class="{selected:character.usableSpells.spells[j].prepared.includes(spell)}"
+                       @click.stop @click="atClickPrepared(j, spell)"
+                  ></div>
                 </div>
                 <p class="flex-3">{{ spell }}</p>
               </div>
@@ -759,7 +812,7 @@ onBeforeMount(async () => {
 
   <!--  MODALS  -->
 
-  <div v-if="editing.open" class="popup container col" style="align-items: center"  @click="atClickCancel">
+  <div v-if="editing.open" class="popup container col" style="align-items: center" @click="atClickCancel">
     <div class="container row popup-display">
       <div class="container block value-display col" @click.stop>
 
@@ -767,7 +820,7 @@ onBeforeMount(async () => {
           <div class="container col">
             <label :for="item.name">{{ item.name }}</label>
             <input v-if="item.type.element === 'input' && item.type.type !== 'disabled'"
-                   :type="item.type.type"
+                   :type="item.type.type !== 'coin' ? item.type.type : 'number'"
                    :name="item.name"
                    v-model="item.value"
                    @keydown.enter="atClickSave"
@@ -800,6 +853,15 @@ onBeforeMount(async () => {
                 <input type="text" v-model="row.damage" placeholder="Damage">
                 <input type="text" v-model="row.type" placeholder="Type">
               </div>
+            </div>
+            <div v-if="item.type.element === 'coins'">
+              <input :type="'number'"
+                     :name="item.name"
+                     v-model="item.value"
+                     @keydown.enter="atClickSave"
+                     @keydown.esc="atClickCancel"/>
+              <p></p>
+              <p v-for="(coin, name) in Character.calculateCoins(item.value)">{{coin}} {{name}}</p>
             </div>
           </div>
         </div>

@@ -180,7 +180,6 @@ export class Character {
                 },
                 hitDice: {
                     die: "8",
-                    total: 1,
                     current: 1
                 },
                 deathSaves: {
@@ -296,6 +295,8 @@ export class Character {
         }
     }
 
+//     TODO: order logic in this class
+
 // CUSTOM LOGIC
     _calculateAbilityModifier(score) {
         return Math.floor((score - 10) / 2);
@@ -317,7 +318,7 @@ export class Character {
 
     }
 
-    _calculateCoins(coins) {
+    static calculateCoins(coins) {
         /*
         Coin	                CP      SP	    EP	    GP	    PP
         Copper Piece    (cp)    1       1/10    1/50    1/100	1/1,000
@@ -406,7 +407,6 @@ export class Character {
     }
 
     get attacks() {
-        // TODO: move to correct position
         return this._character.attacks
     }
 
@@ -478,11 +478,19 @@ export class Character {
             spells: {}
         }
         result['cantrips'] = this._character.spellcasting.cantrips
-        // prepaired spells
+        // prepared spells
         for (const [key, value] of Object.entries(this._character.spellcasting.spells)) {
             result['spells'][key] = value
         }
         return result
+    }
+
+    togglePrepared(lvl, name) {
+        if (this._character.spellcasting.spells[lvl].prepared.includes(name)) {
+            this.removePreparedSpell(lvl, name)
+            return;
+        }
+        this.addPreparedSpell(lvl, name)
     }
 
     addSpell(level, spell) {
@@ -609,7 +617,7 @@ export class Character {
     }
 
     get coins() {
-        return this._calculateCoins(this._character.coins)
+        return Character.calculateCoins(this._character.coins)
     }
 
 // COMPUTED PROPERTIES
@@ -912,7 +920,13 @@ export class Character {
 // ABILITIES GETTERS AND SETTERS
 
     get proficiencies() {
-        return this._character.abilities.proficiencies;
+        // return this._character.abilities.proficiencies;
+
+        let objects = Object.entries(this._character.abilities.proficiencies)
+        objects.sort()
+        const result = {}
+        objects.forEach((item) => result[item[0]] = item[1]);
+        return result
     }
 
     get inspiration() {
@@ -1078,20 +1092,14 @@ export class Character {
         const die = value.toLowerCase().split("d")
         if (die.length === 2 && dice.includes(die[1]) && Number.isInteger(Number(die[0]))) {
             this._character.stats.hitDice.die = die[1];
-            this._character.stats.hitDice.total = Number(die[0]);
+            this.currentHitDice = Number(die[0]);
             return
         }
         console.log("ERROR: Dice is not in the known list")
     }
 
     get maxHitDice() {
-        return this._character.stats.hitDice.total
-    }
-
-    set maxHitDice(value) {
-        if (Number.isInteger(value)) {
-            this._character.stats.hitDice.total = value
-        }
+        return this._character.level
     }
 
     get currentAmountHitDice() {
@@ -1099,7 +1107,7 @@ export class Character {
     }
 
     set currentAmountHitDice(value) {
-        if (Number.isInteger(value) && value <= this._character.stats.hitDice.total && value >= 0) {
+        if (Number.isInteger(value) && value <= this.maxHitDice && value >= 0) {
             this._character.stats.hitDice.current = value
             return;
         }

@@ -34,6 +34,9 @@ owin.bonds = "" +
 owin.flaws = "" +
     "Most people scream and run when they see a demon. I stop and take notes on its anatomy."
 owin.allies = "" +
+    "Backstory:\n" +
+    "- Melliwyn Geargrinder - Colleague and dear friend from before my travels, gotten a letter suggesting she is in danger or might have passed on already\n" +
+    "\n" +
     "Allies: \n" +
     "- Captain Pier Monocker - is a captain working for the Thornberrow Trading Company. Has offered to help if ever needing to travel by ship, instruction is to knock twice on the door of his cabin\n" +
     "\n" +
@@ -47,7 +50,6 @@ owin.allies = "" +
     "Dotty - Assistant at the Thornberrow Trading Company\n" +
     "Oswald Thornberrow - Owner of the Thornberrow Trading Company\n"
 
-// character information
 owin.class = "Artificer" // // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 owin.level = 2
 owin.race = "Rock Gnome" // https://www.dndbeyond.com/races/18-gnome
@@ -97,7 +99,6 @@ owin.baseHitPoints = 13
 owin.currentHitPoints = owin.hitPointMaximumValue
 
 owin.hitDice = "2D8"
-owin.currentHitDice = 2
 owin.deathSaveSuccesses = 0
 owin.deathSaveFailures = 0
 owin.addAttack("light Crossbow", 4, "1d8 + 4", "Piercing") // https://roll20.net/compendium/dnd5e/Light%20Crossbow#content
