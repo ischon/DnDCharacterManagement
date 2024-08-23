@@ -280,10 +280,7 @@ onBeforeMount(async () => {
         <div class="container row flex-2">
           <div class="container col flex-1">
             <!-- ABILITY SCORES -->
-            <div class="container flex-1 block row labeled-row no-border-left clickable"
-                 @click="atClickEdit([
-                      ['Proficiency Bonus', 'proficiencyBonus', character.proficiencyBonus, ModelTypes.number]
-                 ])">
+            <div class="container flex-1 block row labeled-row no-border-left">
               <div class="value flex-1"><p>{{ formatScore(character.proficiencyBonus) }}</p></div>
               <div class="label flex-2"><p>Proficiency Bonus</p></div>
             </div>

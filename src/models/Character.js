@@ -144,7 +144,6 @@ export class Character {
             additionalFeatures: "",
             treasure: "",
             abilities: {
-                proficiencyBonus: 0,
                 proficiencies: {
                     strength: [],
                     dexterity: [],
@@ -614,6 +613,21 @@ export class Character {
     }
 
 // COMPUTED PROPERTIES
+
+    get proficiencyBonus() {
+        if (this.level < 5) {
+            return 2
+        } else if (this.level < 9) {
+            return 3
+        } else if (this.level < 13) {
+            return 4
+        } else if (this.level < 17) {
+            return 5
+        } else {
+            return 6
+        }
+    }
+
     get strengthModifier() {
         return this._calculateAbilityModifier(this.strength);
     }
@@ -896,13 +910,6 @@ export class Character {
 
 
 // ABILITIES GETTERS AND SETTERS
-    get proficiencyBonus() {
-        return this._character.abilities.proficiencyBonus;
-    }
-
-    set proficiencyBonus(value) {
-        this._character.abilities.proficiencyBonus = value;
-    }
 
     get proficiencies() {
         return this._character.abilities.proficiencies;
@@ -966,6 +973,9 @@ export class Character {
 
 // LINKED ABILITIES GETTERS AND SETTERS
     get passivePerception() {
+        if (this.proficiencies.wisdom.includes("Perception")) {
+            return 10 + this.wisdomModifier + this.proficiencyBonus
+        }
         return 10 + this.wisdomModifier
     }
 

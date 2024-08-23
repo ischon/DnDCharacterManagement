@@ -45,13 +45,13 @@ nav {
       color: var(--color-text);
     }
 
-    &:first-child {
-      margin-left: 0;
-    }
-
     &:last-child {
       margin-right: 0;
       margin-left: auto;
+    }
+
+    &:first-child {
+      margin-left: 0;
     }
   }
 }

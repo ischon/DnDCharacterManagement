@@ -80,7 +80,6 @@ owin.intelligence = 16
 owin.wisdom = 10
 owin.charisma = 10
 owin.inspiration = 0
-owin.proficiencyBonus = 2
 owin.addProficiency("constitution", "Saving Throws") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 owin.addProficiency("intelligence", "Saving Throws") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 owin.addProficiency("intelligence", "Investigation") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
@@ -179,7 +178,6 @@ exampleCharacter.constitution = 15
 exampleCharacter.intelligence = 10
 exampleCharacter.wisdom = 16
 exampleCharacter.charisma = 12
-exampleCharacter.proficiencyBonus = 2
 exampleCharacter.inspiration = 0
 exampleCharacter.armorClassBase = 14
 exampleCharacter.armorClassHasDexModifier = true
