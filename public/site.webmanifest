@@ -1,0 +1,20 @@
+{
+    "name": "DnD Character Management",
+    "short_name": "DnD Character Management",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png?v=1",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png?v=1",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#debd9e",
+    "background_color": "#debd9e",
+    "display": "standalone",
+    "orientation": "landscape"
+}
