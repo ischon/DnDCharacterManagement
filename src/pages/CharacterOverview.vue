@@ -546,7 +546,7 @@ onBeforeMount(async () => {
           <div class="container block value-display col flex-2 no-border-right no-border-bottom">
             <div class="container row">
               <div class="container col flex-1 clickable" @click="atClickEdit([
-                  ['Copper Coins', 'this._character.coins', character._character.coins, ModelTypes.coins],
+                  ['Copper Coins', '_character.coins', character._character.coins, ModelTypes.coins],
               ])">
                 <div class="container col block value-display no-border" v-for="(value, type) in character.coins">
                   <p class="value flex-1">
