@@ -18,6 +18,16 @@ const editing = reactive({
 })
 
 const showImageModel = ref(false)
+const deleteModelData = reactive({
+  open: false,
+  item: undefined,
+  deleteFunction: undefined
+})
+const resetDeleteModelData = () => {
+  deleteModelData.open = false
+  deleteModelData.item = undefined
+  deleteModelData.deleteFunction = undefined
+}
 
 class ModelTypes {
   static disabled = new ModelTypes('disabled', 'input')
@@ -94,9 +104,25 @@ const saveWithReflect = (base, path, value) => {
 }
 
 const atClickSave = async () => {
-  editing.items.forEach((item) => {
-    saveWithReflect(character, item.key, item.value)
-  })
+  if (editing.items[0].key.includes('equipment')) {
+    const item = {
+      key: editing.items[0].key.split('.')[1],
+      name: undefined,
+      count: undefined,
+      weight: undefined,
+      index: undefined
+    }
+    editing.items.forEach((i) => {
+      item[i.key.split('.')[2]] = i.value
+    });
+
+    character.updateEquipment(item.key, item.name, item.count, item.weight, item.index)
+  } else {
+    editing.items.forEach((item) => {
+      saveWithReflect(character, item.key, item.value)
+    });
+  }
+
   await firebaseHandler.setCharacterData(character.objectData)
   resetModelData()
 }
@@ -560,32 +586,66 @@ onBeforeMount(async () => {
               <div class="container row flex-4">
                 <div class="container col ">
                   <div class="equipment-item container row">
-                    <div class="flex-1"></div>
-                    <div class="flex-1">
+                    <div class="flex-2"></div>
+                    <div class="flex-2">
                       Count
                     </div>
-                    <div class="flex-4">
+                    <div class="flex-8">
                       Name
                     </div>
-                    <div class="flex-2">
+                    <div class="flex-4">
                       Weight
                     </div>
                   </div>
                   <div v-for="item in character.equipment" class="equipment-item container row clickable" @click="atClickEdit([
-                      ['Position', `_character.equipment.${item.name}.index`, item.index, ModelTypes.number],
-                      ['Amount', `_character.equipment.${item.name}.count`, item.count, ModelTypes.number],
-                      ['Name', `_character.equipment.${item.name}.name`, item.name, ModelTypes.text],
-                      ['Weight', `_character.equipment.${item.name}.weight`, item.weight, ModelTypes.number],
+                      ['Position', `equipment.${item.name}.index`, item.index, ModelTypes.number],
+                      ['Amount', `equipment.${item.name}.count`, item.count, ModelTypes.number],
+                      ['Name', `equipment.${item.name}.name`, item.name, ModelTypes.text],
+                      ['Weight', `equipment.${item.name}.weight`, item.weight, ModelTypes.number],
                   ])">
-                    <div class="flex-1"></div>
-                    <div class="flex-1">
+                    <div class="flex-2"></div>
+                    <div class="flex-2">
                       {{ item.count }}
                     </div>
-                    <div class="flex-4">
+                    <div class="flex-8">
                       {{ item.name }}
                     </div>
-                    <div class="flex-2">
+                    <div class="flex-4">
                       {{ formatWeight(item.weight * item.count) }}
+                    </div>
+                    <div class="flex-1 clickable" @click.stop @click="() =>{
+                      deleteModelData.deleteFunction = async ()=>{
+                        character.removeEquipment(item.name, item.count)
+                        await firebaseHandler.setCharacterData(character.objectData)
+                        resetDeleteModelData()
+                      };
+                      deleteModelData.open = true
+                      deleteModelData.item = item
+                    }">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                           style="fill: var(--color-text); height: var(--font-size); width: var(--font-size)">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0
+                             33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160
+                              0h80v-360h-80v360ZM280-720v520-520Z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="equipment-item container row clickable" @click="async () => {
+                      character.addEquipment('new item', 1, 0)
+                      await firebaseHandler.setCharacterData(character.objectData)
+                    }">
+                    <div class="flex-2"></div>
+                    <div class="flex-2"></div>
+                    <div class="flex-8">click to add a new item</div>
+                    <div class="flex-4"></div>
+                    <div class="flex-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                           style="fill: var(--color-text); height: var(--font-size); width: var(--font-size);">
+                        <path d="M640-121v-120H520v-80h120v-120h80v120h120v80H720v120h-80ZM120-240v-80h80v80h-80Zm160
+                             0v-80h163q-3 21-2.5 40t3.5 40H280ZM120-400v-80h80v80h-80Zm160 0v-80h266q-23 16-41.5
+                             36T472-400H280ZM120-560v-80h80v80h-80Zm160 0v-80h480v80H280ZM120-720v-80h80v80h-80Zm160
+                             0v-80h480v80H280Z"/>
+                      </svg>
                     </div>
                   </div>
                 </div>
@@ -861,7 +921,7 @@ onBeforeMount(async () => {
                      @keydown.enter="atClickSave"
                      @keydown.esc="atClickCancel"/>
               <p></p>
-              <p v-for="(coin, name) in Character.calculateCoins(item.value)">{{coin}} {{name}}</p>
+              <p v-for="(coin, name) in Character.calculateCoins(item.value)">{{ coin }} {{ name }}</p>
             </div>
           </div>
         </div>
@@ -885,6 +945,23 @@ onBeforeMount(async () => {
         </div>
         <div class="container row button-row">
           <button @click="showImageModel=false">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="deleteModelData.open" class="popup container col" style="align-items: center">
+    <div class="container row popup-display">
+      <div class="container block value-display col">
+        <div class="container row input-row">
+          <div class="container col">
+            <p>Are you sure you want to delete this item?</p>
+            <p>{{ deleteModelData.item.count }} {{ deleteModelData.item.name }}</p>
+          </div>
+        </div>
+        <div class="container row button-row">
+          <button @click="deleteModelData.deleteFunction">Confirm</button>
+          <button @click="resetDeleteModelData">Cancel</button>
         </div>
       </div>
     </div>

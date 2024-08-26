@@ -585,6 +585,22 @@ export class Character {
         delete this._character.equipment[name]
     }
 
+    updateEquipment(oldName, name, count, weight, index ) {
+        if (this._character.equipment[oldName] === undefined) {
+            console.log("ERROR: equipment does not exists")
+            return
+        }
+        if (oldName !== name) {
+            this._character.equipment[name] = this._character.equipment[oldName]
+            delete this._character.equipment[oldName]
+            this._character.equipment[name].name = name
+        }
+
+        this._character.equipment[name].count = count
+        this._character.equipment[name].weight = weight
+        this._character.equipment[name].index = index
+    }
+
     get equipment() {
         let objects = Object.entries(this._character.equipment)
         objects.sort((a, b) => {

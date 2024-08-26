@@ -20,6 +20,8 @@
   //--vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-wafer);
   //--vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+
+  --font-size: 1rem;
 }
 
 /* semantic color variables for this project */
@@ -84,7 +86,7 @@ body {
           'Droid Sans',
           'Helvetica Neue',
           sans-serif;
-  font-size: 1rem;
+  font-size: var(--font-size);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -59,7 +59,7 @@ owin.experiencePoints = 0
 owin.addLanguage("Common") // https://www.dndbeyond.com/races/18-gnome#GnomeTraits// https://forgottenrealms.fandom.com/wiki/Common
 owin.addLanguage("Gnomish (Dwarvish script)") // https://www.dndbeyond.com/races/18-gnome#GnomeTraits // https://forgottenrealms.fandom.com/wiki/Gnome_language
 owin.addLanguage("Modron") // study // https://www.dndbeyond.com/backgrounds/11-sage // https://forgottenrealms.fandom.com/wiki/Modron_language
-owin.addLanguage("...") // ... // https://www.dndbeyond.com/backgrounds/11-sage // ...
+owin.addLanguage("... Draconic (Iokharic script)?") // ... // https://www.dndbeyond.com/backgrounds/11-sage // https://forgottenrealms.fandom.com/wiki/Draconic_language
 owin.addFeature("Dark vision") // https://www.dndbeyond.com/races/18-gnome#GnomeTraits
 owin.addFeature("Gnome Cunning") // https://www.dndbeyond.com/races/18-gnome#GnomeTraits
 owin.addFeature("Artificer's Lore") // https://www.dndbeyond.com/races/18-gnome#RockGnome
