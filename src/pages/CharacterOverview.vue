@@ -636,7 +636,7 @@ onBeforeMount(async () => {
                     }">
                     <div class="flex-2"></div>
                     <div class="flex-2"></div>
-                    <div class="flex-8">click to add a new item</div>
+                    <div class="flex-8">--Click on this line to add a new item--</div>
                     <div class="flex-4"></div>
                     <div class="flex-1">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"

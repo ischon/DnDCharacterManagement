@@ -94,7 +94,7 @@ export class FirebaseHandler {
                 console.error(error)
             }
         )
-        return new Character(data);
+        return new Character(data, characterId);
     }
 
     async getCharacterImage(characterId) {

@@ -290,7 +290,7 @@ export class Character {
         }
 
         this._character = object;
-        if (id !== undefined) {
+        if (object.id === undefined && id !== undefined) {
             this._character.id = id
         }
     }

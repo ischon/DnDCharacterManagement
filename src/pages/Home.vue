@@ -1,6 +1,6 @@
 <script setup>
 import {FirebaseHandler} from "@/helpers/firebase.js"
-import { exampleCharacter, owin } from "@/models/Examples.js";
+import { exampleCharacter } from "@/models/Examples.js";
 import { ref } from "vue";
 
 let clicked = ref(false)
@@ -18,7 +18,7 @@ const email = localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem
 <template>
   <button v-if="!clicked" @click="uploadToFirebase(exampleCharacter)" >Upload default to firebase </button>
   <br v-if="!clicked">
-  <button v-if="!clicked && email === 'ian@schon.dev'" @click="uploadToFirebase(owin)">Upload owin to firebase</button>
+<!--  <button v-if="!clicked && email === 'ian@schon.dev'" @click="uploadToFirebase(owin)">Upload owin to firebase</button>-->
   <br v-if="!clicked && email === 'ian@schon.dev'">
   home
 </template>
