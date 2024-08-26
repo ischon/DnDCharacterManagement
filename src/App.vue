@@ -1,10 +1,17 @@
 <script setup>
-import {computed} from "vue";
+import {computed, ref} from "vue";
+import {FirebaseHandler} from "@/helpers/firebase.js";
 
 const validToken = computed(() => {
   let token = localStorage.getItem('Token')
 
   return !!token;
+})
+
+const uid = ref(undefined)
+const firebaseHandler = new FirebaseHandler()
+firebaseHandler.setup().then(() => {
+  uid.value = firebaseHandler.firebaseUser.uid.slice(0,8)
 })
 
 const email = localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem("UserData")).email : undefined
@@ -16,6 +23,7 @@ const email = localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem
     <RouterLink v-if="validToken" to="/">Go to Home</RouterLink>
     <RouterLink v-if="validToken" to="/character/lzrh8rb4">Go to default</RouterLink>
     <RouterLink v-if="validToken && email === 'ian@schon.dev'" to="/character/owin">Go to owin</RouterLink>
+    <RouterLink v-if="validToken && uid" :to="{ path: '/character/' + uid }">Create your own Character</RouterLink>
     <RouterLink v-if="!validToken" to="/login">Go to login</RouterLink>
     <RouterLink v-else to="/logout">logout</RouterLink>
   </nav>
