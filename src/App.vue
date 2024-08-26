@@ -15,7 +15,7 @@ const email = localStorage.getItem("UserData") ? JSON.parse(localStorage.getItem
   <nav>
     <RouterLink v-if="validToken" to="/">Go to Home</RouterLink>
     <RouterLink v-if="validToken" to="/character/lzrh8rb4">Go to default</RouterLink>
-    <RouterLink v-if="validToken && email === 'ian@schon.dev'" to="/character/lz825uz4">Go to owin</RouterLink>
+    <RouterLink v-if="validToken && email === 'ian@schon.dev'" to="/character/owin">Go to owin</RouterLink>
     <RouterLink v-if="!validToken" to="/login">Go to login</RouterLink>
     <RouterLink v-else to="/logout">logout</RouterLink>
   </nav>
