@@ -127,12 +127,15 @@
   .value {
     display: flex;
     justify-content: center;
+    align-items: center;
 
     p {
       background-color: var(--color-border);
       border-radius: 999999px;
       width: 50%;
       text-align: center;
+      height: calc(var(--font-size)* 1.7);
+      align-content: baseline;
     }
   }
 
@@ -144,6 +147,10 @@
     }
 
   }
+}
+
+#page-3 .labeled-row .value p {
+  height: auto;
 }
 
 
