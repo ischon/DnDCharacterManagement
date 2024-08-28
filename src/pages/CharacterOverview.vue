@@ -6,6 +6,7 @@ import {FirebaseHandler} from "@/helpers/firebase.js";
 import {range} from 'lodash';
 
 import {classes, alignments, abilityTypes, proficiencyTypes, abilities, dice, Character} from "@/models/Character.js";
+import {exampleCharacter} from "@/models/Examples.js";
 
 // setup() {
 const loading = reactive({
@@ -21,12 +22,14 @@ const showImageModel = ref(false)
 const deleteModelData = reactive({
   open: false,
   item: undefined,
-  deleteFunction: undefined
+  deleteFunction: undefined,
+  question: undefined
 })
 const resetDeleteModelData = () => {
   deleteModelData.open = false
   deleteModelData.item = undefined
   deleteModelData.deleteFunction = undefined
+  deleteModelData.question = undefined
 }
 
 class ModelTypes {
@@ -117,6 +120,12 @@ const atClickSave = async () => {
     });
 
     character.updateEquipment(item.key, item.name, item.count, item.weight, item.index)
+  } else if(editing.items[0].key.includes('attacks')) {
+    Object.entries(editing.items[0].value).forEach((attack) => {
+      character.updateAttack(attack[0], attack[1])
+    });
+
+
   } else {
     editing.items.forEach((item) => {
       saveWithReflect(character, item.key, item.value)
@@ -502,13 +511,47 @@ onBeforeMount(async () => {
                     <p class="flex-2">Weapon</p>
                     <p class="flex-1">Bonus</p>
                     <p class="flex-2">Damage/ type</p>
+                    <p class="flex-1"></p>
                   </div>
                   <div class="container row" v-for="row in character.attacks">
                     <p class="flex-2">{{ row.name }}</p>
                     <p class="flex-1">{{ formatScore(row.bonus) }}</p>
                     <p class="flex-2">{{ row.damage }} / {{ row.type }}</p>
+                    <p class="flex-1" @click.stop @click="()=>{
+                      deleteModelData.deleteFunction = async ()=>{
+                        character.removeAttack(row.name)
+                        await firebaseHandler.setCharacterData(character.objectData)
+                        resetDeleteModelData()
+                      };
+                      deleteModelData.open = true
+                      deleteModelData.item = `${row.name} attack`
+                      deleteModelData.question = 'Are you sure you want to delete this attack?'
+                    }">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                           style="fill: var(--color-text); height: var(--font-size); width: var(--font-size)">
+                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0
+                             33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160
+                              0h80v-360h-80v360ZM280-720v520-520Z"/>
+                      </svg>
+                    </p>
+                  </div>
+                  <div class="container row clickable" @click.stop @click="async () => {
+                      character.addAttack('Name', 0, 'Damage', 'Type')
+                      await firebaseHandler.setCharacterData(character.objectData)
+                    }">
+                    <p class="flex-5" style="text-align: center">--Click on this line to add a new item--</p>
+                    <p class="flex-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
+                           style="fill: var(--color-text); height: var(--font-size); width: var(--font-size);">
+                        <path d="M640-121v-120H520v-80h120v-120h80v120h120v80H720v120h-80ZM120-240v-80h80v80h-80Zm160
+                             0v-80h163q-3 21-2.5 40t3.5 40H280ZM120-400v-80h80v80h-80Zm160 0v-80h266q-23 16-41.5
+                             36T472-400H280ZM120-560v-80h80v80h-80Zm160 0v-80h480v80H280ZM120-720v-80h80v80h-80Zm160
+                             0v-80h480v80H280Z"/>
+                      </svg>
+                    </p>
                   </div>
                 </div>
+
                 <br/>
                 <p>Cantrips</p>
                 <p v-for="row in character.usableSpells.cantrips">
@@ -620,7 +663,8 @@ onBeforeMount(async () => {
                         resetDeleteModelData()
                       };
                       deleteModelData.open = true
-                      deleteModelData.item = item
+                      deleteModelData.item = `${item.count} ${item.name}`
+                      deleteModelData.question = 'Are you sure you want to delete this item?'
                     }">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
                            style="fill: var(--color-text); height: var(--font-size); width: var(--font-size)">
@@ -955,8 +999,8 @@ onBeforeMount(async () => {
       <div class="container block value-display col">
         <div class="container row input-row">
           <div class="container col">
-            <p>Are you sure you want to delete this item?</p>
-            <p>{{ deleteModelData.item.count }} {{ deleteModelData.item.name }}</p>
+            <p>{{deleteModelData.question}}</p>
+            <p>{{ deleteModelData.item }}</p>
           </div>
         </div>
         <div class="container row button-row">

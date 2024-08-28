@@ -406,6 +406,19 @@ export class Character {
         delete this._character.attacks[name]
     }
 
+    updateAttack(key, attack) {
+        if (this._character.attacks[key] === undefined) {
+            console.log(key, attack, this._character.attacks)
+            console.log("ERROR: attack does not exists")
+            return
+        }
+        if (key !== attack.name) {
+            this._character.attacks[attack.name] = this._character.attacks[key]
+            delete this._character.attacks[key]
+        }
+        this._character.attacks[attack.name] = attack
+    }
+
     get attacks() {
         return this._character.attacks
     }
