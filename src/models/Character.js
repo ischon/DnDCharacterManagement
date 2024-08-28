@@ -388,7 +388,7 @@ export class Character {
             return;
         }
 
-        if (!abilities[type].includes(name)) {
+        if (type !== 'items' && !abilities[type].includes(name)) {
             console.log("ERROR: proficiency does not exists")
             return;
         }
@@ -598,7 +598,7 @@ export class Character {
         delete this._character.equipment[name]
     }
 
-    updateEquipment(oldName, name, count, weight, index ) {
+    updateEquipment(oldName, name, count, weight, index) {
         if (this._character.equipment[oldName] === undefined) {
             console.log("ERROR: equipment does not exists")
             return
@@ -949,12 +949,10 @@ export class Character {
 // ABILITIES GETTERS AND SETTERS
 
     get proficiencies() {
-        // return this._character.abilities.proficiencies;
-
-        let objects = Object.entries(this._character.abilities.proficiencies)
-        objects.sort()
         const result = {}
-        objects.forEach((item) => result[item[0]] = item[1]);
+        Object.entries(this._character.abilities.proficiencies)
+            .sort()
+            .forEach((category) => result[category[0]] = category[1].sort());
         return result
     }
 

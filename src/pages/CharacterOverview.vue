@@ -25,6 +25,10 @@ const deleteModelData = reactive({
   deleteFunction: undefined,
   question: undefined
 })
+
+const ICON_ADD = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 -960 960 960\" style=\"fill: var(--color-text); height: var(--font-size); width: var(--font-size);\"><path d=\"M640-121v-120H520v-80h120v-120h80v120h120v80H720v120h-80ZM120-240v-80h80v80h-80Zm160 0v-80h163q-3 21-2.5 40t3.5 40H280ZM120-400v-80h80v80h-80Zm160 0v-80h266q-23 16-41.5 36T472-400H280ZM120-560v-80h80v80h-80Zm160 0v-80h480v80H280ZM120-720v-80h80v80h-80Zm160 0v-80h480v80H280Z\"/></svg>"
+const ICON_REMOVE = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 -960 960 960\" style=\"fill: var(--color-text); height: var(--font-size); width: var(--font-size)\"><path d=\"M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z\"/></svg>"
+
 const resetDeleteModelData = () => {
   deleteModelData.open = false
   deleteModelData.item = undefined
@@ -120,7 +124,7 @@ const atClickSave = async () => {
     });
 
     character.updateEquipment(item.key, item.name, item.count, item.weight, item.index)
-  } else if(editing.items[0].key.includes('attacks')) {
+  } else if (editing.items[0].key.includes('attacks')) {
     Object.entries(editing.items[0].value).forEach((attack) => {
       character.updateAttack(attack[0], attack[1])
     });
@@ -511,13 +515,13 @@ onBeforeMount(async () => {
                     <p class="flex-2">Weapon</p>
                     <p class="flex-1">Bonus</p>
                     <p class="flex-2">Damage/ type</p>
-                    <p class="flex-1"></p>
+                    <p></p>
                   </div>
                   <div class="container row" v-for="row in character.attacks">
                     <p class="flex-2">{{ row.name }}</p>
                     <p class="flex-1">{{ formatScore(row.bonus) }}</p>
                     <p class="flex-2">{{ row.damage }} / {{ row.type }}</p>
-                    <p class="flex-1" @click.stop @click="()=>{
+                    <p @click.stop @click="()=>{
                       deleteModelData.deleteFunction = async ()=>{
                         character.removeAttack(row.name)
                         await firebaseHandler.setCharacterData(character.objectData)
@@ -526,29 +530,14 @@ onBeforeMount(async () => {
                       deleteModelData.open = true
                       deleteModelData.item = `${row.name} attack`
                       deleteModelData.question = 'Are you sure you want to delete this attack?'
-                    }">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                           style="fill: var(--color-text); height: var(--font-size); width: var(--font-size)">
-                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0
-                             33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160
-                              0h80v-360h-80v360ZM280-720v520-520Z"/>
-                      </svg>
-                    </p>
+                    }" v-html="ICON_REMOVE"></p>
                   </div>
                   <div class="container row clickable" @click.stop @click="async () => {
                       character.addAttack('Name', 0, 'Damage', 'Type')
                       await firebaseHandler.setCharacterData(character.objectData)
                     }">
-                    <p class="flex-5" style="text-align: center">--Click on this line to add a new item--</p>
-                    <p class="flex-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                           style="fill: var(--color-text); height: var(--font-size); width: var(--font-size);">
-                        <path d="M640-121v-120H520v-80h120v-120h80v120h120v80H720v120h-80ZM120-240v-80h80v80h-80Zm160
-                             0v-80h163q-3 21-2.5 40t3.5 40H280ZM120-400v-80h80v80h-80Zm160 0v-80h266q-23 16-41.5
-                             36T472-400H280ZM120-560v-80h80v80h-80Zm160 0v-80h480v80H280ZM120-720v-80h80v80h-80Zm160
-                             0v-80h480v80H280Z"/>
-                      </svg>
-                    </p>
+                    <p class="flex-1" style="text-align: center">--Add a new attack--</p>
+                    <p v-html="ICON_ADD"></p>
                   </div>
                 </div>
 
@@ -568,13 +557,30 @@ onBeforeMount(async () => {
                 <p class="align-center">Attacks & Spellcasting</p>
               </div>
               <div class="container value-display align-start block no-border-right col flex-1">
-                <div class="flex-1">
-                  <div v-for="(feature, index) in character.features" class="clickable" @click="atClickEdit([
-                    ['Features & Traits', `_character.features.${index}`, feature, ModelTypes.textarea]
-                  ])">
-                    <p v-for="feat in feature.split('\n')">
-                      {{ feat }}
-                    </p>
+                <div class="flex-1" style="width: 100%">
+                  <div class="container row flex-1" v-for="(feature, index) in character.features">
+                    <div class="flex-1 clickable container col" @click="atClickEdit([
+                       ['Features & Traits', `_character.features.${index}`, feature, ModelTypes.textarea]
+                    ])">
+                      <p v-for="(feat, index) in feature.split('\n')">{{index===0? '- ':' ‎ ‎ ‎'}}{{ feat }}</p>
+                    </div>
+                    <p class="clickable" @click="()=>{
+                      deleteModelData.deleteFunction = async ()=>{
+                        character.removeFeature(feature)
+                        await firebaseHandler.setCharacterData(character.objectData)
+                        resetDeleteModelData()
+                      };
+                      deleteModelData.open = true
+                      deleteModelData.item = feature
+                      deleteModelData.question = 'Are you sure you want to delete this feature or trait?'
+                    }" v-html="ICON_REMOVE"></p>
+                  </div>
+                  <div class="container row flex-1 clickable" @click="()=>{
+                      character.addFeature('New feature or trait')
+                      firebaseHandler.setCharacterData(character.objectData)
+                    }">
+                    <p class="flex-1">--Add a feature or trait--</p>
+                    <p v-html="ICON_ADD"></p>
                   </div>
                 </div>
                 <p class="align-center">Features & Traits</p>
@@ -586,27 +592,64 @@ onBeforeMount(async () => {
         <div class="container row flex-1">
           <div class="container block value-display col flex-1 no-border-left no-border-bottom">
             <div class="container col flex-1">
-              <div class="flex-1">
+              <div class="flex-1" style="width: 100%">
                 <p>Languages</p>
-                <p v-for="(language, index) in character.languages" class="clickable" @click="atClickEdit([
-                    ['Languages', `_character.languages.${index}`, language, ModelTypes.text]
-                ])">
-                  - {{ language }}
-                </p>
+                <div class="container row flex-1" v-for="(language, index) in character.languages">
+                  <p class="flex-1 clickable" @click="atClickEdit([
+                      ['Languages', `_character.languages.${index}`, language, ModelTypes.text]
+                  ])">
+                    - {{ language }}
+                  </p>
+                  <p class="clickable" @click="()=>{
+                      deleteModelData.deleteFunction = async ()=>{
+                        character.removeLanguage(language)
+                        await firebaseHandler.setCharacterData(character.objectData)
+                        resetDeleteModelData()
+                      };
+                      deleteModelData.open = true
+                      deleteModelData.item = language
+                      deleteModelData.question = 'Are you sure you want to delete this language?'
+                    }" v-html="ICON_REMOVE"></p>
+                </div>
+                <div class="container row flex-1 clickable" @click="async () => {
+                        character.addLanguage('New Language')
+                        await firebaseHandler.setCharacterData(character.objectData)
+                      }">
+                  <p class="flex-1">--add a new language--</p>
+                  <p v-html="ICON_ADD"></p>
+                </div>
                 <br/>
                 <p>Proficiencies</p>
                 <div v-for="(items, category) in character.proficiencies">
-                  <p v-if="items.length > 0">{{ category }}</p>
-                  <p v-if="items.length > 0 && ['items'].includes(category)" v-for="proficiency in items"
-                     class="clickable" @click="atClickEdit([
-                      ['Proficiencies', `_character.proficiencies.${category}.${proficiency}`, proficiency, ModelTypes.text]
-                  ])">
-                    - {{ proficiency }}
-                  </p>
+                  <p v-if="items.length > 0 || category==='items'">{{ category }}</p>
+                  <div v-if="category==='items'" class="container row flex-1" v-for="(proficiency, index) in items">
+                    <p class="flex-1 clickable" @click="atClickEdit([
+                        ['Proficiencies', `_character.abilities.proficiencies.${category}.${character._character.abilities.proficiencies[category].indexOf(proficiency)}`, proficiency, ModelTypes.text]
+                      ])">
+                      - {{ proficiency }}
+                    </p>
+                    <p class="clickable" @click="()=>{
+                      deleteModelData.deleteFunction = async ()=>{
+                        character.removeProficiency(category, proficiency)
+                        await firebaseHandler.setCharacterData(character.objectData)
+                        resetDeleteModelData()
+                      };
+                      deleteModelData.open = true
+                      deleteModelData.item = proficiency
+                      deleteModelData.question = 'Are you sure you want to delete this proficiency?'
+                    }" v-html="ICON_REMOVE"></p>
+                  </div>
+                  <div v-if="category==='items'" class="container row flex-1 clickable" @click="()=>{
+                      character.addProficiency(category, 'New item proficiency')
+                      firebaseHandler.setCharacterData(character.objectData)
+                    }">
+                    <p class="flex-1">--Add a proficiency--</p>
+                    <p v-html="ICON_ADD"></p>
+                  </div>
                   <p v-if="items.length > 0 && category!=='items'" v-for="proficiency in items">
                     - {{ proficiency }}
                   </p>
-                  <br v-if="items.length > 0"/>
+                  <br v-if="items.length > 0 || category==='items'"/>
                 </div>
               </div>
               <p class="align-center">Languages & Other Proficiencies</p>
@@ -656,7 +699,7 @@ onBeforeMount(async () => {
                     <div class="flex-4">
                       {{ formatWeight(item.weight * item.count) }}
                     </div>
-                    <div class="flex-1 clickable" @click.stop @click="() =>{
+                    <div class="clickable" @click.stop @click="() =>{
                       deleteModelData.deleteFunction = async ()=>{
                         character.removeEquipment(item.name, item.count)
                         await firebaseHandler.setCharacterData(character.objectData)
@@ -665,14 +708,7 @@ onBeforeMount(async () => {
                       deleteModelData.open = true
                       deleteModelData.item = `${item.count} ${item.name}`
                       deleteModelData.question = 'Are you sure you want to delete this item?'
-                    }">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                           style="fill: var(--color-text); height: var(--font-size); width: var(--font-size)">
-                        <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0
-                             33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160
-                              0h80v-360h-80v360ZM280-720v520-520Z"/>
-                      </svg>
-                    </div>
+                    }" v-html="ICON_REMOVE"></div>
                   </div>
                   <div class="equipment-item container row clickable" @click="async () => {
                       character.addEquipment('new item', 1, 0)
@@ -680,17 +716,9 @@ onBeforeMount(async () => {
                     }">
                     <div class="flex-2"></div>
                     <div class="flex-2"></div>
-                    <div class="flex-8">--Click on this line to add a new item--</div>
+                    <div class="flex-8">--Add a new item--</div>
                     <div class="flex-4"></div>
-                    <div class="flex-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"
-                           style="fill: var(--color-text); height: var(--font-size); width: var(--font-size);">
-                        <path d="M640-121v-120H520v-80h120v-120h80v120h120v80H720v120h-80ZM120-240v-80h80v80h-80Zm160
-                             0v-80h163q-3 21-2.5 40t3.5 40H280ZM120-400v-80h80v80h-80Zm160 0v-80h266q-23 16-41.5
-                             36T472-400H280ZM120-560v-80h80v80h-80Zm160 0v-80h480v80H280ZM120-720v-80h80v80h-80Zm160
-                             0v-80h480v80H280Z"/>
-                      </svg>
-                    </div>
+                    <div v-html="ICON_ADD"></div>
                   </div>
                 </div>
               </div>
@@ -999,7 +1027,7 @@ onBeforeMount(async () => {
       <div class="container block value-display col">
         <div class="container row input-row">
           <div class="container col">
-            <p>{{deleteModelData.question}}</p>
+            <p>{{ deleteModelData.question }}</p>
             <p>{{ deleteModelData.item }}</p>
           </div>
         </div>
