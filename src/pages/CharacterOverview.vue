@@ -562,7 +562,7 @@ onBeforeMount(async () => {
                     <div class="flex-1 clickable container col" @click="atClickEdit([
                        ['Features & Traits', `_character.features.${index}`, feature, ModelTypes.textarea]
                     ])">
-                      <p v-for="(feat, index) in feature.split('\n')">{{index===0? '- ':' ‎ ‎ ‎'}}{{ feat }}</p>
+                      <p v-for="(feat, index) in feature.split('\n')">{{ index === 0 ? '- ' : ' ‎ ‎ ‎' }}{{ feat }}</p>
                     </div>
                     <p class="clickable" @click="()=>{
                       deleteModelData.deleteFunction = async ()=>{
@@ -902,12 +902,12 @@ onBeforeMount(async () => {
                 </div>
                 <div class="value flex-1" @click.stop @click="atClickEdit([
                   ['Spell Slots Expanded', `usableSpells.spells.${j}.spellSlotsExpanded`, character.usableSpells.spells[j].spellSlotsExpanded, ModelTypes.number],
-              ])">
+                ])">
                   <p>{{ character.usableSpells.spells[j].spellSlotsExpanded }}</p>
                 </div>
                 <div class="label flex-2" @click.stop @click="atClickEdit([
                   ['Spell Slots Expanded', `usableSpells.spells.${j}.spellSlotsExpanded`, character.usableSpells.spells[j].spellSlotsExpanded, ModelTypes.number],
-              ])">
+                ])">
                   <p>Expanded</p>
                 </div>
               </div>
@@ -924,7 +924,17 @@ onBeforeMount(async () => {
             </div>
             <div class="container col block no-border">
               <div v-if="j===0" v-for="cantrip in character.usableSpells.cantrips" class="container row">
-                <p>{{ cantrip }}</p>
+                <p class="flex-1">{{ cantrip }}</p>
+                <p @click.stop @click="() =>{
+                  deleteModelData.deleteFunction = async ()=>{
+                    character.removeCantrip(cantrip)
+                    await firebaseHandler.setCharacterData(character.objectData)
+                    resetDeleteModelData()
+                  };
+                  deleteModelData.open = true
+                  deleteModelData.item = cantrip
+                  deleteModelData.question = 'Are you sure you want to delete this cantrip?'
+                }" v-html="ICON_REMOVE"></p>
               </div>
               <div v-if="j!==0" v-for="spell in character.usableSpells.spells[j].known" class="container row">
                 <div class="flex-1 container row" style="justify-content: center">
@@ -934,6 +944,32 @@ onBeforeMount(async () => {
                   ></div>
                 </div>
                 <p class="flex-3">{{ spell }}</p>
+                <p @click.stop @click="() =>{
+                  deleteModelData.deleteFunction = async ()=>{
+                    character.removeSpell(j, spell)
+                    await firebaseHandler.setCharacterData(character.objectData)
+                    resetDeleteModelData()
+                  };
+                  deleteModelData.open = true
+                  deleteModelData.item = spell
+                  deleteModelData.question = 'Are you sure you want to delete this spell?'
+                }" v-html="ICON_REMOVE"></p>
+              </div>
+            </div>
+            <div class="container col block no-border">
+              <div v-if="j===0"  class="clickable container row" @click.stop @click="()=>{
+                character.addCantrip('New cantrip')
+                firebaseHandler.setCharacterData(character.objectData)
+              }">
+                <p class="flex-1">--Add a cantrip--</p>
+                <p v-html="ICON_ADD"></p>
+              </div>
+              <div v-if="j!==0"  class="clickable container row" @click.stop @click="()=>{
+                character.addSpell(j, 'New Spell')
+                firebaseHandler.setCharacterData(character.objectData)
+              }">
+                <p class="flex-1">--Add a spell--</p>
+                <p v-html="ICON_ADD"></p>
               </div>
             </div>
           </div>
