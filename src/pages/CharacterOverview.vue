@@ -28,6 +28,7 @@ const deleteModelData = reactive({
 
 const ICON_ADD = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 -960 960 960\" style=\"fill: var(--color-text); height: var(--font-size); width: var(--font-size);\"><path d=\"M640-121v-120H520v-80h120v-120h80v120h120v80H720v120h-80ZM120-240v-80h80v80h-80Zm160 0v-80h163q-3 21-2.5 40t3.5 40H280ZM120-400v-80h80v80h-80Zm160 0v-80h266q-23 16-41.5 36T472-400H280ZM120-560v-80h80v80h-80Zm160 0v-80h480v80H280ZM120-720v-80h80v80h-80Zm160 0v-80h480v80H280Z\"/></svg>"
 const ICON_REMOVE = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 -960 960 960\" style=\"fill: var(--color-text); height: var(--font-size); width: var(--font-size)\"><path d=\"M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z\"/></svg>"
+const SPACE_CHAR = ' ‎'
 
 const resetDeleteModelData = () => {
   deleteModelData.open = false
@@ -548,10 +549,10 @@ onBeforeMount(async () => {
                 </p>
                 <br/>
                 <p>Spells</p>
-                <div class="flex-1" v-for="(spells, lvl) in character.usableSpells.spells">
-                  <p v-if="spells.prepared.length > 0">Level {{ lvl }}</p>
+                <div :style="{'display: none': spells.prepared.length > 0}" v-for="(spells, lvl) in character.usableSpells.spells">
+                  <p v-if="spells.prepared.length > 0">- Level {{ lvl }}</p>
                   <p v-if="spells.prepared.length > 0" v-for="spell in spells.prepared">
-                    - {{ spell }}
+                   {{SPACE_CHAR.repeat(3)}}- {{ spell }}
                   </p>
                 </div>
                 <p class="align-center">Attacks & Spellcasting</p>
@@ -562,7 +563,7 @@ onBeforeMount(async () => {
                     <div class="flex-1 clickable container col" @click="atClickEdit([
                        ['Features & Traits', `_character.features.${index}`, feature, ModelTypes.textarea]
                     ])">
-                      <p v-for="(feat, index) in feature.split('\n')">{{ index === 0 ? '- ' : ' ‎ ‎ ‎' }}{{ feat }}</p>
+                      <p v-for="(feat, index) in feature.split('\n')">{{ index === 0 ? '- ' : SPACE_CHAR.repeat(3) }}{{ feat }}</p>
                     </div>
                     <p class="clickable" @click="()=>{
                       deleteModelData.deleteFunction = async ()=>{
@@ -860,28 +861,8 @@ onBeforeMount(async () => {
       </div>
       <div class="body container row">
         <div class="container col flex-1" v-for="(i, key) in [[0,1,2],[3,4,5],[6,7,8,9]]">
-          <div class="container block value-display col flex-1 clickable" v-for="j in i"
-               :class="{'no-border-bottom': [2,5,9].includes(j), 'no-border-left': key===0, 'no-border-right': key===2}"
-               @click="()=>{
-                 if (j === 0){
-                   const items = []
-                   character.usableSpells.cantrips.forEach((item, index)=>{
-                     console.log(item, 'item')
-                     items.push([`Cantrip  ${index+1}`, `usableSpells.cantrips.${index}`, character.usableSpells.cantrips[index], ModelTypes.text])
-                   })
-                    atClickEdit(items)
-                  } else {
-                    const items = [
-                        ['Spell Slots', `usableSpells.spells.${j}.spellSlots`, character.usableSpells.spells[j].spellSlots, ModelTypes.number],
-                        ['Spell Slots Expanded', `usableSpells.spells.${j}.spellSlotsExpanded`, character.usableSpells.spells[j].spellSlotsExpanded, ModelTypes.number],
-                    ]
-                    character.usableSpells.spells[j].known.forEach((item, index)=>{
-                      items.push([`Spell ${index+1}`, `usableSpells.spells.${j}.known.${index}`, item, ModelTypes.text])
-                    })
-                    atClickEdit(items)
-                 }
-               }"
-          >
+          <div class="container block value-display col flex-1" v-for="j in i"
+               :class="{'no-border-bottom': [2,5,9].includes(j), 'no-border-left': key===0, 'no-border-right': key===2}">
             <div class="container row labeled-row" style="margin-bottom: .5rem">
               <div class="value flex-1">
                 <p>lvl {{ j }}</p>
@@ -890,17 +871,17 @@ onBeforeMount(async () => {
                 <p>Cantrips</p>
               </div>
               <div class="flex-3 container row" v-if="j!==0">
-                <div class="value flex-1" @click.stop @click="atClickEdit([
+                <div class="value flex-1" @click="atClickEdit([
                   ['Spell Slots', `usableSpells.spells.${j}.spellSlots`, character.usableSpells.spells[j].spellSlots, ModelTypes.number],
               ])">
                   <p>{{ character.usableSpells.spells[j].spellSlots }}</p>
                 </div>
-                <div class="label flex-2" @click.stop @click="atClickEdit([
+                <div class="label flex-2" @click="atClickEdit([
                   ['Spell Slots', `usableSpells.spells.${j}.spellSlots`, character.usableSpells.spells[j].spellSlots, ModelTypes.number],
               ])">
                   <p>Total</p>
                 </div>
-                <div class="value flex-1" @click.stop @click="atClickEdit([
+                <div class="value flex-1" @click="atClickEdit([
                   ['Spell Slots Expanded', `usableSpells.spells.${j}.spellSlotsExpanded`, character.usableSpells.spells[j].spellSlotsExpanded, ModelTypes.number],
                 ])">
                   <p>{{ character.usableSpells.spells[j].spellSlotsExpanded }}</p>
@@ -912,18 +893,20 @@ onBeforeMount(async () => {
                 </div>
               </div>
             </div>
-            <div v-if="j!==0" class="container row">
+            <div v-if="j===0" class="container row">
+              <p class="flex-3">Cantrip Name</p>
+            </div>
+            <div v-else class="container row">
               <div class="flex-1">
                 <p style="text-align: center">Prepared</p>
               </div>
               <p class="flex-3">Spell Name</p>
             </div>
 
-            <div v-if="j===0" class="container row">
-              <p class="flex-3">Cantrip Name</p>
-            </div>
             <div class="container col block no-border">
-              <div v-if="j===0" v-for="cantrip in character.usableSpells.cantrips" class="container row">
+              <div v-if="j===0" v-for="(cantrip, index) in character.usableSpells.cantrips" class="container row clickable" @click="atClickEdit([
+                  [`Cantrip`, `usableSpells.cantrips.${index}`, character.usableSpells.cantrips[index], ModelTypes.text]
+              ])">
                 <p class="flex-1">{{ cantrip }}</p>
                 <p @click.stop @click="() =>{
                   deleteModelData.deleteFunction = async ()=>{
@@ -936,7 +919,9 @@ onBeforeMount(async () => {
                   deleteModelData.question = 'Are you sure you want to delete this cantrip?'
                 }" v-html="ICON_REMOVE"></p>
               </div>
-              <div v-if="j!==0" v-for="spell in character.usableSpells.spells[j].known" class="container row">
+              <div v-else v-for="(spell, index) in character.usableSpells.spells[j].known" class="container row clickable" @click="atClickEdit([
+                  [`Spell`, `usableSpells.spells.${j}.known.${index}`, spell, ModelTypes.text]
+              ])">
                 <div class="flex-1 container row" style="justify-content: center">
                   <div class="check"
                        :class="{selected:character.usableSpells.spells[j].prepared.includes(spell)}"
