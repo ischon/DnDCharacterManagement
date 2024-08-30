@@ -75,13 +75,13 @@ import {Character} from "@/models/Character.js";
 // )
 //
 // // character abilities
-// owin.strength = 8
-// owin.dexterity = 14
-// owin.constitution = 16
-// owin.intelligence = 16
-// owin.wisdom = 10
-// owin.charisma = 10
-// owin.inspiration = 0
+// owin.ability.strength = 8
+// owin.ability.dexterity = 14
+// owin.ability.constitution = 16
+// owin.ability.intelligence = 16
+// owin.ability.wisdom = 10
+// owin.ability.charisma = 10
+// owin.ability.inspiration = 0
 // owin.proficiency.add("constitution", "Saving Throws") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 // owin.proficiency.add("intelligence", "Saving Throws") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 // owin.proficiency.add("intelligence", "Investigation") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
@@ -92,11 +92,11 @@ import {Character} from "@/models/Character.js";
 // owin.proficiency.add("items", "Weapons: Simple weapons") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 // owin.proficiency.add("items", "Tools: Thieves' tools, tinker’s tools, one type of artisan’s tools of your choice") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 // owin.proficiency.add("items", "Artisan’s tools (tinker’s tools)") // https://www.dndbeyond.com/races/18-gnome#RockGnome
-// owin.armorClassBase = 14
-// owin.armorClassHasDexModifier = true
+// owin.stat.armorClassBase = 14
+// owin.stat.armorClassHasDexModifier = true
 // owin.speed = 25
 // owin.baseHitPoints = 13
-// owin.currentHitPoints = owin.hitPointMaximumValue
+// owin.currentHitPoints = owin.stat.hitPointMaximumValue
 //
 // owin.hitDice = "2D8"
 // owin.deathSaveSuccesses = 0
@@ -173,20 +173,20 @@ exampleCharacter.proficiency.add("strength", "Athletics")
 exampleCharacter.proficiency.add("charisma", "Intimidation")
 exampleCharacter.proficiency.add("wisdom", "Medicine")
 exampleCharacter.proficiency.add("intelligence", "Religion")
-exampleCharacter.strength = 14
-exampleCharacter.dexterity = 8
-exampleCharacter.constitution = 15
-exampleCharacter.intelligence = 10
-exampleCharacter.wisdom = 16
-exampleCharacter.charisma = 12
-exampleCharacter.inspiration = 0
-exampleCharacter.armorClassBase = 14
-exampleCharacter.armorClassHasDexModifier = true
-exampleCharacter.armorClassShield = 2
+exampleCharacter.ability.strength = 14
+exampleCharacter.ability.dexterity = 8
+exampleCharacter.ability.constitution = 15
+exampleCharacter.ability.intelligence = 10
+exampleCharacter.ability.wisdom = 16
+exampleCharacter.ability.charisma = 12
+exampleCharacter.ability.inspiration = 0
+exampleCharacter.stat.armorClassBase = 14
+exampleCharacter.stat.armorClassHasDexModifier = true
+exampleCharacter.stat.armorClassShield = 2
 exampleCharacter.speed = 25
 exampleCharacter.baseHitPoints = 8
 exampleCharacter.hitPointsMisc = 1
-exampleCharacter.currentHitPoints = exampleCharacter.hitPointMaximumValue
+exampleCharacter.currentHitPoints = exampleCharacter.stat.hitPointMaximumValue
 exampleCharacter.hitDice = "1D8"
 exampleCharacter.attack.add("Mace", 4, "1d6 + 2", "Bludgeoning")
 exampleCharacter.attack.add("Handaxe", 4, "1d6 + 2", "Slashing")
@@ -258,7 +258,7 @@ exampleCharacter.equipment.add("Broken blade taken as a trophy from a fallen ene
 exampleCharacter.equipment.add("Set of bone dice", 1, 0)
 exampleCharacter.equipment.add("Set of common clothes", 1, 3)
 exampleCharacter.equipment.add("Pouch", 1, 1)
-exampleCharacter.treasure = "" +
+exampleCharacter.detail.treasure = "" +
     "Broken blade taken as a trophy from a fallen enemy"
 
 

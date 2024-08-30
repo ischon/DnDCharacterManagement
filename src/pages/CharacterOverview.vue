@@ -338,9 +338,9 @@ onBeforeMount(async () => {
             </div>
             <div class="container flex-1 block row labeled-row no-border-left clickable"
                  @click="atClickEdit([
-                      ['Inspiration', 'inspiration', character.inspiration, ModelTypes.number],
+                      ['Inspiration', 'ability.inspiration', character.ability.inspiration, ModelTypes.number],
                  ])">
-              <div class="value flex-1"><p>{{ formatScore(character.inspiration) }}</p></div>
+              <div class="value flex-1"><p>{{ formatScore(character.ability.inspiration) }}</p></div>
               <div class="label flex-2"><p>Inspiration</p></div>
             </div>
             <div v-for="(ability, ability_name) in character.ability.list"
@@ -368,7 +368,7 @@ onBeforeMount(async () => {
               </div>
             </div>
             <div class="container flex-1 block row labeled-row  no-border-left">
-              <div class="value flex-1"><p>{{ character.passivePerception }}</p></div>
+              <div class="value flex-1"><p>{{ character.ability.passivePerception }}</p></div>
               <div class="label flex-2"><p>Passive Wisdom (Perception)</p></div>
             </div>
           </div>
@@ -379,18 +379,18 @@ onBeforeMount(async () => {
                 <div class="container row flex-1">
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
-                          ['Armor class basis', 'armorClassBase', character.armorClassBase, ModelTypes.number],
-                          [`Uses dexterity modifier (${formatScore(character.ability.dexterityModifier)})`, 'armorClassHasDexModifier', character.armorClassHasDexModifier, ModelTypes.checkbox],
-                          ['Added protection from a shield', 'armorClassShield', character.armorClassShield, ModelTypes.number],
-                          ['Additional modifier', 'armorClassMisc', character.armorClassMisc, ModelTypes.number]
+                          ['Armor class basis', 'stat.armorClassBase', character.stat.armorClassBase, ModelTypes.number],
+                          [`Uses dexterity modifier (${formatScore(character.ability.dexterityModifier)})`, 'stat.armorClassHasDexModifier', character.stat.armorClassHasDexModifier, ModelTypes.checkbox],
+                          ['Added protection from a shield', 'stat.armorClassShield', character.stat.armorClassShield, ModelTypes.number],
+                          ['Additional modifier', 'stat.armorClassMisc', character.stat.armorClassMisc, ModelTypes.number]
                        ])">
-                    <p class="flex-1 value">{{ character.armorClass }}</p>
+                    <p class="flex-1 value">{{ character.stat.armorClass }}</p>
                     <p>Armor Class</p>
                   </div>
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
                           ['Dexterity modifier', 'ability.dexterityModifier', character.ability.dexterityModifier, ModelTypes.disabled],
-                          [`Additional modifier`, 'initiativeMisc', character.initiativeMisc, ModelTypes.number],
+                          [`Additional modifier`, 'ability.initiativeMisc', character.initiativeMisc, ModelTypes.number],
                        ])">
                     <p class="flex-1 value">{{ formatScore(character.ability.initiativeModifier) }}</p>
                     <p>Initiative</p>
@@ -410,7 +410,7 @@ onBeforeMount(async () => {
                           ['Additional hit points', 'hitPointsMisc', character.hitPointsMisc, ModelTypes.number],
                           [`Current hit points`, 'currentHitPoints', character.currentHitPoints, ModelTypes.number],
                        ])">
-                  <p>Hit Point Maximum: {{ character.hitPointMaximum }}</p>
+                  <p>Hit Point Maximum: {{ character.stat.hitPointMaximum }}</p>
                   <p class="flex-1 value">{{ character.currentHitPoints }}</p>
                   <p>Current Hit Points</p>
                 </div>
@@ -433,14 +433,14 @@ onBeforeMount(async () => {
                   </div>
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
-                         ['Successful rolls', 'deathSaveSuccesses', character.deathSaves.successes, ModelTypes.number],
-                         ['Failed rolls', 'deathSaveFailures', character.deathSaves.failures, ModelTypes.number],
+                         ['Successful rolls', 'stat.deathSaves.successes', character.stat.deathSaves.successes, ModelTypes.number],
+                         ['Failed rolls', 'stat.deathSaves.failures', character.stat.deathSaves.failures, ModelTypes.number],
                   ])">
                     <div class="container col flex-1 value">
                       <div class="container row death-saves">
                         <div class="label flex-2">successes</div>
                         <div class="checks flex-1 container row">
-                          <div class="check" :class="{ selected: key < character.deathSaves.successes  }"
+                          <div class="check" :class="{ selected: key < character.stat.deathSaves.successes  }"
                                v-for="key in range(0,3)">
                           </div>
                         </div>
@@ -448,7 +448,7 @@ onBeforeMount(async () => {
                       <div class="container row death-saves">
                         <div class="label flex-2">Failures</div>
                         <div class="checks flex-1 container row">
-                          <div class="check" :class="{ selected: key < character.deathSaves.failures }"
+                          <div class="check" :class="{ selected: key < character.stat.deathSaves.failures }"
                                v-for="key in range(0,3)"></div>
                         </div>
                       </div>
@@ -813,18 +813,18 @@ onBeforeMount(async () => {
             <p class="align-center">Allies & Organizations</p>
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right clickable"
-               @click="atClickEdit([['Additional Features & Traits', 'additionalFeatures', character.additionalFeatures, ModelTypes.textarea]])">
+               @click="atClickEdit([['Additional Features & Traits', 'feature.additional', character.feature.additional, ModelTypes.textarea]])">
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.additionalFeatures.split('\n')">
+              <p class="no-transform" v-for="line in character.feature.additional.split('\n')">
                 {{ line }}
               </p>
             </div>
             <p class="align-center">Additional Features & Traits</p>
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right no-border-bottom clickable"
-               @click="atClickEdit([['Treasure', 'treasure', character.treasure, ModelTypes.textarea]])">
+               @click="atClickEdit([['Treasure', 'detail.treasure', character.detail.treasure, ModelTypes.textarea]])">
             <div class="flex-1">
-              <p class="flex-1 no-transform" v-for="line in character.treasure.split('\n')">
+              <p class="flex-1 no-transform" v-for="line in character.detail.treasure.split('\n')">
                 {{ line }}
               </p>
             </div>

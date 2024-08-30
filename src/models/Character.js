@@ -196,6 +196,15 @@ export class Character {
         this.equipment._configure()
         this.ability._configure()
         this.detail._configure()
+        this.stat._configure()
+    }
+
+    get id() {
+        return this._character.id;
+    }
+
+    get objectData() {
+        return JSON.parse(JSON.stringify(this._character));
     }
 
     proficiency = {
@@ -203,6 +212,8 @@ export class Character {
             Object.defineProperty(this.proficiency, 'list', {get: this.proficiency._list_get})
             Object.defineProperty(this.proficiency, 'bonus', {get: this.proficiency._bonus_get})
         },
+        list: undefined,
+        bonus: undefined,
         add: (type, name) => {
             if (!proficiencyTypes.includes(type)) {
                 console.error("ERROR: ability type does not exists")
@@ -269,6 +280,7 @@ export class Character {
         _configure: () => {
             Object.defineProperty(this.attack, 'list', {get: this.attack._list_get})
         },
+        list: undefined,
         add: (name, bonus, damage, type) => {
             this._character.attacks[name] = new Attack(name, bonus, damage, type)
         },
@@ -295,6 +307,7 @@ export class Character {
         _configure: () => {
             Object.defineProperty(this.language, 'list', {get: this.language._list_get})
         },
+        list: undefined,
         add: (language) => {
             if (!this._character.languages.includes(language)) {
                 this._character.languages.push(language)
@@ -326,6 +339,11 @@ export class Character {
 
             this.spellcasting.spell._configure()
         },
+        class: undefined,
+        ability: undefined,
+        spellSaveDc: undefined,
+        attackBonus: undefined,
+        usableSpells: undefined,
         _class_get: () => {
             return this._character.spellcasting.class
         },
@@ -424,7 +442,106 @@ export class Character {
                     }
                     this.spellcasting.spell[level]._configure()
                 })
-            }
+            },
+            1: {
+                slots: undefined,
+                slotsExpanded: undefined,
+                add: undefined,
+                remove: undefined,
+                prepared: {
+                    toggle: undefined,
+                    add: undefined,
+                    remove: undefined
+                }
+            },
+            2: {
+                slots: undefined,
+                slotsExpanded: undefined,
+                add: undefined,
+                remove: undefined,
+                prepared: {
+                    toggle: undefined,
+                    add: undefined,
+                    remove: undefined
+                }
+            },
+            3: {
+                slots: undefined,
+                slotsExpanded: undefined,
+                add: undefined,
+                remove: undefined,
+                prepared: {
+                    toggle: undefined,
+                    add: undefined,
+                    remove: undefined
+                }
+            },
+            4: {
+                slots: undefined,
+                slotsExpanded: undefined,
+                add: undefined,
+                remove: undefined,
+                prepared: {
+                    toggle: undefined,
+                    add: undefined,
+                    remove: undefined
+                }
+            },
+            5: {
+                slots: undefined,
+                slotsExpanded: undefined,
+                add: undefined,
+                remove: undefined,
+                prepared: {
+                    toggle: undefined,
+                    add: undefined,
+                    remove: undefined
+                }
+            },
+            6: {
+                slots: undefined,
+                slotsExpanded: undefined,
+                add: undefined,
+                remove: undefined,
+                prepared: {
+                    toggle: undefined,
+                    add: undefined,
+                    remove: undefined
+                }
+            },
+            7: {
+                slots: undefined,
+                slotsExpanded: undefined,
+                add: undefined,
+                remove: undefined,
+                prepared: {
+                    toggle: undefined,
+                    add: undefined,
+                    remove: undefined
+                }
+            },
+            8: {
+                slots: undefined,
+                slotsExpanded: undefined,
+                add: undefined,
+                remove: undefined,
+                prepared: {
+                    toggle: undefined,
+                    add: undefined,
+                    remove: undefined
+                }
+            },
+            9: {
+                slots: undefined,
+                slotsExpanded: undefined,
+                add: undefined,
+                remove: undefined,
+                prepared: {
+                    toggle: undefined,
+                    add: undefined,
+                    remove: undefined
+                }
+            },
         },
         cantrip: {
             add: (cantrip) => {
@@ -443,7 +560,12 @@ export class Character {
     feature = {
         _configure: () => {
             Object.defineProperty(this.feature, 'list', {get: this.feature._list_get})
+            Object.defineProperty(this.feature, 'additional', {
+                get: () => this._character.additionalFeatures,
+                set: (value) => this._character.additionalFeatures = value
+            })
         },
+        list: undefined,
         add: (feature) => {
             if (!this._character.features.includes(feature)) {
                 this._character.features.push(feature)
@@ -464,6 +586,7 @@ export class Character {
             Object.defineProperty(this.equipment, 'list', {get: this.equipment._list_get})
             this.equipment.coin._configure()
         },
+        list: undefined,
         add: (name, count, weight) => {
             if (this._character.equipment[name] !== undefined) {
                 this._character.equipment[name].count += count
@@ -522,6 +645,7 @@ export class Character {
                     set: this.equipment.coin._amount_set
                 })
             },
+            amount: undefined,
             add: (coins, type) => {
                 let cp = toCopperCoins(coins, type)
                 this._character.coins += cp
@@ -555,20 +679,50 @@ export class Character {
             ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].forEach((ability) => {
                 Object.defineProperty(this.ability, `${ability}Modifier`, {
                     get: () => {
-                        return calculateAbilityModifier(this[ability])
+                        return calculateAbilityModifier(this.ability[ability])
                     }
                 })
+                Object.defineProperty(this.ability, `${ability}`, {
+                    get: () => this._character.abilities[ability],
+                    set: (value) => this._character.abilities[ability] = value
+                })
+            })
+            Object.defineProperty(this.ability, 'inspiration', {
+                get: () => this._character.abilities.inspiration,
+                set: (value) => this._character.abilities.inspiration = value
             })
             Object.defineProperty(this.ability, 'list', {get: this.ability._list_get})
             Object.defineProperty(this.ability, 'initiativeModifier', {get: this.ability._initiativeModifier_get})
+            Object.defineProperty(this.ability, 'initiativeMisc', {
+                get: this.ability._initiativeMisc_get,
+                set: this.ability._initiativeMisc_set
+            })
+            Object.defineProperty(this.ability, 'passivePerception', {get: this.ability._passivePerception_get})
         },
+        strength: undefined,
+        dexterity: undefined,
+        constitution: undefined,
+        intelligence: undefined,
+        wisdom: undefined,
+        charisma: undefined,
+        strengthModifier: undefined,
+        dexterityModifier: undefined,
+        constitutionModifier: undefined,
+        intelligenceModifier: undefined,
+        wisdomModifier: undefined,
+        charismaModifier: undefined,
+        inspiration: undefined,
+        list: undefined,
+        initiativeModifier: undefined,
+        initiativeMisc: undefined,
+        passivePerception: undefined,
         _list_get: () => {
             let result = {}
 
             for (const [key, value] of Object.entries(abilities)) {
                 result[key] = {
                     skills: {},
-                    score: this[`${key}`],
+                    score: this.ability[`${key}`],
                     modifier: this.ability[`${key}Modifier`]
                 }
                 value.forEach((item) => {
@@ -585,16 +739,24 @@ export class Character {
             }
             return result
         },
-        _initiativeModifier_get: () => {
-            return this.initiativeBase + this.initiativeMisc
-        }
+        _initiativeModifier_get: () => this.ability.dexterityModifier + this.ability.initiativeMisc,
+        _initiativeMisc_get: () => this._character.stats.initiative.misc,
+        _initiativeMisc_set: (value) => this._character.stats.initiative.misc = value,
+        _passivePerception_get: () => {
+            let modifier = 10 + this.ability.wisdomModifier
+            if (this.proficiency.list.wisdom.includes("Perception")) {
+                modifier += this.proficiency.bonus
+            }
+            return modifier
+        },
     }
 
     detail = {
         _configure: () => {
             [
                 'name', 'level', 'race', 'background', 'experiencePoints', 'age', 'height', 'weight', 'eyeColor',
-                'hairColor', 'skinColor', 'backstory', 'personalityTraits', 'ideals', 'bonds', 'flaws', 'allies'
+                'hairColor', 'skinColor', 'backstory', 'personalityTraits', 'ideals', 'bonds', 'flaws', 'allies',
+                'treasure'
             ].forEach((item) => {
                 Object.defineProperty(this.detail, `${item}`, {
                     get: () => this._character[item],
@@ -603,8 +765,31 @@ export class Character {
             })
 
             Object.defineProperty(this.detail, 'class', {get: this.detail._class_get, set: this.detail._class_set})
-            Object.defineProperty(this.detail, 'alignment', {get: this.detail._alignment_get, set: this.detail._alignment_set})
+            Object.defineProperty(this.detail, 'alignment', {
+                get: this.detail._alignment_get,
+                set: this.detail._alignment_set
+            })
         },
+        name: undefined,
+        level: undefined,
+        race: undefined,
+        background: undefined,
+        experiencePoints: undefined,
+        age: undefined,
+        height: undefined,
+        weight: undefined,
+        eyeColor: undefined,
+        hairColor: undefined,
+        skinColor: undefined,
+        backstory: undefined,
+        personalityTraits: undefined,
+        ideals: undefined,
+        bonds: undefined,
+        flaws: undefined,
+        allies: undefined,
+        treasure: undefined,
+        class: undefined,
+        alignment: undefined,
         _class_get: () => this._character.class,
         _class_set: (value) => {
             if (classes.includes(value)) {
@@ -623,189 +808,88 @@ export class Character {
         },
     }
 
-// COMPUTED PROPERTIES
-    // TODO: What to do with these?
-    get armorClass() {
-        let result = 0
-        result += this.armorClassBase
-        if (this.armorClassHasDexModifier) {
-            result += ((this.ability.dexterityModifier < 2) ? this.dexterityModifier : 2)
-        }
-        result += this.armorClassShield
-        result += this.armorClassMisc
-        return result
-    }
+    stat = {
+        _configure: () => {
+            Object.defineProperty(this.stat, 'armorClass', {get: this.stat._armorClass_get});
+            ['base', 'hasDexModifier', 'shield', 'misc'].forEach((item) => {
+                Object.defineProperty(this.stat, `armorClass${item.charAt(0).toUpperCase() + item.slice(1)}`, {
+                    get: () => this._character.stats.armorClass[item],
+                    set: (value) => this._character.stats.armorClass[item] = value
+                })
+            })
+            Object.defineProperty(this.stat, 'hitPointMaximum', {get: this.stat._hitPointMaximum_get})
+            Object.defineProperty(this.stat, 'hitPointMaximumValue', {get: this.stat._hitPointMaximumValue_get})
 
-    get hitPointMaximum() {
-        // https://5ehpcalculator.com/
-        const values = []
-        values.push(this.baseHitPoints)
-        values.push(this.ability.constitutionModifier)
-        if (this.hitPointsMisc && this.hitPointsMisc !== 0) {
-            values.push(this.hitPointsMisc)
-        }
+            this.stat.deathSaves._configure()
+        },
+        armorClass: undefined,
+        armorClassBase: undefined,
+        armorClassHasDexModifier: undefined,
+        armorClassShield: undefined,
+        armorClassMisc: undefined,
+        _armorClass_get: () => {
+            let result = 0
+            result += this.stat.armorClassBase
+            if (this.stat.armorClassHasDexModifier) {
+                result += ((this.ability.dexterityModifier < 2) ? this.ability.dexterityModifier : 2)
+            }
+            result += this.stat.armorClassShield
+            result += this.stat.armorClassMisc
+            return result
+        },
+        _hitPointMaximum_get:()=> {
+            // https://5ehpcalculator.com/
+            const values = []
+            values.push(this.baseHitPoints)
+            values.push(this.ability.constitutionModifier)
+            if (this.hitPointsMisc && this.hitPointsMisc !== 0) {
+                values.push(this.hitPointsMisc)
+            }
 
-        return values.join(" + ")
-    }
-
-    get hitPointMaximumValue() {
-        let value = 0
-        value += this.baseHitPoints
-        value += this.ability.constitutionModifier
-        if (this.hitPointsMisc && this.hitPointsMisc !== 0) {
+            return values.join(" + ")
+        },
+        _hitPointMaximumValue_get: () => {
+            let value = 0
+            value += this.baseHitPoints
+            value += this.ability.constitutionModifier
             value += this.hitPointsMisc
+
+            return value
+        },
+
+        deathSaves: {
+            _configure: () => {
+                Object.defineProperty(this.stat.deathSaves, 'successes', {
+                    get: () => this._character.stats.deathSaves.successes,
+                    set: (value) => {
+                        if (value < 0 || value > 3) {
+                            console.error("ERROR: death saves successes must be between 0 and 3")
+                            return
+                        }
+                        this._character.stats.deathSaves.successes = value
+                    }
+                })
+                Object.defineProperty(this.stat.deathSaves, 'failures', {
+                    get: () => this._character.stats.deathSaves.failures,
+                    set: (value) => {
+                        if (value < 0 || value > 3) {
+                            console.error("ERROR: death saves failures must be between 0 and 3")
+                            return
+                        }
+                        this._character.stats.deathSaves.failures = value
+
+                    }
+                })
+            },
+            successes: undefined,
+            failures: undefined
         }
-
-        return value
-    }
-
-
-// GLOBAL GETTERS AND SETTERS
-    get id() {
-        return this._character.id;
-    }
-
-    get objectData() {
-        return JSON.parse(JSON.stringify(this._character));
     }
 
     // TODO: Continue here
 
-    get additionalFeatures() {
-        return this._character.additionalFeatures;
-    }
-
-    set additionalFeatures(value) {
-        this._character.additionalFeatures = value;
-    }
-
-    get treasure() {
-        return this._character.treasure;
-    }
-
-    set treasure(value) {
-        this._character.treasure = value;
-    }
-
-
-// ABILITIES GETTERS AND SETTERS
-
-    get inspiration() {
-        return this._character.abilities.inspiration;
-    }
-
-    set inspiration(value) {
-        this._character.abilities.inspiration = value;
-    }
-
-    get strength() {
-        return this._character.abilities.strength;
-    }
-
-    set strength(value) {
-        this._character.abilities.strength = value;
-    }
-
-    get dexterity() {
-        return this._character.abilities.dexterity;
-    }
-
-    set dexterity(value) {
-        this._character.abilities.dexterity = value;
-    }
-
-    get constitution() {
-        return this._character.abilities.constitution;
-    }
-
-    set constitution(value) {
-        this._character.abilities.constitution = value;
-    }
-
-    get intelligence() {
-        return this._character.abilities.intelligence;
-    }
-
-    set intelligence(value) {
-        this._character.abilities.intelligence = value;
-    }
-
-    get wisdom() {
-        return this._character.abilities.wisdom;
-    }
-
-    set wisdom(value) {
-        this._character.abilities.wisdom = value;
-    }
-
-    get charisma() {
-        return this._character.abilities.charisma;
-    }
-
-    set charisma(value) {
-        this._character.abilities.charisma = value;
-    }
-
-// LINKED ABILITIES GETTERS AND SETTERS
-    get passivePerception() {
-        if (this.proficiency.list.wisdom.includes("Perception")) {
-            return 10 + this.ability.wisdomModifier + this.proficiency.bonus
-        }
-        return 10 + this.ability.wisdomModifier
-    }
-
 // STATS GETTERS AND SETTERS
-    get armorClassBase() {
-        return this._character.stats.armorClass.base
-    }
 
-    set armorClassBase(value) {
-        this._character.stats.armorClass.base = value
-    }
-
-    get armorClassHasDexModifier() {
-        return this._character.stats.armorClass.hasDexModifier
-    }
-
-    set armorClassHasDexModifier(value) {
-        this._character.stats.armorClass.hasDexModifier = value
-    }
-
-    get armorClassShield() {
-        return this._character.stats.armorClass.shield
-    }
-
-    set armorClassShield(value) {
-        this._character.stats.armorClass.shield = value
-    }
-
-    get armorClassMisc() {
-        return this._character.stats.armorClass.misc
-    }
-
-    set armorClassMisc(value) {
-        this._character.stats.armorClass.misc = value
-    }
-
-    get initiativeBase() {
-        return this.ability.dexterityModifier
-    }
-
-    get initiativeMisc() {
-        return this._character.stats.initiative.misc
-    }
-
-    set initiativeMisc(value) {
-        this._character.stats.initiative.misc = value
-    }
-
-    get speed() {
-        return this._character.stats.speed
-    }
-
-    set speed(value) {
-        this._character.stats.speed = value
-    }
 
     get baseHitPoints() {
         return this._character.stats.hitPoints.base
@@ -828,9 +912,9 @@ export class Character {
     }
 
     set currentHitPoints(value) {
-        if (value > this.hitPointMaximumValue) {
+        if (value > this.stat.hitPointMaximumValue) {
             console.error("ERROR: hit points are higher than maximum hit points")
-            this._character.stats.hitPoints.current = this.hitPointMaximumValue
+            this._character.stats.hitPoints.current = this.stat.hitPointMaximumValue
             return
         }
 
@@ -883,15 +967,11 @@ export class Character {
         this.currentAmountHitDice = Number(value)
     }
 
-    get deathSaves() {
-        return this._character.stats.deathSaves
+    get speed() {
+        return this._character.stats.speed
     }
 
-    set deathSaveSuccesses(value) {
-        this._character.stats.deathSaves.successes = value
-    }
-
-    set deathSaveFailures(value) {
-        this._character.stats.deathSaves.failures = value
+    set speed(value) {
+        this._character.stats.speed = value
     }
 }
