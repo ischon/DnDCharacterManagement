@@ -1,5 +1,5 @@
 import {classes, alignments, abilityTypes, proficiencyTypes, abilities, dice} from "@/models/Enums.js";
-import {Attack, Item} from "@/models/CharacterHelperClasses.js";
+import {Attack, Item, defaultCharacter} from "@/models/CharacterHelperClasses.js";
 import {calculateCoins, calculateAbilityModifier, toCopperCoins} from "@/helpers/characterHelpers.js";
 import {range} from "lodash";
 
@@ -14,168 +14,8 @@ export class Character {
             return Date.now().toString(36).slice(-8);
         }
 
-        return {
-            id: _getIdWithFailSave(id),
-            name: "",
-            class: "",
-            level: 0,
-            race: "",
-            background: "",
-            alignment: "",
-            experiencePoints: 0,
-            age: 0,
-            height: 0,
-            weight: 0,
-            eyeColor: "",
-            hairColor: "",
-            skinColor: "",
-            backstory: "",
-            personalityTraits: "",
-            ideals: "",
-            bonds: "",
-            flaws: "",
-            allies: "",
-            additionalFeatures: "",
-            treasure: "",
-            abilities: {
-                proficiencies: {
-                    strength: [],
-                    dexterity: [],
-                    constitution: [],
-                    intelligence: [],
-                    wisdom: [],
-                    charisma: [],
-                    items: []
-                },
-                inspiration: 0,
-                strength: 10,
-                dexterity: 10,
-                constitution: 10,
-                intelligence: 10,
-                wisdom: 10,
-                charisma: 10,
-            },
-            stats: {
-                armorClass: {
-                    base: 10,
-                    hasDexModifier: true,
-                    shield: 0,
-                    misc: 0
-                },
-                initiative: {
-                    misc: 0
-                },
-                speed: 30,
-                hitPoints: {
-                    base: 8,
-                    misc: 0,
-                    current: 0,
-                    temp: 0
-                },
-                hitDice: {
-                    die: "8",
-                    current: 1
-                },
-                deathSaves: {
-                    successes: 0,
-                    failures: 0
-                },
-            },
-            coins: 0,
-            equipment: {},
-            languages: [],
-            attacks: {},
-            spellcasting: {
-                class: "",
-                ability: "",
-                cantrips: [],
-                spells: {
-                    1: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    2: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    3: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    4: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    5: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    6: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    7: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    8: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    9: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                },
-            },
-            features: [],
-        }
-    };
+        return defaultCharacter(_getIdWithFailSave(id))
+    }
 
     constructor(object = undefined, id = undefined) {
         if (object === undefined) {
@@ -262,13 +102,13 @@ export class Character {
             }
         },
         _bonus_get: () => {
-            if (this.level < 5) {
+            if (this.detail.level < 5) {
                 return 2
-            } else if (this.level < 9) {
+            } else if (this.detail.level < 9) {
                 return 3
-            } else if (this.level < 13) {
+            } else if (this.detail.level < 13) {
                 return 4
-            } else if (this.level < 17) {
+            } else if (this.detail.level < 17) {
                 return 5
             } else {
                 return 6
@@ -423,10 +263,10 @@ export class Character {
                         prepared: {
                             toggle: (name) => {
                                 if (this._character.spellcasting.spells[level].prepared.includes(name)) {
-                                    this.spellcasting.spell.prepared.remove(level, name)
+                                    this.spellcasting.spell[level].prepared.remove(name)
                                     return;
                                 }
-                                this.spellcasting.spell.prepared.add(level, name)
+                                this.spellcasting.spell[level].prepared.add( name)
                             },
                             add: (spell) => {
                                 if (!this._character.spellcasting.spells[level].prepared.includes(spell)) {
@@ -435,7 +275,8 @@ export class Character {
                             },
                             remove: (spell) => {
                                 if (this._character.spellcasting.spells[level].prepared.includes(spell)) {
-                                    this._character.spellcasting.spells[level].prepared.splice(this._character.spellcasting.spells[level].prepared.indexOf(spell), 1)
+                                    let spellIndex = this._character.spellcasting.spells[level].prepared.indexOf(spell)
+                                    this._character.spellcasting.spells[level].prepared.splice(spellIndex, 1)
                                 }
                             }
                         }
@@ -644,8 +485,10 @@ export class Character {
                     get: this.equipment.coin._amount_get,
                     set: this.equipment.coin._amount_set
                 })
+                Object.defineProperty(this.equipment.coin, 'format', {get: this.equipment.coin._format_get})
             },
             amount: undefined,
+            format: undefined,
             add: (coins, type) => {
                 let cp = toCopperCoins(coins, type)
                 this._character.coins += cp
@@ -668,7 +511,7 @@ export class Character {
 
                 this._character.coins = value
             },
-            format: () => {
+            _format_get: () => {
                 return calculateCoins(this._character.coins)
             }
         }
@@ -817,9 +660,32 @@ export class Character {
                     set: (value) => this._character.stats.armorClass[item] = value
                 })
             })
-            Object.defineProperty(this.stat, 'hitPointMaximum', {get: this.stat._hitPointMaximum_get})
-            Object.defineProperty(this.stat, 'hitPointMaximumValue', {get: this.stat._hitPointMaximumValue_get})
-
+            Object.defineProperty(this.stat, 'hitPointMaximum', {get: this.stat._hitPointMaximum_get});
+            Object.defineProperty(this.stat, 'hitPointMaximumValue', {get: this.stat._hitPointMaximumValue_get});
+            ['base', 'misc', 'temp'].forEach((item) => {
+                Object.defineProperty(this.stat, `hitPoints${item.charAt(0).toUpperCase() + item.slice(1)}`, {
+                    get: () => this._character.stats.hitPoints[item],
+                    set: (value) => this._character.stats.hitPoints[item] = value
+                })
+            })
+            Object.defineProperty(this.stat, 'hitPointsCurrent', {
+                get: this.stat._hitPointsCurrent_get,
+                set: this.stat._hitPointsCurrent_set
+            })
+            Object.defineProperty(this.stat, 'hitDie', {
+                get: this.stat._hitDie_get,
+                set: this.stat._hitDie_set
+            })
+            Object.defineProperty(this.stat, 'maxHitDice', {get: this.stat._maxHitDice_get})
+            Object.defineProperty(this.stat, 'currentAmountHitDice', {
+                get: this.stat._currentAmountHitDice_get,
+                set: this.stat._currentAmountHitDice_set
+            })
+            Object.defineProperty(this.stat, 'currentHitDice', {get: this.stat._currentHitDice_get})
+            Object.defineProperty(this.stat, 'speed', {
+                get: () => this._character.stats.speed,
+                set: (value) => this._character.stats.speed = value
+            })
             this.stat.deathSaves._configure()
         },
         armorClass: undefined,
@@ -827,6 +693,17 @@ export class Character {
         armorClassHasDexModifier: undefined,
         armorClassShield: undefined,
         armorClassMisc: undefined,
+        hitPointMaximum: undefined,
+        hitPointMaximumValue: undefined,
+        hitPointsBase: undefined,
+        hitPointsMisc: undefined,
+        hitPointsTemp: undefined,
+        hitPointsCurrent: undefined,
+        hitDie: undefined,
+        maxHitDice: undefined,
+        currentAmountHitDice: undefined,
+        currentHitDice: undefined,
+        speed: undefined,
         _armorClass_get: () => {
             let result = 0
             result += this.stat.armorClassBase
@@ -837,26 +714,57 @@ export class Character {
             result += this.stat.armorClassMisc
             return result
         },
-        _hitPointMaximum_get:()=> {
+        _hitPointMaximum_get: () => {
             // https://5ehpcalculator.com/
             const values = []
-            values.push(this.baseHitPoints)
+            values.push(this.stat.hitPointsBase)
             values.push(this.ability.constitutionModifier)
-            if (this.hitPointsMisc && this.hitPointsMisc !== 0) {
-                values.push(this.hitPointsMisc)
+            if (this.stat.hitPointsMisc && this.stat.hitPointsMisc !== 0) {
+                values.push(this.stat.hitPointsMisc)
             }
 
             return values.join(" + ")
         },
         _hitPointMaximumValue_get: () => {
             let value = 0
-            value += this.baseHitPoints
+            value += this.stat.hitPointsBase
             value += this.ability.constitutionModifier
-            value += this.hitPointsMisc
+            value += this.stat.hitPointsMisc
 
             return value
         },
+        _hitPointsCurrent_get: () => this._character.stats.hitPoints.current,
+        _hitPointsCurrent_set :(value)=> {
+            if (value > this.stat.hitPointMaximumValue) {
+                console.error("ERROR: hit points are higher than maximum hit points")
+                this._character.stats.hitPoints.current = this.stat.hitPointMaximumValue
+                return
+            }
 
+            this._character.stats.hitPoints.current = value
+        },
+        _hitDie_get:()=> this._character.stats.hitDice.die,
+        _hitDie_set: (value)=> {
+            const die = value.toLowerCase().split("d")
+            if (die.length === 2 && dice.includes(die[1]) && Number.isInteger(Number(die[0]))) {
+                this._character.stats.hitDice.die = die[1];
+                this.stat.currentAmountHitDice = Number(die[0]);
+                return
+            }
+            console.error("ERROR: Dice is not in the known list")
+        },
+        _maxHitDice_get: () => this.detail.level,
+        _currentAmountHitDice_get: () =>this._character.stats.hitDice.current,
+        _currentAmountHitDice_set: (value)=> {
+            if (Number.isInteger(value) && value <= this.stat.maxHitDice && value >= 0) {
+                this._character.stats.hitDice.current = value
+                return;
+            }
+            console.error("ERROR: not enough hit dice")
+        },
+        _currentHitDice_get: ()=> {
+            return this.stat.currentAmountHitDice + 'D' + this.stat.hitDie
+        },
         deathSaves: {
             _configure: () => {
                 Object.defineProperty(this.stat.deathSaves, 'successes', {
@@ -884,94 +792,5 @@ export class Character {
             successes: undefined,
             failures: undefined
         }
-    }
-
-    // TODO: Continue here
-
-// STATS GETTERS AND SETTERS
-
-
-    get baseHitPoints() {
-        return this._character.stats.hitPoints.base
-    }
-
-    set baseHitPoints(value) {
-        this._character.stats.hitPoints.base = value
-    }
-
-    get hitPointsMisc() {
-        return this._character.stats.hitPoints.misc
-    }
-
-    set hitPointsMisc(value) {
-        this._character.stats.hitPoints.misc = value
-    }
-
-    get currentHitPoints() {
-        return this._character.stats.hitPoints.current
-    }
-
-    set currentHitPoints(value) {
-        if (value > this.stat.hitPointMaximumValue) {
-            console.error("ERROR: hit points are higher than maximum hit points")
-            this._character.stats.hitPoints.current = this.stat.hitPointMaximumValue
-            return
-        }
-
-        this._character.stats.hitPoints.current = value
-    }
-
-    get tempHitPoints() {
-        return this._character.stats.hitPoints.temp
-    }
-
-    set tempHitPoints(value) {
-        this._character.stats.hitPoints.temp = value
-    }
-
-    get hitDice() {
-        return this._character.stats.hitDice.die
-    }
-
-    set hitDice(value) {
-        const die = value.toLowerCase().split("d")
-        if (die.length === 2 && dice.includes(die[1]) && Number.isInteger(Number(die[0]))) {
-            this._character.stats.hitDice.die = die[1];
-            this.currentHitDice = Number(die[0]);
-            return
-        }
-        console.error("ERROR: Dice is not in the known list")
-    }
-
-    get maxHitDice() {
-        return this.detail.level
-    }
-
-    get currentAmountHitDice() {
-        return this._character.stats.hitDice.current
-    }
-
-    set currentAmountHitDice(value) {
-        if (Number.isInteger(value) && value <= this.maxHitDice && value >= 0) {
-            this._character.stats.hitDice.current = value
-            return;
-        }
-        console.error("ERROR: not enough hit dice")
-    }
-
-    get currentHitDice() {
-        return this.currentAmountHitDice + 'D' + this._character.stats.hitDice.die
-    }
-
-    set currentHitDice(value) {
-        this.currentAmountHitDice = Number(value)
-    }
-
-    get speed() {
-        return this._character.stats.speed
-    }
-
-    set speed(value) {
-        this._character.stats.speed = value
     }
 }

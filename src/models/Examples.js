@@ -94,11 +94,11 @@ import {Character} from "@/models/Character.js";
 // owin.proficiency.add("items", "Artisan’s tools (tinker’s tools)") // https://www.dndbeyond.com/races/18-gnome#RockGnome
 // owin.stat.armorClassBase = 14
 // owin.stat.armorClassHasDexModifier = true
-// owin.speed = 25
-// owin.baseHitPoints = 13
-// owin.currentHitPoints = owin.stat.hitPointMaximumValue
+// owin.stat.speed = 25
+// owin.stat.hitPointsBase = 13
+// owin.stat.hitPointsCurrent = owin.stat.hitPointMaximumValue
 //
-// owin.hitDice = "2D8"
+// owin.stat.hitDie = "2D8"
 // owin.deathSaveSuccesses = 0
 // owin.deathSaveFailures = 0
 // owin.attack.add("light Crossbow", 4, "1d8 + 4", "Piercing") // https://roll20.net/compendium/dnd5e/Light%20Crossbow#content
@@ -183,11 +183,11 @@ exampleCharacter.ability.inspiration = 0
 exampleCharacter.stat.armorClassBase = 14
 exampleCharacter.stat.armorClassHasDexModifier = true
 exampleCharacter.stat.armorClassShield = 2
-exampleCharacter.speed = 25
-exampleCharacter.baseHitPoints = 8
-exampleCharacter.hitPointsMisc = 1
-exampleCharacter.currentHitPoints = exampleCharacter.stat.hitPointMaximumValue
-exampleCharacter.hitDice = "1D8"
+exampleCharacter.stat.speed = 25
+exampleCharacter.stat.hitPointsBase = 8
+exampleCharacter.stat.hitPointsMisc = 1
+exampleCharacter.stat.hitPointsCurrent = exampleCharacter.stat.hitPointMaximumValue
+exampleCharacter.stat.hitDie = "1D8"
 exampleCharacter.attack.add("Mace", 4, "1d6 + 2", "Bludgeoning")
 exampleCharacter.attack.add("Handaxe", 4, "1d6 + 2", "Slashing")
 exampleCharacter.feature.add("Divine Domain")

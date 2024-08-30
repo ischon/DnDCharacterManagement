@@ -93,7 +93,7 @@ const atClickProficiency = (ability_name, skill_name) => {
   firebaseHandler.setCharacterData(character.objectData);
 }
 const atClickPrepared = (spell_lvl, spell_name) => {
-  character.spellcasting.spell.prepared.toggle(spell_lvl, spell_name);
+  character.spellcasting.spell[spell_lvl].prepared.toggle(spell_name);
   firebaseHandler.setCharacterData(character.objectData);
 }
 
@@ -112,7 +112,7 @@ const saveWithReflect = (base, path, value) => {
 }
 
 const atClickSave = async () => {
-  if (editing.items[0].key.includes('equipment')) {
+  if (editing.items[0].key.includes('tag-equipment')) {
     const item = {
       key: editing.items[0].key.split('.')[1],
       name: undefined,
@@ -348,7 +348,7 @@ onBeforeMount(async () => {
               <!--ABILITY-->
               <div class="container ability col flex-1 clickable"
                    @click="atClickEdit([
-                      [ability_name, ability_name, ability.score, ModelTypes.number],
+                      [ability_name, `ability.${ability_name}`, ability.score, ModelTypes.number],
                  ])">
                 <div class="ability-modifier flex-1"><p class="content no-label">{{ formatScore(ability.modifier) }}</p>
                 </div>
@@ -360,7 +360,8 @@ onBeforeMount(async () => {
               <div class="container skill col flex-2">
                 <!--SKILLS-->
                 <div v-for="(skill_stats, skill_name) in ability.skills" class="skill-row flex-1">
-                  <div class="proficient clickable" :class="{ selected: skill_stats.proficient }"
+                  <!-- TODO: Find a way to actively update this property when toggled on or of -->
+                  <div class="proficient clickable" :class="{ selected: character.proficiency.list[ability_name].includes(skill_name) }"
                        @click="atClickProficiency(ability_name, skill_name)"></div>
                   <div class="skill-score">{{ formatScore(skill_stats.value) }}</div>
                   <div class="skill-name">{{ skill_name }}</div>
@@ -397,38 +398,38 @@ onBeforeMount(async () => {
                   </div>
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
-                          ['Speed', 'speed', character.speed, ModelTypes.number],
+                          ['Speed', 'stat.speed', character.stat.speed, ModelTypes.number],
                        ])">
-                    <p class="flex-1 value">{{ character.speed }}</p>
+                    <p class="flex-1 value">{{ character.stat.speed }}</p>
                     <p>Speed</p>
                   </div>
                 </div>
                 <div class="container block value-display col flex-1 clickable"
                      @click="atClickEdit([
-                          ['Hit points basis', 'baseHitPoints', character.baseHitPoints, ModelTypes.number],
+                          ['Hit points basis', 'stat.hitPointsBase', character.stat.hitPointsBase, ModelTypes.number],
                           ['Constitution modifier', 'ability.constitutionModifier', character.ability.constitutionModifier, ModelTypes.disabled],
-                          ['Additional hit points', 'hitPointsMisc', character.hitPointsMisc, ModelTypes.number],
-                          [`Current hit points`, 'currentHitPoints', character.currentHitPoints, ModelTypes.number],
+                          ['Additional hit points', 'stat.hitPointsMisc', character.stat.hitPointsMisc, ModelTypes.number],
+                          [`Current hit points`, 'stat.hitPointsCurrent', character.stat.hitPointsCurrent, ModelTypes.number],
                        ])">
                   <p>Hit Point Maximum: {{ character.stat.hitPointMaximum }}</p>
-                  <p class="flex-1 value">{{ character.currentHitPoints }}</p>
+                  <p class="flex-1 value">{{ character.stat.hitPointsCurrent }}</p>
                   <p>Current Hit Points</p>
                 </div>
                 <div class="container block value-display col flex-1 clickable"
                      @click="atClickEdit([
-                          ['Temporary hit points', 'tempHitPoints', character.tempHitPoints, ModelTypes.number],
+                          ['Temporary hit points', 'stat.hitPointsTemp', character.stat.hitPointsTemp, ModelTypes.number],
                        ])">
-                  <p class="flex-1 value">{{ character.tempHitPoints !== 0 ? character.tempHitPoints : '-' }}</p>
+                  <p class="flex-1 value">{{ character.stat.hitPointsTemp !== 0 ? character.stat.hitPointsTemp : '-' }}</p>
                   <p>Temporary Hit Points</p>
                 </div>
                 <div class="container row flex-1">
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
-                          ['Hit Die', 'hitDice', character.hitDice, ModelTypes.die],
-                          ['Usable hit Dice', 'currentAmountHitDice', character.currentAmountHitDice, ModelTypes.number],
+                          ['Hit Die', 'stat.hitDie', character.stat.hitDie, ModelTypes.die],
+                          ['Usable hit Dice', 'stat.currentAmountHitDice', character.stat.currentAmountHitDice, ModelTypes.number],
                        ])">
-                    <p>Total Hit Dice: {{ character.maxHitDice }}</p>
-                    <p class="flex-1 value">{{ character.currentHitDice }}</p>
+                    <p>Total Hit Dice: {{ character.stat.maxHitDice }}</p>
+                    <p class="flex-1 value">{{ character.stat.currentHitDice }}</p>
                     <p>Hit Dice</p>
                   </div>
                   <div class="container block value-display col flex-1 clickable"
@@ -685,10 +686,10 @@ onBeforeMount(async () => {
                     </div>
                   </div>
                   <div v-for="item in character.equipment.list" class="equipment-item container row clickable" @click="atClickEdit([
-                      ['Position', `equipment.${item.name}.index`, item.index, ModelTypes.number],
-                      ['Amount', `equipment.${item.name}.count`, item.count, ModelTypes.number],
-                      ['Name', `equipment.${item.name}.name`, item.name, ModelTypes.text],
-                      ['Weight', `equipment.${item.name}.weight`, item.weight, ModelTypes.number],
+                      ['Position', `tag-equipment.${item.name}.index`, item.index, ModelTypes.number],
+                      ['Amount', `tag-equipment.${item.name}.count`, item.count, ModelTypes.number],
+                      ['Name', `tag-equipment.${item.name}.name`, item.name, ModelTypes.text],
+                      ['Weight', `tag-equipment.${item.name}.weight`, item.weight, ModelTypes.number],
                   ])">
                     <div class="flex-2"></div>
                     <div class="flex-2">
@@ -931,7 +932,7 @@ onBeforeMount(async () => {
                 <p class="flex-3">{{ spell }}</p>
                 <p @click.stop @click="() =>{
                   deleteModelData.deleteFunction = async ()=>{
-                    character.spellcasting.spell.remove(j, spell)
+                    character.spellcasting.spell[j].remove(spell)
                     await firebaseHandler.setCharacterData(character.objectData)
                     resetDeleteModelData()
                   };
@@ -950,7 +951,7 @@ onBeforeMount(async () => {
                 <p v-html="ICON_ADD"></p>
               </div>
               <div v-if="j!==0"  class="clickable container row" @click.stop @click="()=>{
-                character.spellcasting.spell.add(j, 'New Spell')
+                character.spellcasting.spell[j].add('New Spell')
                 firebaseHandler.setCharacterData(character.objectData)
               }">
                 <p class="flex-1">--Add a spell--</p>
