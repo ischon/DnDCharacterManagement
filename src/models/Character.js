@@ -266,7 +266,7 @@ export class Character {
                                     this.spellcasting.spell[level].prepared.remove(name)
                                     return;
                                 }
-                                this.spellcasting.spell[level].prepared.add( name)
+                                this.spellcasting.spell[level].prepared.add(name)
                             },
                             add: (spell) => {
                                 if (!this._character.spellcasting.spells[level].prepared.includes(spell)) {
@@ -734,7 +734,7 @@ export class Character {
             return value
         },
         _hitPointsCurrent_get: () => this._character.stats.hitPoints.current,
-        _hitPointsCurrent_set :(value)=> {
+        _hitPointsCurrent_set: (value) => {
             if (value > this.stat.hitPointMaximumValue) {
                 console.error("ERROR: hit points are higher than maximum hit points")
                 this._character.stats.hitPoints.current = this.stat.hitPointMaximumValue
@@ -743,8 +743,8 @@ export class Character {
 
             this._character.stats.hitPoints.current = value
         },
-        _hitDie_get:()=> this._character.stats.hitDice.die,
-        _hitDie_set: (value)=> {
+        _hitDie_get: () => this._character.stats.hitDice.die,
+        _hitDie_set: (value) => {
             const die = value.toLowerCase().split("d")
             if (die.length === 2 && dice.includes(die[1]) && Number.isInteger(Number(die[0]))) {
                 this._character.stats.hitDice.die = die[1];
@@ -754,15 +754,15 @@ export class Character {
             console.error("ERROR: Dice is not in the known list")
         },
         _maxHitDice_get: () => this.detail.level,
-        _currentAmountHitDice_get: () =>this._character.stats.hitDice.current,
-        _currentAmountHitDice_set: (value)=> {
+        _currentAmountHitDice_get: () => this._character.stats.hitDice.current,
+        _currentAmountHitDice_set: (value) => {
             if (Number.isInteger(value) && value <= this.stat.maxHitDice && value >= 0) {
                 this._character.stats.hitDice.current = value
                 return;
             }
             console.error("ERROR: not enough hit dice")
         },
-        _currentHitDice_get: ()=> {
+        _currentHitDice_get: () => {
             return this.stat.currentAmountHitDice + 'D' + this.stat.hitDie
         },
         deathSaves: {

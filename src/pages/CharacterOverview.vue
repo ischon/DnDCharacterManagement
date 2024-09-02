@@ -5,7 +5,7 @@ import {onBeforeMount, ref, reactive, watch} from 'vue'
 import {FirebaseHandler} from "@/helpers/firebase.js";
 import {range} from 'lodash';
 
-import {classes, alignments, abilityTypes, proficiencyTypes, abilities, dice} from "@/models/Enums.js";
+import {classes, alignments, abilityTypes, abilities, dice} from "@/models/Enums.js";
 import {calculateCoins} from "@/helpers/characterHelpers.js";
 
 // setup() {
@@ -286,7 +286,9 @@ onBeforeMount(async () => {
                      ['Class', 'detail.class', character.detail.class, ModelTypes.classes],
                      ['Level', 'detail.level', character.detail.level, ModelTypes.number]
                      ])">
-              <p class="flex-1 value medium no-transform">{{ character.detail.class }} lvl {{ character.detail.level }}</p>
+              <p class="flex-1 value medium no-transform">{{ character.detail.class }} lvl {{
+                  character.detail.level
+                }}</p>
               <p>Class & Level</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top clickable"
@@ -361,7 +363,8 @@ onBeforeMount(async () => {
                 <!--SKILLS-->
                 <div v-for="(skill_stats, skill_name) in ability.skills" class="skill-row flex-1">
                   <!-- TODO: Find a way to actively update this property when toggled on or of -->
-                  <div class="proficient clickable" :class="{ selected: character.proficiency.list[ability_name].includes(skill_name) }"
+                  <div class="proficient clickable"
+                       :class="{ selected: character.proficiency.list[ability_name].includes(skill_name) }"
                        @click="atClickProficiency(ability_name, skill_name)"></div>
                   <div class="skill-score">{{ formatScore(skill_stats.value) }}</div>
                   <div class="skill-name">{{ skill_name }}</div>
@@ -419,7 +422,9 @@ onBeforeMount(async () => {
                      @click="atClickEdit([
                           ['Temporary hit points', 'stat.hitPointsTemp', character.stat.hitPointsTemp, ModelTypes.number],
                        ])">
-                  <p class="flex-1 value">{{ character.stat.hitPointsTemp !== 0 ? character.stat.hitPointsTemp : '-' }}</p>
+                  <p class="flex-1 value">{{
+                      character.stat.hitPointsTemp !== 0 ? character.stat.hitPointsTemp : '-'
+                    }}</p>
                   <p>Temporary Hit Points</p>
                 </div>
                 <div class="container row flex-1">
@@ -550,10 +555,11 @@ onBeforeMount(async () => {
                 </p>
                 <br/>
                 <p>Spells</p>
-                <div :style="{'display: none': spells.prepared.length > 0}" v-for="(spells, lvl) in character.spellcasting.usableSpells.spells">
+                <div :style="{'display: none': spells.prepared.length > 0}"
+                     v-for="(spells, lvl) in character.spellcasting.usableSpells.spells">
                   <p v-if="spells.prepared.length > 0">- Level {{ lvl }}</p>
                   <p v-if="spells.prepared.length > 0" v-for="spell in spells.prepared">
-                   {{SPACE_CHAR.repeat(3)}}- {{ spell }}
+                    {{ SPACE_CHAR.repeat(3) }}- {{ spell }}
                   </p>
                 </div>
                 <p class="align-center">Attacks & Spellcasting</p>
@@ -564,7 +570,9 @@ onBeforeMount(async () => {
                     <div class="flex-1 clickable container col" @click="atClickEdit([
                        ['Features & Traits', `_character.features.${index}`, feature, ModelTypes.textarea]
                     ])">
-                      <p v-for="(feat, index) in feature.split('\n')">{{ index === 0 ? '- ' : SPACE_CHAR.repeat(3) }}{{ feat }}</p>
+                      <p v-for="(feat, index) in feature.split('\n')">{{
+                          index === 0 ? '- ' : SPACE_CHAR.repeat(3)
+                        }}{{ feat }}</p>
                     </div>
                     <p class="clickable" @click="()=>{
                       deleteModelData.deleteFunction = async ()=>{
@@ -662,7 +670,8 @@ onBeforeMount(async () => {
               <div class="container col flex-1 clickable" @click="atClickEdit([
                   ['Copper Coins', 'equipment.coin.amount', character.equipment.coin.amount, ModelTypes.coins],
               ])">
-                <div class="container col block value-display no-border" v-for="(value, type) in character.equipment.coin.format">
+                <div class="container col block value-display no-border"
+                     v-for="(value, type) in character.equipment.coin.format">
                   <p class="value flex-1">
                     {{ value }}
                   </p>
@@ -905,7 +914,8 @@ onBeforeMount(async () => {
             </div>
 
             <div class="container col block no-border">
-              <div v-if="j===0" v-for="(cantrip, index) in character.spellcasting.usableSpells.cantrips" class="container row clickable" @click="atClickEdit([
+              <div v-if="j===0" v-for="(cantrip, index) in character.spellcasting.usableSpells.cantrips"
+                   class="container row clickable" @click="atClickEdit([
                   [`Cantrip`, `spellcasting.usableSpells.cantrips.${index}`, character.spellcasting.usableSpells.cantrips[index], ModelTypes.text]
               ])">
                 <p class="flex-1">{{ cantrip }}</p>
@@ -920,7 +930,8 @@ onBeforeMount(async () => {
                   deleteModelData.question = 'Are you sure you want to delete this cantrip?'
                 }" v-html="ICON_REMOVE"></p>
               </div>
-              <div v-else v-for="(spell, index) in character.spellcasting.usableSpells.spells[j].known" class="container row clickable" @click="atClickEdit([
+              <div v-else v-for="(spell, index) in character.spellcasting.usableSpells.spells[j].known"
+                   class="container row clickable" @click="atClickEdit([
                   [`Spell`, `spellcasting.usableSpells.spells.${j}.known.${index}`, spell, ModelTypes.text]
               ])">
                 <div class="flex-1 container row" style="justify-content: center">
@@ -943,14 +954,14 @@ onBeforeMount(async () => {
               </div>
             </div>
             <div class="container col block no-border">
-              <div v-if="j===0"  class="clickable container row" @click.stop @click="()=>{
+              <div v-if="j===0" class="clickable container row" @click.stop @click="()=>{
                 character.spellcasting.cantrip.add('New cantrip')
                 firebaseHandler.setCharacterData(character.objectData)
               }">
                 <p class="flex-1">--Add a cantrip--</p>
                 <p v-html="ICON_ADD"></p>
               </div>
-              <div v-if="j!==0"  class="clickable container row" @click.stop @click="()=>{
+              <div v-if="j!==0" class="clickable container row" @click.stop @click="()=>{
                 character.spellcasting.spell[j].add('New Spell')
                 firebaseHandler.setCharacterData(character.objectData)
               }">
