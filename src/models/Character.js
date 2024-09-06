@@ -1,7 +1,6 @@
-import {classes, alignments, abilityTypes, proficiencyTypes, abilities, dice} from "@/models/Enums.js";
+import {classes, alignments, abilityTypes, proficiencyTypes, armorTypes, abilities, dice} from "@/models/Enums.js";
 import {Attack, Item, defaultCharacter} from "@/models/CharacterHelperClasses.js";
-import {calculateCoins, calculateAbilityModifier, toCopperCoins} from "@/helpers/characterHelpers.js";
-import {range} from "lodash";
+import {calculateCoins, calculateAbilityModifier, toCopperCoins} from "@/helpers/characterHelpers.js";;
 
 export class Character {
     default(id = undefined) {
@@ -139,93 +138,6 @@ export class Character {
             this._character.languages.splice(this._character.languages.indexOf(language), 1)
         }
     }
-
-
-    // spellcasting = {
-    //     _configure: () => {
-    //         Object.defineProperty(this.spellcasting, 'class', {
-    //             get: this.spellcasting._class_get,
-    //             set: this.spellcasting._class_set
-    //         })
-    //         Object.defineProperty(this.spellcasting, 'ability', {
-    //             get: this.spellcasting._ability_get,
-    //             set: this.spellcasting._ability_set
-    //         })
-    //         Object.defineProperty(this.spellcasting, 'spellSaveDc', {get: this.spellcasting._spellSaveDc_get})
-    //         Object.defineProperty(this.spellcasting, 'attackBonus', {get: this.spellcasting._attackBonus_get})
-    //         Object.defineProperty(this.spellcasting, 'usableSpells', {get: this.spellcasting._usableSpells_get})
-    //
-    //         this.spellcasting.spell._configure()
-    //     },
-    //     class: undefined,
-    //     ability: undefined,
-    //     spellSaveDc: undefined,
-    //     attackBonus: undefined,
-    //     usableSpells: undefined,
-    //     _class_get: () => {
-    //         return this._character.spellcasting.class
-    //     },
-    //     _class_set: (value) => {
-    //         if (!classes.includes(value)) {
-    //             console.error("ERROR: class does not exists")
-    //             return;
-    //         }
-    //         this._character.spellcasting.class = value
-    //     },
-    //     _ability_get: () => {
-    //         return this._character.spellcasting.ability
-    //     },
-    //     _ability_set: (value) => {
-    //         if (!abilityTypes.includes(value)) {
-    //             console.error("ERROR: ability type does not exists")
-    //             return;
-    //         }
-    //         this._character.spellcasting.ability = value
-    //     },
-    //     _spellSaveDc_get: () => {
-    //         const modifier = this[`ability${this.spellcasting.ability}Modifier`]
-    //         return 8 + modifier + this.proficiencyBonus
-    //     },
-    //     _attackBonus_get: () => {
-    //         const modifier = this[`ability${this.spellcasting.ability}Modifier`]
-    //         return modifier + this.proficiencyBonus
-    //     },
-    //     _usableSpells_get: () => {
-    //         let result = {
-    //             cantrips: [],
-    //             spells: {}
-    //         }
-    //         result['cantrips'] = this._character.spellcasting.cantrips
-    //         // prepared spells
-    //         for (const [key, value] of Object.entries(this._character.spellcasting.spells)) {
-    //             result['spells'][key] = value
-    //         }
-    //         return result
-    //     },
-    //     spell: {
-    //         _configure: () => {
-    //             range(1, 10).forEach((level) => {
-    //                 this.spellcasting.spell[level] = {
-    //                     _configure: () => {
-    //                         Object.defineProperty(this.spellcasting.spell[level], 'slots', {
-    //                             get: this.spellcasting.spell[level]._slots_get,
-    //                             set: this.spellcasting.spell[level]._slots_set
-    //                         })
-    //                         Object.defineProperty(this.spellcasting.spell[level], 'slotsExpanded', {
-    //                             get: this.spellcasting.spell[level]._slotsExpanded_get,
-    //                             set: this.spellcasting.spell[level]._slotsExpanded_set
-    //                         })
-    //                     },
-    //                 }
-    //             }, this)
-    //         },
-    //
-    //
-    //         cantrip: {
-    //     //
-    //         },
-    //     }
-
 
     get spellcastingClass() {
         return this._character.spellcasting.class
@@ -744,9 +656,7 @@ export class Character {
     get statArmorClass() {
         let result = 0;
         result += this.statArmorClassBase;
-        if (this.statArmorClassHasDexModifier) {
-            result += (this.abilityDexterityModifier < 2) ? this.abilityDexterityModifier : 2;
-        }
+        result += this.statArmorClassGetDexModifier
         result += this.statArmorClassShield;
         result += this.statArmorClassMisc;
         return result;
@@ -760,12 +670,32 @@ export class Character {
         this._character.stats.armorClass.base = value;
     }
 
-    get statArmorClassHasDexModifier() {
-        return this._character.stats.armorClass.hasDexModifier;
+    get statArmorClassArmorType() {
+        if (this._character.stats.armorClass.armorType === undefined) {
+            this._character.stats.armorClass.armorType = armorTypes[0];
+        }
+        return this._character.stats.armorClass.armorType;
     }
 
-    set statArmorClassHasDexModifier(value) {
-        this._character.stats.armorClass.hasDexModifier = value;
+    set statArmorClassArmorType(value) {
+        if (armorTypes.includes(value)) {
+            this._character.stats.armorClass.armorType = value;
+        } else {
+            console.error("ERROR: armor type is not in the known list");
+        }
+    }
+
+    get statArmorClassGetDexModifier() {
+        switch (this.statArmorClassArmorType) {
+            case "Light":
+                return this.abilityDexterityModifier;
+            case "Medium":
+                return Math.max(this.abilityDexterityModifier, 2);
+            case "Heavy":
+                return 0;
+            default:
+                return 0;
+        }
     }
 
     get statArmorClassShield() {

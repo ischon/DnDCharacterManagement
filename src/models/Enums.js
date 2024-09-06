@@ -89,3 +89,10 @@ export const dice = [
     "12",
     "20",
 ]
+
+export const armorTypes = [
+    "None",
+    "Light",
+    "Medium",
+    "Heavy"
+]

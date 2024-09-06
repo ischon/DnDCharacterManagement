@@ -5,7 +5,7 @@ import {onBeforeMount, ref, reactive, watch} from 'vue'
 import {FirebaseHandler} from "@/helpers/firebase.js";
 import {range} from 'lodash';
 
-import {classes, alignments, abilityTypes, abilities, dice} from "@/models/Enums.js";
+import {classes, alignments, abilityTypes, abilities, dice, armorTypes} from "@/models/Enums.js";
 import {calculateCoins} from "@/helpers/characterHelpers.js";
 
 // setup() {
@@ -55,6 +55,7 @@ class ModelTypes {
   static die = new ModelTypes('dice', 'dice', dice)
   static weapon = new ModelTypes('weapon', 'weapon')
   static coins = new ModelTypes('coins', 'coins')
+  static armor = new ModelTypes('armor', 'select', armorTypes)
 
   constructor(type, element, options = undefined) {
     this.type = type;
@@ -384,7 +385,7 @@ onBeforeMount(async () => {
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
                           ['Armor class basis', 'statArmorClassBase', character.statArmorClassBase, ModelTypes.number],
-                          [`Uses dexterity modifier (${formatScore(character.abilityDexterityModifier)})`, 'statArmorClassHasDexModifier', character.statArmorClassHasDexModifier, ModelTypes.checkbox],
+                          [`Type of Armor`, 'statArmorClassArmorType', character.statArmorClassArmorType, ModelTypes.armor],
                           ['Added protection from a shield', 'statArmorClassShield', character.statArmorClassShield, ModelTypes.number],
                           ['Additional modifier', 'statArmorClassMisc', character.statArmorClassMisc, ModelTypes.number]
                        ])">

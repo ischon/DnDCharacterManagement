@@ -93,7 +93,7 @@ import {Character} from "@/models/Character.js";
 // owin.proficiencyAdd("items", "Tools: Thieves' tools, tinker’s tools, one type of artisan’s tools of your choice") // https://drive.google.com/file/d/1QVK2-rkohWcVEocqfJSrUD59ipcG_Y-Q
 // owin.proficiencyAdd("items", "Artisan’s tools (tinker’s tools)") // https://www.dndbeyond.com/races/18-gnome#RockGnome
 // owin.statArmorClassBase = 14
-// owin.statArmorClassHasDexModifier = true
+// owin.statArmorClassArmorType = "Medium"
 // owin.statSpeed = 25
 // owin.statHitPointsBase = 13
 // owin.statHitPointsCurrent = owin.statHitPointMaximumValue
@@ -181,7 +181,7 @@ exampleCharacter.abilityWisdom = 16
 exampleCharacter.abilityCharisma = 12
 exampleCharacter.abilityInspiration = 0
 exampleCharacter.statArmorClassBase = 14
-exampleCharacter.statArmorClassHasDexModifier = true
+exampleCharacter.statArmorClassArmorType = "Heavy"
 exampleCharacter.statArmorClassShield = 2
 exampleCharacter.statSpeed = 25
 exampleCharacter.statHitPointsBase = 8
