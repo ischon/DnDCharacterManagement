@@ -89,11 +89,11 @@ const atClickEdit = (items) => {
 }
 
 const atClickProficiency = (ability_name, skill_name) => {
-  character.proficiency.toggle(ability_name, skill_name);
+  character.proficiencyToggle(ability_name, skill_name);
   firebaseHandler.setCharacterData(character.objectData);
 }
 const atClickPrepared = (spell_lvl, spell_name) => {
-  character.spellcasting.spell[spell_lvl].prepared.toggle(spell_name);
+  character.spellcastingPreparedToggle(spell_lvl, spell_name);
   firebaseHandler.setCharacterData(character.objectData);
 }
 
@@ -124,10 +124,10 @@ const atClickSave = async () => {
       item[i.key.split('.')[2]] = i.value
     });
 
-    character.equipment.update(item.key, item.name, item.count, item.weight, item.index)
+    character.equipmentUpdate(item.key, item.name, item.count, item.weight, item.index)
   } else if (editing.items[0].key.includes('attacks')) {
     Object.entries(editing.items[0].value).forEach((attack) => {
-      character.attack.update(attack[0], attack[1])
+      character.attackUpdate(attack[0], attack[1])
     });
 
 
@@ -274,8 +274,8 @@ onBeforeMount(async () => {
       <div class="header container row flex-1"> <!-- Header -->
         <div class="container col flex-1"> <!-- Left Column -->
           <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
-               @click="atClickEdit([['Character Name', 'detail.name', character.detail.name, ModelTypes.text]])">
-            <p class="flex-1 value medium no-transform">{{ character.detail.name }}</p>
+               @click="atClickEdit([['Character Name', 'detailName', character.detailName, ModelTypes.text]])">
+            <p class="flex-1 value medium no-transform">{{ character.detailName }}</p>
             <p>Character Name</p>
           </div>
         </div>
@@ -283,19 +283,19 @@ onBeforeMount(async () => {
           <div class="container row">
             <div class="container block value-display col flex-1 no-border-top clickable"
                  @click="atClickEdit([
-                     ['Class', 'detail.class', character.detail.class, ModelTypes.classes],
-                     ['Level', 'detail.level', character.detail.level, ModelTypes.number]
+                     ['Class', 'detailClass', character.detailClass, ModelTypes.classes],
+                     ['Level', 'detailLevel', character.detailLevel, ModelTypes.number]
                      ])">
-              <p class="flex-1 value medium no-transform">{{ character.detail.class }} lvl {{
-                  character.detail.level
+              <p class="flex-1 value medium no-transform">{{ character.detailClass }} lvl {{
+                  character.detailLevel
                 }}</p>
               <p>Class & Level</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top clickable"
                  @click="atClickEdit([
-                     ['Background', 'detail.background', character.detail.background, ModelTypes.text],
+                     ['Background', 'detailBackground', character.detailBackground, ModelTypes.text],
                      ])">
-              <p class="flex-1 value medium no-transform">{{ character.detail.background }}</p>
+              <p class="flex-1 value medium no-transform">{{ character.detailBackground }}</p>
               <p>Background</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top no-border-right">
@@ -306,24 +306,24 @@ onBeforeMount(async () => {
           <div class="container row">
             <div class="container block value-display col flex-1 clickable"
                  @click="atClickEdit([
-                     ['Race', 'detail.race', character.detail.race, ModelTypes.text],
+                     ['Race', 'detailRace', character.detailRace, ModelTypes.text],
                      ])">
-              <p class="flex-1 value medium no-transform">{{ character.detail.race }}</p>
+              <p class="flex-1 value medium no-transform">{{ character.detailRace }}</p>
               <p>Race</p>
             </div>
             <div class="container block value-display col flex-1 clickable"
                  @click="atClickEdit([
-                     ['Alignment', 'detail.alignment', character.detail.alignment, ModelTypes.alignments],
+                     ['Alignment', 'detailAlignment', character.detailAlignment, ModelTypes.alignments],
                      ])">
-              <p class="flex-1 value medium no-transform">{{ character.detail.alignment }}</p>
+              <p class="flex-1 value medium no-transform">{{ character.detailAlignment }}</p>
               <p>Alignment</p>
             </div>
             <div class="container block value-display col flex-1 no-border-right clickable"
                  @click="atClickEdit([
-                     ['Experience points', 'detail.experiencePoints', character.detail.experiencePoints, ModelTypes.number],
+                     ['Experience points', 'detailExperiencePoints', character.detailExperiencePoints, ModelTypes.number],
                      ])">
               <p class="flex-1 value medium no-transform">
-                {{ character.detail.experiencePoints !== 0 ? character.detail.experiencePoints : '-' }}</p>
+                {{ character.detailExperiencePoints !== 0 ? character.detailExperiencePoints : '-' }}</p>
               <p>Experience Points</p>
             </div>
           </div>
@@ -335,22 +335,22 @@ onBeforeMount(async () => {
           <div class="container col flex-1">
             <!-- ABILITY SCORES -->
             <div class="container flex-1 block row labeled-row no-border-left">
-              <div class="value flex-1"><p>{{ formatScore(character.proficiency.bonus) }}</p></div>
+              <div class="value flex-1"><p>{{ formatScore(character.proficiencyBonus) }}</p></div>
               <div class="label flex-2"><p>Proficiency Bonus</p></div>
             </div>
             <div class="container flex-1 block row labeled-row no-border-left clickable"
                  @click="atClickEdit([
-                      ['Inspiration', 'ability.inspiration', character.ability.inspiration, ModelTypes.number],
+                      ['Inspiration', 'abilityInspiration', character.abilityInspiration, ModelTypes.number],
                  ])">
-              <div class="value flex-1"><p>{{ formatScore(character.ability.inspiration) }}</p></div>
+              <div class="value flex-1"><p>{{ formatScore(character.abilityInspiration) }}</p></div>
               <div class="label flex-2"><p>Inspiration</p></div>
             </div>
-            <div v-for="(ability, ability_name) in character.ability.list"
+            <div v-for="(ability, ability_name) in character.abilities"
                  class="container row flex-2 block ability-block no-border-left">
               <!--ABILITY-->
               <div class="container ability col flex-1 clickable"
                    @click="atClickEdit([
-                      [ability_name, `ability.${ability_name}`, ability.score, ModelTypes.number],
+                      [ability_name, `ability${ability_name}`, ability.score, ModelTypes.number],
                  ])">
                 <div class="ability-modifier flex-1"><p class="content no-label">{{ formatScore(ability.modifier) }}</p>
                 </div>
@@ -364,7 +364,7 @@ onBeforeMount(async () => {
                 <div v-for="(skill_stats, skill_name) in ability.skills" class="skill-row flex-1">
                   <!-- TODO: Find a way to actively update this property when toggled on or of -->
                   <div class="proficient clickable"
-                       :class="{ selected: character.proficiency.list[ability_name].includes(skill_name) }"
+                       :class="{ selected: character.proficiencies[ability_name.toLowerCase()].includes(skill_name) }"
                        @click="atClickProficiency(ability_name, skill_name)"></div>
                   <div class="skill-score">{{ formatScore(skill_stats.value) }}</div>
                   <div class="skill-name">{{ skill_name }}</div>
@@ -372,7 +372,7 @@ onBeforeMount(async () => {
               </div>
             </div>
             <div class="container flex-1 block row labeled-row  no-border-left">
-              <div class="value flex-1"><p>{{ character.ability.passivePerception }}</p></div>
+              <div class="value flex-1"><p>{{ character.abilityPassivePerception }}</p></div>
               <div class="label flex-2"><p>Passive Wisdom (Perception)</p></div>
             </div>
           </div>
@@ -383,70 +383,70 @@ onBeforeMount(async () => {
                 <div class="container row flex-1">
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
-                          ['Armor class basis', 'stat.armorClassBase', character.stat.armorClassBase, ModelTypes.number],
-                          [`Uses dexterity modifier (${formatScore(character.ability.dexterityModifier)})`, 'stat.armorClassHasDexModifier', character.stat.armorClassHasDexModifier, ModelTypes.checkbox],
-                          ['Added protection from a shield', 'stat.armorClassShield', character.stat.armorClassShield, ModelTypes.number],
-                          ['Additional modifier', 'stat.armorClassMisc', character.stat.armorClassMisc, ModelTypes.number]
+                          ['Armor class basis', 'statArmorClassBase', character.statArmorClassBase, ModelTypes.number],
+                          [`Uses dexterity modifier (${formatScore(character.abilityDexterityModifier)})`, 'statArmorClassHasDexModifier', character.statArmorClassHasDexModifier, ModelTypes.checkbox],
+                          ['Added protection from a shield', 'statArmorClassShield', character.statArmorClassShield, ModelTypes.number],
+                          ['Additional modifier', 'statArmorClassMisc', character.statArmorClassMisc, ModelTypes.number]
                        ])">
-                    <p class="flex-1 value">{{ character.stat.armorClass }}</p>
+                    <p class="flex-1 value">{{ character.statArmorClass }}</p>
                     <p>Armor Class</p>
                   </div>
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
-                          ['Dexterity modifier', 'ability.dexterityModifier', character.ability.dexterityModifier, ModelTypes.disabled],
-                          [`Additional modifier`, 'ability.initiativeMisc', character.initiativeMisc, ModelTypes.number],
+                          ['Dexterity modifier', 'abilityDexterityModifier', character.abilityDexterityModifier, ModelTypes.disabled],
+                          [`Additional modifier`, 'abilityInitiativeMisc', character.abilityInitiativeMisc, ModelTypes.number],
                        ])">
-                    <p class="flex-1 value">{{ formatScore(character.ability.initiativeModifier) }}</p>
+                    <p class="flex-1 value">{{ formatScore(character.abilityInitiativeModifier) }}</p>
                     <p>Initiative</p>
                   </div>
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
-                          ['Speed', 'stat.speed', character.stat.speed, ModelTypes.number],
+                          ['Speed', 'statSpeed', character.statSpeed, ModelTypes.number],
                        ])">
-                    <p class="flex-1 value">{{ character.stat.speed }}</p>
+                    <p class="flex-1 value">{{ character.statSpeed }}</p>
                     <p>Speed</p>
                   </div>
                 </div>
                 <div class="container block value-display col flex-1 clickable"
                      @click="atClickEdit([
-                          ['Hit points basis', 'stat.hitPointsBase', character.stat.hitPointsBase, ModelTypes.number],
-                          ['Constitution modifier', 'ability.constitutionModifier', character.ability.constitutionModifier, ModelTypes.disabled],
-                          ['Additional hit points', 'stat.hitPointsMisc', character.stat.hitPointsMisc, ModelTypes.number],
-                          [`Current hit points`, 'stat.hitPointsCurrent', character.stat.hitPointsCurrent, ModelTypes.number],
+                          ['Hit points basis', 'statHitPointsBase', character.statHitPointsBase, ModelTypes.number],
+                          ['Constitution modifier', 'abilityConstitutionModifier', character.abilityConstitutionModifier, ModelTypes.disabled],
+                          ['Additional hit points', 'statHitPointsMisc', character.statHitPointsMisc, ModelTypes.number],
+                          [`Current hit points`, 'statHitPointsCurrent', character.statHitPointsCurrent, ModelTypes.number],
                        ])">
-                  <p>Hit Point Maximum: {{ character.stat.hitPointMaximum }}</p>
-                  <p class="flex-1 value">{{ character.stat.hitPointsCurrent }}</p>
+                  <p>Hit Point Maximum: {{ character.statHitPointMaximum }}</p>
+                  <p class="flex-1 value">{{ character.statHitPointsCurrent }}</p>
                   <p>Current Hit Points</p>
                 </div>
                 <div class="container block value-display col flex-1 clickable"
                      @click="atClickEdit([
-                          ['Temporary hit points', 'stat.hitPointsTemp', character.stat.hitPointsTemp, ModelTypes.number],
+                          ['Temporary hit points', 'statHitPointsTemp', character.statHitPointsTemp, ModelTypes.number],
                        ])">
                   <p class="flex-1 value">{{
-                      character.stat.hitPointsTemp !== 0 ? character.stat.hitPointsTemp : '-'
+                      character.statHitPointsTemp !== 0 ? character.statHitPointsTemp : '-'
                     }}</p>
                   <p>Temporary Hit Points</p>
                 </div>
                 <div class="container row flex-1">
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
-                          ['Hit Die', 'stat.hitDie', character.stat.hitDie, ModelTypes.die],
-                          ['Usable hit Dice', 'stat.currentAmountHitDice', character.stat.currentAmountHitDice, ModelTypes.number],
+                          ['Hit Die', 'statHitDie', character.statHitDie, ModelTypes.die],
+                          ['Usable hit Dice', 'statCurrentAmountHitDice', character.statCurrentAmountHitDice, ModelTypes.number],
                        ])">
-                    <p>Total Hit Dice: {{ character.stat.maxHitDice }}</p>
-                    <p class="flex-1 value">{{ character.stat.currentHitDice }}</p>
+                    <p>Total Hit Dice: {{ character.statMaxHitDice }}</p>
+                    <p class="flex-1 value">{{ character.statCurrentHitDice }}</p>
                     <p>Hit Dice</p>
                   </div>
                   <div class="container block value-display col flex-1 clickable"
                        @click="atClickEdit([
-                         ['Successful rolls', 'stat.deathSaves.successes', character.stat.deathSaves.successes, ModelTypes.number],
-                         ['Failed rolls', 'stat.deathSaves.failures', character.stat.deathSaves.failures, ModelTypes.number],
+                         ['Successful rolls', 'statDeathSavesSuccesses', character.statDeathSavesSuccesses, ModelTypes.number],
+                         ['Failed rolls', 'statDeathSavesFailures', character.statDeathSavesFailures, ModelTypes.number],
                   ])">
                     <div class="container col flex-1 value">
                       <div class="container row death-saves">
                         <div class="label flex-2">successes</div>
                         <div class="checks flex-1 container row">
-                          <div class="check" :class="{ selected: key < character.stat.deathSaves.successes  }"
+                          <div class="check" :class="{ selected: key < character.statDeathSavesSuccesses  }"
                                v-for="key in range(0,3)">
                           </div>
                         </div>
@@ -454,7 +454,7 @@ onBeforeMount(async () => {
                       <div class="container row death-saves">
                         <div class="label flex-2">Failures</div>
                         <div class="checks flex-1 container row">
-                          <div class="check" :class="{ selected: key < character.stat.deathSaves.failures }"
+                          <div class="check" :class="{ selected: key < character.statDeathSavesFailures }"
                                v-for="key in range(0,3)"></div>
                         </div>
                       </div>
@@ -466,10 +466,10 @@ onBeforeMount(async () => {
               <div class="container col flex-1">
                 <div class="container block value-display col flex-1 no-border-right clickable"
                      @click="atClickEdit([
-                         ['Traits', 'detail.personalityTraits', character.detail.personalityTraits, ModelTypes.textarea],
+                         ['Traits', 'detailPersonalityTraits', character.detailPersonalityTraits, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
-                    <p class="no-transform" v-for="traits in character.detail.personalityTraits.split('\n')">
+                    <p class="no-transform" v-for="traits in character.detailPersonalityTraits.split('\n')">
                       {{ traits }}
                     </p>
                   </div>
@@ -477,10 +477,10 @@ onBeforeMount(async () => {
                 </div>
                 <div class="container block value-display col flex-1 no-border-right clickable"
                      @click="atClickEdit([
-                         ['Ideals', 'detail.ideals', character.detail.ideals, ModelTypes.textarea],
+                         ['Ideals', 'detailIdeals', character.detailIdeals, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
-                    <p class="no-transform" v-for="ideal in character.detail.ideals.split('\n')">
+                    <p class="no-transform" v-for="ideal in character.detailIdeals.split('\n')">
                       {{ ideal }}
                     </p>
                   </div>
@@ -488,10 +488,10 @@ onBeforeMount(async () => {
                 </div>
                 <div class="container block value-display col flex-1 no-border-right clickable"
                      @click="atClickEdit([
-                         ['Bonds', 'detail.bonds', character.detail.bonds, ModelTypes.textarea],
+                         ['Bonds', 'detailBonds', character.detailBonds, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
-                    <p class="no-transform" v-for="bond in character.detail.bonds.split('\n')">
+                    <p class="no-transform" v-for="bond in character.detailBonds.split('\n')">
                       {{ bond }}
                     </p>
                   </div>
@@ -500,10 +500,10 @@ onBeforeMount(async () => {
 
                 <div class="container block value-display col flex-1 no-border-right clickable"
                      @click="atClickEdit([
-                         ['Flaws', 'detail.flaws', character.detail.flaws, ModelTypes.textarea],
+                         ['Flaws', 'detailFlaws', character.detailFlaws, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
-                    <p class="no-transform" v-for="flaw in character.detail.flaws.split('\n')">
+                    <p class="no-transform" v-for="flaw in character.detailFlaws.split('\n')">
                       {{ flaw }}
                     </p>
                   </div>
@@ -515,7 +515,7 @@ onBeforeMount(async () => {
               <div class="container block value-display align-start col flex-1">
                 <div class="container col clickable" @click="atClickEdit(
                     [
-                        ['Attacks', 'attacks', character.attack.list, ModelTypes.weapon]
+                        ['Attacks', 'attacks', character.attacks, ModelTypes.weapon]
                     ]
                 )">
                   <div class="container row">
@@ -524,13 +524,13 @@ onBeforeMount(async () => {
                     <p class="flex-2">Damage/ type</p>
                     <p></p>
                   </div>
-                  <div class="container row" v-for="row in character.attack.list">
+                  <div class="container row" v-for="row in character.attacks">
                     <p class="flex-2">{{ row.name }}</p>
                     <p class="flex-1">{{ formatScore(row.bonus) }}</p>
                     <p class="flex-2">{{ row.damage }} / {{ row.type }}</p>
                     <p @click.stop @click="()=>{
                       deleteModelData.deleteFunction = async ()=>{
-                        character.attack.remove(row.name)
+                        character.attackRemove(row.name)
                         await firebaseHandler.setCharacterData(character.objectData)
                         resetDeleteModelData()
                       };
@@ -540,7 +540,7 @@ onBeforeMount(async () => {
                     }" v-html="ICON_REMOVE"></p>
                   </div>
                   <div class="container row clickable" @click.stop @click="async () => {
-                      character.attack.add('Name', 0, 'Damage', 'Type')
+                      character.attackAdd('Name', 0, 'Damage', 'Type')
                       await firebaseHandler.setCharacterData(character.objectData)
                     }">
                     <p class="flex-1" style="text-align: center">--Add a new attack--</p>
@@ -550,13 +550,13 @@ onBeforeMount(async () => {
 
                 <br/>
                 <p>Cantrips</p>
-                <p v-for="row in character.spellcasting.usableSpells.cantrips">
+                <p v-for="row in character.spellcastingCantrips">
                   - {{ row }}
                 </p>
                 <br/>
                 <p>Spells</p>
                 <div :style="{'display: none': spells.prepared.length > 0}"
-                     v-for="(spells, lvl) in character.spellcasting.usableSpells.spells">
+                     v-for="(spells, lvl) in character.spellcastingSpells">
                   <p v-if="spells.prepared.length > 0">- Level {{ lvl }}</p>
                   <p v-if="spells.prepared.length > 0" v-for="spell in spells.prepared">
                     {{ SPACE_CHAR.repeat(3) }}- {{ spell }}
@@ -566,7 +566,7 @@ onBeforeMount(async () => {
               </div>
               <div class="container value-display align-start block no-border-right col flex-1">
                 <div class="flex-1" style="width: 100%">
-                  <div class="container row flex-1" v-for="(feature, index) in character.feature.list">
+                  <div class="container row flex-1" v-for="(feature, index) in character.features">
                     <div class="flex-1 clickable container col" @click="atClickEdit([
                        ['Features & Traits', `_character.features.${index}`, feature, ModelTypes.textarea]
                     ])">
@@ -576,7 +576,7 @@ onBeforeMount(async () => {
                     </div>
                     <p class="clickable" @click="()=>{
                       deleteModelData.deleteFunction = async ()=>{
-                        character.feature.remove(feature)
+                        character.featureRemove(feature)
                         await firebaseHandler.setCharacterData(character.objectData)
                         resetDeleteModelData()
                       };
@@ -586,7 +586,7 @@ onBeforeMount(async () => {
                     }" v-html="ICON_REMOVE"></p>
                   </div>
                   <div class="container row flex-1 clickable" @click="()=>{
-                      character.feature.add('New feature or trait')
+                      character.featureAdd('New feature or trait')
                       firebaseHandler.setCharacterData(character.objectData)
                     }">
                     <p class="flex-1">--Add a feature or trait--</p>
@@ -604,7 +604,7 @@ onBeforeMount(async () => {
             <div class="container col flex-1">
               <div class="flex-1" style="width: 100%">
                 <p>Languages</p>
-                <div class="container row flex-1" v-for="(language, index) in character.language.list">
+                <div class="container row flex-1" v-for="(language, index) in character.languages">
                   <p class="flex-1 clickable" @click="atClickEdit([
                       ['Languages', `_character.languages.${index}`, language, ModelTypes.text]
                   ])">
@@ -612,7 +612,7 @@ onBeforeMount(async () => {
                   </p>
                   <p class="clickable" @click="()=>{
                       deleteModelData.deleteFunction = async ()=>{
-                        character.language.remove(language)
+                        character.languageRemove(language)
                         await firebaseHandler.setCharacterData(character.objectData)
                         resetDeleteModelData()
                       };
@@ -622,7 +622,7 @@ onBeforeMount(async () => {
                     }" v-html="ICON_REMOVE"></p>
                 </div>
                 <div class="container row flex-1 clickable" @click="async () => {
-                        character.language.add('New Language')
+                        character.languageAdd('New Language')
                         await firebaseHandler.setCharacterData(character.objectData)
                       }">
                   <p class="flex-1">--add a new language--</p>
@@ -630,7 +630,7 @@ onBeforeMount(async () => {
                 </div>
                 <br/>
                 <p>Proficiencies</p>
-                <div v-for="(items, category) in character.proficiency.list">
+                <div v-for="(items, category) in character.proficiencies">
                   <p v-if="items.length > 0 || category==='items'">{{ category }}</p>
                   <div v-if="category==='items'" class="container row flex-1" v-for="(proficiency, index) in items">
                     <p class="flex-1 clickable" @click="atClickEdit([
@@ -640,7 +640,7 @@ onBeforeMount(async () => {
                     </p>
                     <p class="clickable" @click="()=>{
                       deleteModelData.deleteFunction = async ()=>{
-                        character.proficiency.remove(category, proficiency)
+                        character.proficiencyRemove(category, proficiency)
                         await firebaseHandler.setCharacterData(character.objectData)
                         resetDeleteModelData()
                       };
@@ -650,7 +650,7 @@ onBeforeMount(async () => {
                     }" v-html="ICON_REMOVE"></p>
                   </div>
                   <div v-if="category==='items'" class="container row flex-1 clickable" @click="()=>{
-                      character.proficiency.add(category, 'New item proficiency')
+                      character.proficiencyAdd(category, 'New item proficiency')
                       firebaseHandler.setCharacterData(character.objectData)
                     }">
                     <p class="flex-1">--Add a proficiency--</p>
@@ -668,10 +668,10 @@ onBeforeMount(async () => {
           <div class="container block value-display col flex-2 no-border-right no-border-bottom">
             <div class="container row">
               <div class="container col flex-1 clickable" @click="atClickEdit([
-                  ['Copper Coins', 'equipment.coin.amount', character.equipment.coin.amount, ModelTypes.coins],
+                  ['Copper Coins', 'equipmentCoins', character.equipmentCoins, ModelTypes.coins],
               ])">
                 <div class="container col block value-display no-border"
-                     v-for="(value, type) in character.equipment.coin.format">
+                     v-for="(value, type) in character.equipmentCoinFormatted">
                   <p class="value flex-1">
                     {{ value }}
                   </p>
@@ -694,7 +694,7 @@ onBeforeMount(async () => {
                       Weight
                     </div>
                   </div>
-                  <div v-for="item in character.equipment.list" class="equipment-item container row clickable" @click="atClickEdit([
+                  <div v-for="item in character.equipmentItems" class="equipment-item container row clickable" @click="atClickEdit([
                       ['Position', `tag-equipment.${item.name}.index`, item.index, ModelTypes.number],
                       ['Amount', `tag-equipment.${item.name}.count`, item.count, ModelTypes.number],
                       ['Name', `tag-equipment.${item.name}.name`, item.name, ModelTypes.text],
@@ -712,7 +712,7 @@ onBeforeMount(async () => {
                     </div>
                     <div class="clickable" @click.stop @click="() =>{
                       deleteModelData.deleteFunction = async ()=>{
-                        character.equipment.remove(item.name, item.count)
+                        character.equipmentRemove(item.name, item.count)
                         await firebaseHandler.setCharacterData(character.objectData)
                         resetDeleteModelData()
                       };
@@ -722,7 +722,7 @@ onBeforeMount(async () => {
                     }" v-html="ICON_REMOVE"></div>
                   </div>
                   <div class="equipment-item container row clickable" @click="async () => {
-                      character.equipment.add('new item', 1, 0)
+                      character.equipmentAdd('new item', 1, 0)
                       await firebaseHandler.setCharacterData(character.objectData)
                     }">
                     <div class="flex-2"></div>
@@ -746,43 +746,43 @@ onBeforeMount(async () => {
       <div class="header container row"> <!-- Header -->
         <div class="container col flex-1"> <!-- Left Column -->
           <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
-               @click="atClickEdit([['Character Name', 'detail.name', character.detail.name, ModelTypes.text]])">
-            <p class="flex-1 value medium no-transform">{{ character.detail.name }}</p>
+               @click="atClickEdit([['Character Name', 'detailName', character.detailName, ModelTypes.text]])">
+            <p class="flex-1 value medium no-transform">{{ character.detailName }}</p>
             <p>Character Name</p>
           </div>
         </div>
         <div class="container col flex-2"> <!-- Right Column -->
           <div class="container row">
             <div class="container block value-display col flex-1 no-border-top clickable"
-                 @click="atClickEdit([['Character Age in years', 'detail.age', character.detail.age, ModelTypes.number]])">
-              <p class="flex-1 value medium no-transform">{{ character.detail.age }}</p>
+                 @click="atClickEdit([['Character Age in years', 'detailAge', character.detailAge, ModelTypes.number]])">
+              <p class="flex-1 value medium no-transform">{{ character.detailAge }}</p>
               <p>Age</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top clickable"
-                 @click="atClickEdit([['Character Height in foot', 'detail.height', character.detail.height, ModelTypes.number]])">
-              <p class="flex-1 value medium no-transform">{{ formatLength(character.detail.height) }}</p>
+                 @click="atClickEdit([['Character Height in foot', 'detailHeight', character.detailHeight, ModelTypes.number]])">
+              <p class="flex-1 value medium no-transform">{{ formatLength(character.detailHeight) }}</p>
               <p>Height</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top no-border-right clickable"
-                 @click="atClickEdit([['Character Weight in pounds', 'detail.weight', character.detail.weight, ModelTypes.number]])">
-              <p class="flex-1 value medium no-transform">{{ formatWeight(character.detail.weight) }}</p>
+                 @click="atClickEdit([['Character Weight in pounds', 'detailWeight', character.detailWeight, ModelTypes.number]])">
+              <p class="flex-1 value medium no-transform">{{ formatWeight(character.detailWeight) }}</p>
               <p>Weight</p>
             </div>
           </div>
           <div class="container row">
             <div class="container block value-display col flex-1 clickable"
-                 @click="atClickEdit([['Character Eyes', 'detail.eyeColor', character.detail.eyeColor, ModelTypes.text]])">
-              <p class="flex-1 value medium no-transform">{{ character.detail.eyeColor }}</p>
+                 @click="atClickEdit([['Character Eyes', 'detailEyeColor', character.detailEyeColor, ModelTypes.text]])">
+              <p class="flex-1 value medium no-transform">{{ character.detailEyeColor }}</p>
               <p>Eyes</p>
             </div>
             <div class="container block value-display col flex-1 clickable"
-                 @click="atClickEdit([['Character Skin', 'detail.skinColor', character.detail.skinColor, ModelTypes.text]])">
-              <p class="flex-1 value medium no-transform">{{ character.detail.skinColor }}</p>
+                 @click="atClickEdit([['Character Skin', 'detailSkinColor', character.detailSkinColor, ModelTypes.text]])">
+              <p class="flex-1 value medium no-transform">{{ character.detailSkinColor }}</p>
               <p>Skin</p>
             </div>
             <div class="container block value-display col flex-1 no-border-right clickable"
-                 @click="atClickEdit([['Character Hair', 'detail.hairColor', character.detail.hairColor, ModelTypes.text]])">
-              <p class="flex-1 value medium no-transform">{{ character.detail.hairColor }}</p>
+                 @click="atClickEdit([['Character Hair', 'detailHairColor', character.detailHairColor, ModelTypes.text]])">
+              <p class="flex-1 value medium no-transform">{{ character.detailHairColor }}</p>
               <p>Hair</p>
             </div>
           </div>
@@ -803,9 +803,9 @@ onBeforeMount(async () => {
             <p>Character Appearance</p>
           </div>
           <div class="container block value-display col flex-2 no-border-left no-border-bottom clickable"
-               @click="atClickEdit([['Character Backstory', 'detail.backstory', character.detail.backstory, ModelTypes.textarea]])">
+               @click="atClickEdit([['Character Backstory', 'detailBackstory', character.detailBackstory, ModelTypes.textarea]])">
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.detail.backstory.split('\n')">
+              <p class="no-transform" v-for="line in character.detailBackstory.split('\n')">
                 {{ line }}
               </p>
             </div>
@@ -814,27 +814,27 @@ onBeforeMount(async () => {
         </div>
         <div class="container col flex-2">
           <div class="container block value-display align-start col flex-1 no-border-right clickable"
-               @click="atClickEdit([['Allies & Organizations', 'detail.allies', character.detail.allies, ModelTypes.textarea]])">
+               @click="atClickEdit([['Allies & Organizations', 'detailAllies', character.detailAllies, ModelTypes.textarea]])">
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.detail.allies.split('\n')">
+              <p class="no-transform" v-for="line in character.detailAllies.split('\n')">
                 {{ line }}
               </p>
             </div>
             <p class="align-center">Allies & Organizations</p>
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right clickable"
-               @click="atClickEdit([['Additional Features & Traits', 'feature.additional', character.feature.additional, ModelTypes.textarea]])">
+               @click="atClickEdit([['Additional Features & Traits', 'featureAdditional', character.featureAdditional, ModelTypes.textarea]])">
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.feature.additional.split('\n')">
+              <p class="no-transform" v-for="line in character.featureAdditional.split('\n')">
                 {{ line }}
               </p>
             </div>
             <p class="align-center">Additional Features & Traits</p>
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right no-border-bottom clickable"
-               @click="atClickEdit([['Treasure', 'detail.treasure', character.detail.treasure, ModelTypes.textarea]])">
+               @click="atClickEdit([['Treasure', 'detailTreasure', character.detailTreasure, ModelTypes.textarea]])">
             <div class="flex-1">
-              <p class="flex-1 no-transform" v-for="line in character.detail.treasure.split('\n')">
+              <p class="flex-1 no-transform" v-for="line in character.detailTreasure.split('\n')">
                 {{ line }}
               </p>
             </div>
@@ -848,22 +848,22 @@ onBeforeMount(async () => {
         <div class="container col flex-1">
           <div class="container row">
             <div class="container value-display col block flex-3 no-border-top no-border-left clickable"
-                 @click="atClickEdit([['Spellcasting Class', 'spellcasting.class', character.spellcasting.class, ModelTypes.classes]])">
-              <p class="flex-1 value medium no-transform">{{ character.spellcasting.class }}</p>
+                 @click="atClickEdit([['Spellcasting Class', 'spellcasting.class', character.spellcastingClass, ModelTypes.classes]])">
+              <p class="flex-1 value medium no-transform">{{ character.spellcastingClass }}</p>
               <p>Spellcasting Class</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top clickable"
-                 @click="atClickEdit([['Spellcasting Ability', 'spellcasting.ability', character.spellcasting.ability, ModelTypes.abilityTypes]])">
+                 @click="atClickEdit([['Spellcasting Ability', 'spellcastingAbility', character.spellcastingAbility, ModelTypes.abilityTypes]])">
               <p class="flex-1 value medium no-transform" style="text-transform: capitalize">
-                {{ character.spellcasting.ability }}</p>
+                {{ character.spellcastingAbility }}</p>
               <p>Spellcasting Ability</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top">
-              <p class="flex-1 value medium no-transform">{{ character.spellcasting.spellSaveDc }}</p>
+              <p class="flex-1 value medium no-transform">{{ character.spellcastingSpellSaveDc }}</p>
               <p>Spell Save DC</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top no-border-right">
-              <p class="flex-1 value medium no-transform">{{ formatScore(character.spellcasting.attackBonus) }}</p>
+              <p class="flex-1 value medium no-transform">{{ formatScore(character.spellcastingAttackBonus) }}</p>
               <p>Spell Attack Bonus</p>
             </div>
           </div>
@@ -882,22 +882,22 @@ onBeforeMount(async () => {
               </div>
               <div class="flex-3 container row" v-if="j!==0">
                 <div class="value flex-1" @click="atClickEdit([
-                  ['Spell Slots', `spellcasting.usableSpells.spells.${j}.spellSlots`, character.spellcasting.usableSpells.spells[j].spellSlots, ModelTypes.number],
-              ])">
-                  <p>{{ character.spellcasting.usableSpells.spells[j].spellSlots }}</p>
+                  ['Spell Slots', `_character.spellcasting.spells.${j}.spellSlots`, character.spellcastingSpellSlots_get(j), ModelTypes.number],
+                ])">
+                  <p>{{ character.spellcastingSpellSlots_get(j) }}</p>
                 </div>
                 <div class="label flex-2" @click="atClickEdit([
-                  ['Spell Slots', `spellcasting.usableSpells.spells.${j}.spellSlots`, character.spellcasting.usableSpells.spells[j].spellSlots, ModelTypes.number],
+                  ['Spell Slots', `_character.spellcasting.spells.${j}.spellSlots`, character.spellcastingSpellSlots_get(j), ModelTypes.number],
               ])">
                   <p>Total</p>
                 </div>
                 <div class="value flex-1" @click="atClickEdit([
-                  ['Spell Slots Expanded', `spellcasting.usableSpells.spells.${j}.spellSlotsExpanded`, character.spellcasting.usableSpells.spells[j].spellSlotsExpanded, ModelTypes.number],
+                  ['Spell Slots Expanded', `_character.spellcasting.spells.${j}.spellSlotsExpanded`, character.spellcastingSpellSlotsExpanded_get(j), ModelTypes.number],
                 ])">
-                  <p>{{ character.spellcasting.usableSpells.spells[j].spellSlotsExpanded }}</p>
+                  <p>{{ character.spellcastingSpellSlotsExpanded_get(j) }}</p>
                 </div>
                 <div class="label flex-2" @click.stop @click="atClickEdit([
-                  ['Spell Slots Expanded', `spellcasting.usableSpells.spells.${j}.spellSlotsExpanded`, character.spellcasting.usableSpells.spells[j].spellSlotsExpanded, ModelTypes.number],
+                  ['Spell Slots Expanded', `_character.spellcasting.spells.${j}.spellSlotsExpanded`, character.spellcastingSpellSlotsExpanded_get(j), ModelTypes.number],
                 ])">
                   <p>Expanded</p>
                 </div>
@@ -914,14 +914,14 @@ onBeforeMount(async () => {
             </div>
 
             <div class="container col block no-border">
-              <div v-if="j===0" v-for="(cantrip, index) in character.spellcasting.usableSpells.cantrips"
+              <div v-if="j===0" v-for="(cantrip, index) in character.spellcastingCantrips"
                    class="container row clickable" @click="atClickEdit([
-                  [`Cantrip`, `spellcasting.usableSpells.cantrips.${index}`, character.spellcasting.usableSpells.cantrips[index], ModelTypes.text]
+                  [`Cantrip`, `_character.spellcasting.cantrips.${index}`, character.spellcastingCantrips[index], ModelTypes.text]
               ])">
                 <p class="flex-1">{{ cantrip }}</p>
                 <p @click.stop @click="() =>{
                   deleteModelData.deleteFunction = async ()=>{
-                    character.spellcasting.cantrip.remove(cantrip)
+                    character.spellcastingCantripRemove(cantrip)
                     await firebaseHandler.setCharacterData(character.objectData)
                     resetDeleteModelData()
                   };
@@ -930,20 +930,20 @@ onBeforeMount(async () => {
                   deleteModelData.question = 'Are you sure you want to delete this cantrip?'
                 }" v-html="ICON_REMOVE"></p>
               </div>
-              <div v-else v-for="(spell, index) in character.spellcasting.usableSpells.spells[j].known"
+              <div v-else v-for="(spell, index) in character.spellcastingSpells[j].known"
                    class="container row clickable" @click="atClickEdit([
-                  [`Spell`, `spellcasting.usableSpells.spells.${j}.known.${index}`, spell, ModelTypes.text]
+                  [`Spell`, `_character.spellcasting.spells.${j}.known.${index}`, spell, ModelTypes.text]
               ])">
                 <div class="flex-1 container row" style="justify-content: center">
                   <div class="check"
-                       :class="{selected:character.spellcasting.usableSpells.spells[j].prepared.includes(spell)}"
+                       :class="{selected:character.spellcastingSpells[j].prepared.includes(spell)}"
                        @click.stop @click="atClickPrepared(j, spell)"
                   ></div>
                 </div>
                 <p class="flex-3">{{ spell }}</p>
                 <p @click.stop @click="() =>{
                   deleteModelData.deleteFunction = async ()=>{
-                    character.spellcasting.spell[j].remove(spell)
+                    character.spellcastingRemove(j, spell)
                     await firebaseHandler.setCharacterData(character.objectData)
                     resetDeleteModelData()
                   };
@@ -955,14 +955,14 @@ onBeforeMount(async () => {
             </div>
             <div class="container col block no-border">
               <div v-if="j===0" class="clickable container row" @click.stop @click="()=>{
-                character.spellcasting.cantrip.add('New cantrip')
+                character.spellcastingCantripAdd('New cantrip')
                 firebaseHandler.setCharacterData(character.objectData)
               }">
                 <p class="flex-1">--Add a cantrip--</p>
                 <p v-html="ICON_ADD"></p>
               </div>
               <div v-if="j!==0" class="clickable container row" @click.stop @click="()=>{
-                character.spellcasting.spell[j].add('New Spell')
+                character.spellcastingAdd(j, 'New Spell')
                 firebaseHandler.setCharacterData(character.objectData)
               }">
                 <p class="flex-1">--Add a spell--</p>
