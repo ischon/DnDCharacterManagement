@@ -67,7 +67,7 @@ export class FirebaseHandler {
             return docSnap.data();
         } else {
             // doc.data() will be undefined in this case
-            console.log("No such document!");
+            console.warn("No such document!");
             return undefined;
         }
     }
@@ -103,7 +103,7 @@ export class FirebaseHandler {
             .replace("{characterId}", characterId)
         const storageRef = ref(this.storage, path);
         return await getDownloadURL(storageRef).catch((error) => {
-            console.log("Error getting document:", error);
+            console.error("Error getting document:", error);
             // A full list of error codes is available at
             // https://firebase.google.com/docs/storage/web/handle-errors
             switch (error.code) {
@@ -127,17 +127,12 @@ export class FirebaseHandler {
         const path = this.paths["character"]
             .replace("{uid}", this.firebaseUser.uid)
             .replace("{characterId}", characterId)
-        console.log("path", path);
         const storageRef = ref(this.storage, path);
-        // await storageRef.put(file);
-        console.log(storageRef)
         await uploadBytes(storageRef, file).then((snapshot) => {
-            console.log(snapshot);
-            console.log('Uploaded a blob or file!');
+            console.debug(snapshot);
         }).catch((error) => {
             console.error("Error adding document: ", error);
         });
-        // await uploadString(storageRef, data, 'data_url');
     }
 }
 

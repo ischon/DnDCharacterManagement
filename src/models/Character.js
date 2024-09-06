@@ -1,376 +1,46 @@
-export const classes = [
-    "Artificer",
-    "Barbarian",
-    "Bard",
-    "Cleric",
-    "Druid",
-    "Fighter",
-    "Monk",
-    "Paladin",
-    "Ranger",
-    "Rogue",
-    "Sorcerer",
-    "Warlock",
-    "Wizard",
-    "Custom"
-];
-
-export const alignments = [
-    "Lawful good",
-    "Neutral good",
-    "Chaotic good",
-    "Lawful neutral",
-    "Neutral",
-    "Chaotic neutral",
-    "Lawful evil",
-    "Neutral evil",
-    "Chaotic evil"
-];
-
-export const abilityTypes = [
-    "strength",
-    "dexterity",
-    "constitution",
-    "intelligence",
-    "wisdom",
-    "charisma"
-]
-
-export const proficiencyTypes = [
-    ...abilityTypes,
-    "items"
-]
-
-export const abilities = {
-    strength: [
-        "Saving Throws",
-        "Athletics"
-    ],
-    dexterity: [
-        "Saving Throws",
-        "Acrobatics",
-        "Sleight of Hand",
-        "Stealth"
-    ],
-    constitution: [
-        "Saving Throws"
-    ],
-    intelligence: [
-        "Saving Throws",
-        "Arcana",
-        "History",
-        "Investigation",
-        "Nature",
-        "Religion"
-    ],
-    wisdom: [
-        "Saving Throws",
-        "Animal Handling",
-        "Insight",
-        "Medicine",
-        "Perception",
-        "Survival"
-    ],
-    charisma: [
-        "Saving Throws",
-        "Deception",
-        "Intimidation",
-        "Performance",
-        "Persuasion"
-    ],
-};
-
-export const dice = [
-    "2",
-    "4",
-    "6",
-    "8",
-    "10",
-    "12",
-    "20",
-]
-
-export class Attack {
-    constructor(name, bonus, damage, type) {
-        this.name = name;
-        this.bonus = bonus;
-        this.damage = damage;
-        this.type = type;
-    }
-}
-
-export class Item {
-    constructor(index, name, count, weight) {
-        this.index = index
-        this.name = name;
-        this.count = count;
-        this.weight = weight;
-    }
-}
+import {classes, alignments, abilityTypes, proficiencyTypes, abilities, dice} from "@/models/Enums.js";
+import {Attack, Item, defaultCharacter} from "@/models/CharacterHelperClasses.js";
+import {calculateCoins, calculateAbilityModifier, toCopperCoins} from "@/helpers/characterHelpers.js";
+import {range} from "lodash";
 
 export class Character {
-
     default(id = undefined) {
-        let _id
-        if (id !== undefined) {
-            _id = id
-        } else if (this._character !== undefined) {
-            _id = this._character.id;
-        } else {
-            _id = Date.now().toString(36).slice(-8);
+        const _getIdWithFailSave = (id = undefined) => {
+            if (id !== undefined) {
+                return id
+            } else if (this._character !== undefined) {
+                return this._character.id;
+            }
+            return Date.now().toString(36).slice(-8);
         }
 
-        this._character = {
-            id: _id,
-            name: "",
-            class: "",
-            level: 0,
-            race: "",
-            background: "",
-            alignment: "",
-            experiencePoints: 0,
-            age: 0,
-            height: 0,
-            weight: 0,
-            eyeColor: "",
-            hairColor: "",
-            skinColor: "",
-            backstory: "",
-            personalityTraits: "",
-            ideals: "",
-            bonds: "",
-            flaws: "",
-            allies: "",
-            additionalFeatures: "",
-            treasure: "",
-            abilities: {
-                proficiencies: {
-                    strength: [],
-                    dexterity: [],
-                    constitution: [],
-                    intelligence: [],
-                    wisdom: [],
-                    charisma: [],
-                    items: []
-                },
-                inspiration: 0,
-                strength: 10,
-                dexterity: 10,
-                constitution: 10,
-                intelligence: 10,
-                wisdom: 10,
-                charisma: 10,
-            },
-            stats: {
-                armorClass: {
-                    base: 10,
-                    hasDexModifier: true,
-                    shield: 0,
-                    misc: 0
-                },
-                initiative: {
-                    misc: 0
-                },
-                speed: 30,
-                hitPoints: {
-                    base: 8,
-                    misc: 0,
-                    current: 0,
-                    temp: 0
-                },
-                hitDice: {
-                    die: "8",
-                    current: 1
-                },
-                deathSaves: {
-                    successes: 0,
-                    failures: 0
-                },
-            },
-            coins: 0,
-            equipment: {},
-            languages: [],
-            attacks: {},
-            spellcasting: {
-                class: "",
-                ability: "",
-                cantrips: [],
-                spells: {
-                    1: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    2: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    3: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    4: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    5: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    6: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    7: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    8: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                    9: {
-                        prepared: [],
-                        known:
-                            [],
-                        spellSlots:
-                            0,
-                        spellSlotsExpanded:
-                            0
-                    },
-                },
-            },
-            features: [],
-        }
-    };
+        return defaultCharacter(_getIdWithFailSave(id))
+    }
 
     constructor(object = undefined, id = undefined) {
         if (object === undefined) {
-            this.default(id);
-            return;
+            object = this.default(id);
         }
 
         this._character = object;
-        if (object.id === undefined && id !== undefined) {
-            this._character.id = id
-        }
     }
 
-//     TODO: order logic in this class
-
-// CUSTOM LOGIC
-    _calculateAbilityModifier(score) {
-        return Math.floor((score - 10) / 2);
+    get id() {
+        return this._character.id;
     }
 
-    _toCopperCoins(coins, type) {
-        switch (type) {
-            case "COPPER":
-                return coins
-            case "SILVER":
-                return coins * 10
-            case "ELECTRUM":
-                return coins * 50
-            case "GOLD":
-                return coins * 100
-            case "PLATINUM":
-                return coins * 1000
-        }
-
+    get objectData() {
+        return JSON.parse(JSON.stringify(this._character));
     }
 
-    static calculateCoins(coins) {
-        /*
-        Coin	                CP      SP	    EP	    GP	    PP
-        Copper Piece    (cp)    1       1/10    1/50    1/100	1/1,000
-        Silver Piece    (sp)    10      1       1/5	    1/10    1/100
-        Electrum Piece  (ep)    50      5       1       1/2     1/20
-        Gold Piece      (gp)    100     10      2       1       1/10
-        Platinum Piece  (pp)    1,000   100     20      10      1
-         */
-        let cp = coins
-        let pp = Math.floor(cp / 1000)
-        cp -= pp * 1000
-        let gp = Math.floor(cp / 100)
-        cp -= gp * 100
-        let ep = Math.floor(cp / 50)
-        cp -= ep * 50
-        let sp = Math.floor(cp / 10)
-        cp -= sp * 10
-
-        return {
-            'Copper Coins': cp,
-            'Silver Coins': sp,
-            'Electrum Coins': ep,
-            'Gold Coins': gp,
-            'Platinum Coins': pp
-        }
-    }
-
-// METHODS
-    save(key, value) {
-        this._character[key] = value;
-
-
-    }
-
-    toggleProficiency(type, name) {
-        if (this.proficiencies[type].includes(name)) {
-            this.removeProficiency(type, name)
-            return;
-        }
-        this.addProficiency(type, name)
-    }
-
-    addProficiency(type, name) {
+    proficiencyAdd(type, name) {
         if (!proficiencyTypes.includes(type)) {
-            console.log("ERROR: ability type does not exists")
+            console.error("ERROR: ability type does not exists")
             return;
         }
 
         if (type !== 'items' && !abilities[type].includes(name)) {
-            console.log("ERROR: proficiency does not exists")
-            console.log(abilities[type])
-            console.log(name)
+            console.error("ERROR: proficiency does not exists")
             return;
         }
 
@@ -382,14 +52,30 @@ export class Character {
 
     }
 
-    removeProficiency(type, name) {
+    get proficiencies() {
+        const result = {}
+        Object.entries(this._character.abilities.proficiencies)
+            .sort()
+            .forEach((category) => result[category[0]] = category[1].sort());
+        return result
+    }
+
+    proficiencyToggle(type, name) {
+        if (this.proficiencies[type].includes(name)) {
+            this.proficiencyRemove(type, name)
+            return;
+        }
+        this.proficiencyAdd(type, name)
+    }
+
+    proficiencyRemove(type, name) {
         if (!proficiencyTypes.includes(type)) {
-            console.log("ERROR: ability type does not exists")
+            console.error("ERROR: ability type does not exists")
             return;
         }
 
         if (type !== 'items' && !abilities[type].includes(name)) {
-            console.log("ERROR: proficiency does not exists")
+            console.error("ERROR: proficiency does not exists")
             return;
         }
 
@@ -398,18 +84,32 @@ export class Character {
         }
     }
 
-    addAttack(name, bonus, damage, type) {
+    get proficiencyBonus() {
+        if (this.detailLevel < 5) {
+            return 2
+        } else if (this.detailLevel < 9) {
+            return 3
+        } else if (this.detailLevel < 13) {
+            return 4
+        } else if (this.detailLevel < 17) {
+            return 5
+        } else {
+            return 6
+        }
+    }
+
+
+    attackAdd(name, bonus, damage, type) {
         this._character.attacks[name] = new Attack(name, bonus, damage, type)
     }
 
-    removeAttack(name) {
-        delete this._character.attacks[name]
+    get attacks() {
+        return this._character.attacks
     }
 
-    updateAttack(key, attack) {
+    attackUpdate(key, attack) {
         if (this._character.attacks[key] === undefined) {
-            console.log(key, attack, this._character.attacks)
-            console.log("ERROR: attack does not exists")
+            console.error("ERROR: attack does not exists")
             return
         }
         if (key !== attack.name) {
@@ -419,19 +119,14 @@ export class Character {
         this._character.attacks[attack.name] = attack
     }
 
-    get attacks() {
-        return this._character.attacks
+    attackRemove(name) {
+        delete this._character.attacks[name]
     }
 
-    addLanguage(language) {
+
+    languageAdd(language) {
         if (!this._character.languages.includes(language)) {
             this._character.languages.push(language)
-        }
-    }
-
-    removeLanguage(language) {
-        if (this._character.languages.includes(language)) {
-            this._character.languages.splice(this._character.languages.indexOf(language), 1)
         }
     }
 
@@ -439,13 +134,106 @@ export class Character {
         return this._character.languages
     }
 
+    languageRemove(language) {
+        if (this._character.languages.includes(language)) {
+            this._character.languages.splice(this._character.languages.indexOf(language), 1)
+        }
+    }
+
+
+    // spellcasting = {
+    //     _configure: () => {
+    //         Object.defineProperty(this.spellcasting, 'class', {
+    //             get: this.spellcasting._class_get,
+    //             set: this.spellcasting._class_set
+    //         })
+    //         Object.defineProperty(this.spellcasting, 'ability', {
+    //             get: this.spellcasting._ability_get,
+    //             set: this.spellcasting._ability_set
+    //         })
+    //         Object.defineProperty(this.spellcasting, 'spellSaveDc', {get: this.spellcasting._spellSaveDc_get})
+    //         Object.defineProperty(this.spellcasting, 'attackBonus', {get: this.spellcasting._attackBonus_get})
+    //         Object.defineProperty(this.spellcasting, 'usableSpells', {get: this.spellcasting._usableSpells_get})
+    //
+    //         this.spellcasting.spell._configure()
+    //     },
+    //     class: undefined,
+    //     ability: undefined,
+    //     spellSaveDc: undefined,
+    //     attackBonus: undefined,
+    //     usableSpells: undefined,
+    //     _class_get: () => {
+    //         return this._character.spellcasting.class
+    //     },
+    //     _class_set: (value) => {
+    //         if (!classes.includes(value)) {
+    //             console.error("ERROR: class does not exists")
+    //             return;
+    //         }
+    //         this._character.spellcasting.class = value
+    //     },
+    //     _ability_get: () => {
+    //         return this._character.spellcasting.ability
+    //     },
+    //     _ability_set: (value) => {
+    //         if (!abilityTypes.includes(value)) {
+    //             console.error("ERROR: ability type does not exists")
+    //             return;
+    //         }
+    //         this._character.spellcasting.ability = value
+    //     },
+    //     _spellSaveDc_get: () => {
+    //         const modifier = this[`ability${this.spellcasting.ability}Modifier`]
+    //         return 8 + modifier + this.proficiencyBonus
+    //     },
+    //     _attackBonus_get: () => {
+    //         const modifier = this[`ability${this.spellcasting.ability}Modifier`]
+    //         return modifier + this.proficiencyBonus
+    //     },
+    //     _usableSpells_get: () => {
+    //         let result = {
+    //             cantrips: [],
+    //             spells: {}
+    //         }
+    //         result['cantrips'] = this._character.spellcasting.cantrips
+    //         // prepared spells
+    //         for (const [key, value] of Object.entries(this._character.spellcasting.spells)) {
+    //             result['spells'][key] = value
+    //         }
+    //         return result
+    //     },
+    //     spell: {
+    //         _configure: () => {
+    //             range(1, 10).forEach((level) => {
+    //                 this.spellcasting.spell[level] = {
+    //                     _configure: () => {
+    //                         Object.defineProperty(this.spellcasting.spell[level], 'slots', {
+    //                             get: this.spellcasting.spell[level]._slots_get,
+    //                             set: this.spellcasting.spell[level]._slots_set
+    //                         })
+    //                         Object.defineProperty(this.spellcasting.spell[level], 'slotsExpanded', {
+    //                             get: this.spellcasting.spell[level]._slotsExpanded_get,
+    //                             set: this.spellcasting.spell[level]._slotsExpanded_set
+    //                         })
+    //                     },
+    //                 }
+    //             }, this)
+    //         },
+    //
+    //
+    //         cantrip: {
+    //     //
+    //         },
+    //     }
+
+
     get spellcastingClass() {
         return this._character.spellcasting.class
     }
 
     set spellcastingClass(value) {
         if (!classes.includes(value)) {
-            console.log("ERROR: class does not exists")
+            console.error("ERROR: class does not exists")
             return;
         }
         this._character.spellcasting.class = value
@@ -457,119 +245,110 @@ export class Character {
 
     set spellcastingAbility(value) {
         if (!abilityTypes.includes(value)) {
-            console.log("ERROR: ability type does not exists")
+            console.error("ERROR: ability type does not exists")
             return;
         }
         this._character.spellcasting.ability = value
     }
 
-    get spellSaveDc() {
-        const modifier = Reflect.get(this, `${this.spellcastingAbility}Modifier`)
+    get spellcastingSpellSaveDc() {
+        const upperAbility = this.spellcastingAbility.charAt(0).toUpperCase() + this.spellcastingAbility.slice(1)
+        const modifier = this[`ability${upperAbility}Modifier`]
         return 8 + modifier + this.proficiencyBonus
     }
 
-    get spellAttackBonus() {
-        const modifier = Reflect.get(this, `${this.spellcastingAbility}Modifier`)
+    get spellcastingAttackBonus() {
+        const upperAbility = this.spellcastingAbility.charAt(0).toUpperCase() + this.spellcastingAbility.slice(1)
+        const modifier = this[`ability${upperAbility}Modifier`]
         return modifier + this.proficiencyBonus
     }
 
-    addCantrip(cantrip) {
-        if (!this._character.spellcasting.cantrips.includes(cantrip)) {
-            this._character.spellcasting.cantrips.push(cantrip)
-        }
-    }
-
-    removeCantrip(cantrip) {
-        if (this._character.spellcasting.cantrips.includes(cantrip)) {
-            this._character.spellcasting.cantrips.splice(this._character.spellcasting.cantrips.indexOf(cantrip), 1)
-        }
-    }
-
-    get usableSpells() {
-        let result = {
-            cantrips: [],
-            spells: {}
-        }
-        result['cantrips'] = this._character.spellcasting.cantrips
+    get spellcastingSpells() {
+        let spells = {}
         // prepared spells
         for (const [key, value] of Object.entries(this._character.spellcasting.spells)) {
-            result['spells'][key] = value
+            spells[key] = value
         }
-        return result
+        return spells
     }
 
-    togglePrepared(lvl, name) {
-        if (this._character.spellcasting.spells[lvl].prepared.includes(name)) {
-            this.removePreparedSpell(lvl, name)
-            return;
-        }
-        this.addPreparedSpell(lvl, name)
+    spellcastingSpellSlots_get(level) {
+        return this._character.spellcasting.spells[level].spellSlots
     }
 
-    addSpell(level, spell) {
+    spellcastingSpellSlots_set(level, value) {
+        this._character.spellcasting.spells[level].spellSlots = value
+    }
+
+    spellcastingSpellSlotsExpanded_get(level,) {
+        return this._character.spellcasting.spells[level].spellSlotsExpanded
+    }
+
+    spellcastingSpellSlotsExpanded_set(level, value) {
+        this._character.spellcasting.spells[level].spellSlotsExpanded = value
+    }
+
+    spellcastingAdd(level, spell) {
         if (!this._character.spellcasting.spells[level].known.includes(spell)) {
             this._character.spellcasting.spells[level].known.push(spell)
         }
     }
 
-    removeSpell(level, spell) {
+    spellcastingRemove(level, spell) {
         if (this._character.spellcasting.spells[level].known.includes(spell)) {
             this._character.spellcasting.spells[level].known.splice(this._character.spellcasting.spells[level].known.indexOf(spell), 1)
         }
     }
 
-    addPreparedSpell(level, spell) {
+    spellcastingPreparedToggle(level, name) {
+        if (this._character.spellcasting.spells[level].prepared.includes(name)) {
+            this.spellcastingPreparedRemove(level, name)
+            return;
+        }
+        this.spellcastingPreparedAdd(level, name)
+    }
+
+    spellcastingPreparedAdd(level, spell) {
         if (!this._character.spellcasting.spells[level].prepared.includes(spell)) {
             this._character.spellcasting.spells[level].prepared.push(spell)
         }
     }
 
-    removePreparedSpell(level, spell) {
+    spellcastingPreparedRemove(level, spell) {
         if (this._character.spellcasting.spells[level].prepared.includes(spell)) {
-            this._character.spellcasting.spells[level].prepared.splice(this._character.spellcasting.spells[level].prepared.indexOf(spell), 1)
+            let spellIndex = this._character.spellcasting.spells[level].prepared.indexOf(spell)
+            this._character.spellcasting.spells[level].prepared.splice(spellIndex, 1)
         }
     }
 
-    addSpellSlot(level, slots = 1) {
-        this._character.spellcasting.spells[level].spellSlots += slots
+    get spellcastingCantrips() {
+        return this._character.spellcasting.cantrips
     }
 
-    removeSpellSlot(level, slots = 1) {
-        if (this._character.spellcasting.spells[level].spellSlots < slots) {
-            this._character.spellcasting.spells[level].spellSlots = 0
-            console.log("ERROR: not enough spell slots, reset to 0")
-            return
+    spellcastingCantripAdd(cantrip) {
+        if (!this._character.spellcasting.cantrips.includes(cantrip)) {
+            this._character.spellcasting.cantrips.push(cantrip)
         }
-        this._character.spellcasting.spells[level].spellSlots -= slots
     }
 
-    restoreSpellSlots(level, slots = undefined) {
-        if (slots === undefined) {
-            this._character.spellcasting.spells[level].spellSlotsExpanded = 0
-            return
+    spellcastingCantripRemove(cantrip) {
+        if (this._character.spellcasting.cantrips.includes(cantrip)) {
+            this._character.spellcasting.cantrips.splice(this._character.spellcasting.cantrips.indexOf(cantrip), 1)
         }
-        this._character.spellcasting.spells[level].spellSlotsExpanded += slots
     }
 
-    useSpellSlot(level, slots = 1) {
-        if (
-            this._character.spellcasting.spells[level].spellSlotsExpanded < this._character.spellcasting.spells[level].spellSlots
-            && (this._character.spellcasting.spells[level].spellSlots - this._character.spellcasting.spells[level].spellSlotsExpanded) < slots
-        ) {
-            this._character.spellcasting.spells[level].spellSlotsExpanded += slots
-        }
 
+    get featureAdditional() {
+        return this._character.additionalFeatures
     }
 
-    addFeature(feature) {
+    set featureAdditional(value) {
+        this._character.additionalFeatures = value
+    }
+
+    featureAdd(feature) {
         if (!this._character.features.includes(feature)) {
             this._character.features.push(feature)
-        }
-    }
-
-    removeFeature(feature) {
-        if (this._character.features.includes(feature)) {
-            this._character.features.splice(this._character.features.indexOf(feature), 1)
         }
     }
 
@@ -577,7 +356,14 @@ export class Character {
         return this._character.features
     }
 
-    addEquipment(name, count, weight) {
+    featureRemove(feature) {
+        if (this._character.features.includes(feature)) {
+            this._character.features.splice(this._character.features.indexOf(feature), 1)
+        }
+    }
+
+
+    equipmentAdd(name, count, weight) {
         if (this._character.equipment[name] !== undefined) {
             this._character.equipment[name].count += count
             return
@@ -585,36 +371,7 @@ export class Character {
         this._character.equipment[name] = new Item(Object.keys(this._character.equipment).length, name, count, weight)
     }
 
-    removeEquipment(name, count) {
-        if (this._character.equipment[name] === undefined) {
-            return
-        }
-
-        if (this._character.equipment[name].count > count) {
-            this._character.equipment[name].count -= count
-            return
-        }
-
-        delete this._character.equipment[name]
-    }
-
-    updateEquipment(oldName, name, count, weight, index) {
-        if (this._character.equipment[oldName] === undefined) {
-            console.log("ERROR: equipment does not exists")
-            return
-        }
-        if (oldName !== name) {
-            this._character.equipment[name] = this._character.equipment[oldName]
-            delete this._character.equipment[oldName]
-            this._character.equipment[name].name = name
-        }
-
-        this._character.equipment[name].count = count
-        this._character.equipment[name].weight = weight
-        this._character.equipment[name].index = index
-    }
-
-    get equipment() {
+    get equipmentItems() {
         let objects = Object.entries(this._character.equipment)
         objects.sort((a, b) => {
             if (a[1].index < b[1].index) {
@@ -631,533 +388,519 @@ export class Character {
         return result
     }
 
-    addCoins(coins, type) {
-        let cp = this._toCopperCoins(coins, type)
+    equipmentRemove(name, count) {
+        if (this._character.equipment[name] === undefined) {
+            return
+        }
+
+        if (this._character.equipment[name].count > count) {
+            this._character.equipment[name].count -= count
+            return
+        }
+
+        delete this._character.equipment[name]
+    }
+
+    equipmentUpdate(oldName, name, count, weight, index) {
+        if (this._character.equipment[oldName] === undefined) {
+            console.error("ERROR: equipment does not exists")
+            return
+        }
+        if (oldName !== name) {
+            this._character.equipment[name] = this._character.equipment[oldName]
+            delete this._character.equipment[oldName]
+            this._character.equipment[name].name = name
+        }
+
+        this._character.equipment[name].count = count
+        this._character.equipment[name].weight = weight
+        this._character.equipment[name].index = index
+
+    }
+
+    equipmentCoinAdd(coins, type) {
+        let cp = toCopperCoins(coins, type)
         this._character.coins += cp
     }
 
-    removeCoins(coins, type) {
-        let cp = this._toCopperCoins(coins, type)
+    equipmentCoinRemove(coins, type) {
+        let cp = toCopperCoins(coins, type)
         if (this._character.coins < cp) {
-            console.log("ERROR: not enough coins")
+            console.error("ERROR: not enough coins")
             return
         }
         this._character.coins -= cp
     }
 
-    get coins() {
-        return Character.calculateCoins(this._character.coins)
+    get equipmentCoins() {
+        return this._character.coins
     }
 
-// COMPUTED PROPERTIES
-
-    get proficiencyBonus() {
-        if (this.level < 5) {
-            return 2
-        } else if (this.level < 9) {
-            return 3
-        } else if (this.level < 13) {
-            return 4
-        } else if (this.level < 17) {
-            return 5
-        } else {
-            return 6
+    set equipmentCoins(value) {
+        if (!Number.isInteger(value) || value < 0) {
+            console.error("ERROR: coins must be a positive integer")
         }
+
+        this._character.coins = value
     }
 
-    get strengthModifier() {
-        return this._calculateAbilityModifier(this.strength);
+    get equipmentCoinFormatted() {
+        return calculateCoins(this._character.coins)
     }
 
-    get dexterityModifier() {
-        return this._calculateAbilityModifier(this.dexterity);
+    get abilityStrength() {
+        return this._character.abilities.strength;
     }
 
-    get constitutionModifier() {
-        return this._calculateAbilityModifier(this.constitution);
+    set abilityStrength(value) {
+        this._character.abilities.strength = value;
     }
 
-    get intelligenceModifier() {
-        return this._calculateAbilityModifier(this.intelligence);
+    get abilityDexterity() {
+        return this._character.abilities.dexterity;
     }
 
-    get charismaModifier() {
-        return this._calculateAbilityModifier(this.charisma);
+    set abilityDexterity(value) {
+        this._character.abilities.dexterity = value;
     }
 
-    get wisdomModifier() {
-        return this._calculateAbilityModifier(this.wisdom);
+    get abilityConstitution() {
+        return this._character.abilities.constitution;
+    }
+
+    set abilityConstitution(value) {
+        this._character.abilities.constitution = value;
+    }
+
+    get abilityIntelligence() {
+        return this._character.abilities.intelligence;
+    }
+
+    set abilityIntelligence(value) {
+        this._character.abilities.intelligence = value;
+    }
+
+    get abilityWisdom() {
+        return this._character.abilities.wisdom;
+    }
+
+    set abilityWisdom(value) {
+        this._character.abilities.wisdom = value;
+    }
+
+    get abilityCharisma() {
+        return this._character.abilities.charisma;
+    }
+
+    set abilityCharisma(value) {
+        this._character.abilities.charisma = value;
+    }
+
+    get abilityStrengthModifier() {
+        return calculateAbilityModifier(this.abilityStrength);
+    }
+
+    get abilityDexterityModifier() {
+        return calculateAbilityModifier(this.abilityDexterity);
+    }
+
+    get abilityConstitutionModifier() {
+        return calculateAbilityModifier(this.abilityConstitution);
+    }
+
+    get abilityIntelligenceModifier() {
+        return calculateAbilityModifier(this.abilityIntelligence);
+    }
+
+    get abilityWisdomModifier() {
+        return calculateAbilityModifier(this.abilityWisdom);
+    }
+
+    get abilityCharismaModifier() {
+        return calculateAbilityModifier(this.abilityCharisma);
+    }
+
+    get abilityInspiration() {
+        return this._character.abilities.inspiration;
+    }
+
+    set abilityInspiration(value) {
+        this._character.abilities.inspiration = value;
     }
 
     get abilities() {
-        // console.log("abilities")
         let result = {}
 
         for (const [key, value] of Object.entries(abilities)) {
-            result[key] = {
+            const upperKey = key.charAt(0).toUpperCase() + key.slice(1)
+            result[upperKey] = {
                 skills: {},
-                score: Reflect.get(this, `${key}`),
-                modifier: Reflect.get(this, `${key}Modifier`)
+                score: this[`ability${upperKey}`],
+                modifier: this[`ability${upperKey}Modifier`]
             }
             value.forEach((item) => {
-                // console.log(key, item)
-                result[key]["skills"][item] = {
-                    value: Reflect.get(this, `${key}Modifier`),
+                result[upperKey]["skills"][item] = {
+                    value: this[`ability${upperKey}Modifier`],
                     proficient: false
                 }
 
                 if (this.proficiencies[key].includes(item)) {
-                    // console.log("proficient", key, item)
-                    result[key]["skills"][item].value += this.proficiencyBonus
-                    result[key]["skills"][item].proficient = true
+                    result[upperKey]["skills"][item].value += this.proficiencyBonus
+                    result[upperKey]["skills"][item].proficient = true
                 }
             })
         }
         return result
     }
 
-    get armorClass() {
-        let result = 0
-        result += this.armorClassBase
-        if (this.armorClassHasDexModifier) {
-            result += ((this.dexterityModifier < 2) ? this.dexterityModifier : 2)
+    get abilityInitiativeModifier() {
+        return this.abilityDexterityModifier + this.abilityInitiativeMisc;
+    }
+
+    get abilityInitiativeMisc() {
+        return this._character.stats.initiative.misc;
+    }
+
+    set abilityInitiativeMisc(value) {
+        this._character.stats.initiative.misc = value;
+    }
+
+    get abilityPassivePerception() {
+        let modifier = 10 + this.abilityWisdomModifier;
+        if (this.proficiencies.wisdom.includes("Perception")) {
+            modifier += this.proficiencyBonus;
         }
-        result += this.armorClassShield
-        result += this.armorClassMisc
-        return result
+        return modifier;
     }
 
-    get hitPointMaximum() {
-        // https://5ehpcalculator.com/
-        const values = []
-        values.push(this.baseHitPoints)
-        values.push(this.constitutionModifier)
-        if (this.hitPointsMisc && this.hitPointsMisc !== 0) {
-            values.push(this.hitPointsMisc)
-        }
-
-        return values.join(" + ")
-    }
-
-    get hitPointMaximumValue() {
-        let value = 0
-        value += this.baseHitPoints
-        value += this.constitutionModifier
-        if (this.hitPointsMisc && this.hitPointsMisc !== 0) {
-            value += this.hitPointsMisc
-        }
-
-        return value
-    }
-
-    get initiativeModifier() {
-        return this.initiativeBase
-            + this.initiativeMisc
-    }
-
-
-// GLOBAL GETTERS AND SETTERS
-    get id() {
-        return this._character.id;
-    }
-
-    get objectData() {
-        return JSON.parse(JSON.stringify(this._character));
-    }
-
-    get name() {
+    get detailName() {
         return this._character.name;
     }
 
-    set name(value) {
+    set detailName(value) {
         this._character.name = value;
     }
 
-    get class
-
-    () {
-        return this._character.class;
-    }
-
-    set class
-
-    (value) {
-        if (classes.includes(value)) {
-            this._character.class = value;
-        } else {
-            console.log("ERROR: class is not in the known list")
-        }
-    }
-
-    get level() {
+    get detailLevel() {
         return this._character.level;
     }
 
-    set level(value) {
+    set detailLevel(value) {
         this._character.level = value;
     }
 
-    get race() {
+    get detailRace() {
         return this._character.race;
     }
 
-    set race(value) {
+    set detailRace(value) {
         this._character.race = value;
     }
 
-    get background() {
+    get detailBackground() {
         return this._character.background;
     }
 
-    set background(value) {
+    set detailBackground(value) {
         this._character.background = value;
     }
 
-    get alignment() {
-        return this._character.alignment;
-    }
-
-    set alignment(value) {
-        if (alignments.includes(value)) {
-            this._character.alignment = value;
-        } else {
-            console.log("ERROR: alignment is not in the known list")
-        }
-    }
-
-    get experiencePoints() {
+    get detailExperiencePoints() {
         return this._character.experiencePoints;
     }
 
-    set experiencePoints(value) {
+    set detailExperiencePoints(value) {
         this._character.experiencePoints = value;
     }
 
-    get age() {
+    get detailAge() {
         return this._character.age;
     }
 
-    set age(value) {
+    set detailAge(value) {
         this._character.age = value;
     }
 
-    get height() {
+    get detailHeight() {
         return this._character.height;
     }
 
-    set height(value) {
+    set detailHeight(value) {
         this._character.height = value;
     }
 
-    get weight() {
+    get detailWeight() {
         return this._character.weight;
     }
 
-    set weight(value) {
+    set detailWeight(value) {
         this._character.weight = value;
     }
 
-    get eyeColor() {
+    get detailEyeColor() {
         return this._character.eyeColor;
     }
 
-    set eyeColor(value) {
+    set detailEyeColor(value) {
         this._character.eyeColor = value;
     }
 
-    get hairColor() {
+    get detailHairColor() {
         return this._character.hairColor;
     }
 
-    set hairColor(value) {
+    set detailHairColor(value) {
         this._character.hairColor = value;
     }
 
-    get skinColor() {
+    get detailSkinColor() {
         return this._character.skinColor;
     }
 
-    set skinColor(value) {
+    set detailSkinColor(value) {
         this._character.skinColor = value;
     }
 
-    get backstory() {
+    get detailBackstory() {
         return this._character.backstory;
     }
 
-    set backstory(value) {
+    set detailBackstory(value) {
         this._character.backstory = value;
     }
 
-    get personalityTraits() {
+    get detailPersonalityTraits() {
         return this._character.personalityTraits;
     }
 
-    set personalityTraits(value) {
+    set detailPersonalityTraits(value) {
         this._character.personalityTraits = value;
     }
 
-    get ideals() {
+    get detailIdeals() {
         return this._character.ideals;
     }
 
-    set ideals(value) {
+    set detailIdeals(value) {
         this._character.ideals = value;
     }
 
-    get bonds() {
+    get detailBonds() {
         return this._character.bonds;
     }
 
-    set bonds(value) {
+    set detailBonds(value) {
         this._character.bonds = value;
     }
 
-    get flaws() {
+    get detailFlaws() {
         return this._character.flaws;
     }
 
-    set flaws(value) {
+    set detailFlaws(value) {
         this._character.flaws = value;
     }
 
-    get allies() {
+    get detailAllies() {
         return this._character.allies;
     }
 
-    set allies(value) {
+    set detailAllies(value) {
         this._character.allies = value;
     }
 
-    get additionalFeatures() {
-        return this._character.additionalFeatures;
-    }
-
-    set additionalFeatures(value) {
-        this._character.additionalFeatures = value;
-    }
-
-    get treasure() {
+    get detailTreasure() {
         return this._character.treasure;
     }
 
-    set treasure(value) {
+    set detailTreasure(value) {
         this._character.treasure = value;
     }
 
-
-// ABILITIES GETTERS AND SETTERS
-
-    get proficiencies() {
-        const result = {}
-        Object.entries(this._character.abilities.proficiencies)
-            .sort()
-            .forEach((category) => result[category[0]] = category[1].sort());
-        return result
+    get detailClass() {
+        return this._character.class;
     }
 
-    get inspiration() {
-        return this._character.abilities.inspiration;
-    }
-
-    set inspiration(value) {
-        this._character.abilities.inspiration = value;
-    }
-
-    get strength() {
-        return this._character.abilities.strength;
-    }
-
-    set strength(value) {
-        this._character.abilities.strength = value;
-    }
-
-    get dexterity() {
-        return this._character.abilities.dexterity;
-    }
-
-    set dexterity(value) {
-        this._character.abilities.dexterity = value;
-    }
-
-    get constitution() {
-        return this._character.abilities.constitution;
-    }
-
-    set constitution(value) {
-        this._character.abilities.constitution = value;
-    }
-
-    get intelligence() {
-        return this._character.abilities.intelligence;
-    }
-
-    set intelligence(value) {
-        this._character.abilities.intelligence = value;
-    }
-
-    get wisdom() {
-        return this._character.abilities.wisdom;
-    }
-
-    set wisdom(value) {
-        this._character.abilities.wisdom = value;
-    }
-
-    get charisma() {
-        return this._character.abilities.charisma;
-    }
-
-    set charisma(value) {
-        this._character.abilities.charisma = value;
-    }
-
-// LINKED ABILITIES GETTERS AND SETTERS
-    get passivePerception() {
-        if (this.proficiencies.wisdom.includes("Perception")) {
-            return 10 + this.wisdomModifier + this.proficiencyBonus
+    set detailClass(value) {
+        if (classes.includes(value)) {
+            this._character.class = value;
+        } else {
+            console.error("ERROR: class is not in the known list")
         }
-        return 10 + this.wisdomModifier
     }
 
-// STATS GETTERS AND SETTERS
-    get armorClassBase() {
-        return this._character.stats.armorClass.base
+    get detailAlignment() {
+        return this._character.alignment
     }
 
-    set armorClassBase(value) {
-        this._character.stats.armorClass.base = value
-    }
-
-    get armorClassHasDexModifier() {
-        return this._character.stats.armorClass.hasDexModifier
-    }
-
-    set armorClassHasDexModifier(value) {
-        this._character.stats.armorClass.hasDexModifier = value
-    }
-
-    get armorClassShield() {
-        return this._character.stats.armorClass.shield
-    }
-
-    set armorClassShield(value) {
-        this._character.stats.armorClass.shield = value
-    }
-
-    get armorClassMisc() {
-        return this._character.stats.armorClass.misc
-    }
-
-    set armorClassMisc(value) {
-        this._character.stats.armorClass.misc = value
-    }
-
-    get initiativeBase() {
-        return this.dexterityModifier
-    }
-
-    get initiativeMisc() {
-        return this._character.stats.initiative.misc
-    }
-
-    set initiativeMisc(value) {
-        this._character.stats.initiative.misc = value
-    }
-
-    get speed() {
-        return this._character.stats.speed
-    }
-
-    set speed(value) {
-        this._character.stats.speed = value
-    }
-
-    get baseHitPoints() {
-        return this._character.stats.hitPoints.base
-    }
-
-    set baseHitPoints(value) {
-        this._character.stats.hitPoints.base = value
-    }
-
-    get hitPointsMisc() {
-        return this._character.stats.hitPoints.misc
-    }
-
-    set hitPointsMisc(value) {
-        this._character.stats.hitPoints.misc = value
-    }
-
-    get currentHitPoints() {
-        return this._character.stats.hitPoints.current
-    }
-
-    set currentHitPoints(value) {
-        if (value > this.hitPointMaximumValue) {
-            console.log("ERROR: hit points are higher than maximum hit points")
-            this._character.stats.hitPoints.current = this.hitPointMaximumValue
-            return
+    set detailAlignment(value) {
+        if (alignments.includes(value)) {
+            this._character.alignment = value;
+        } else {
+            console.error("ERROR: alignment is not in the known list")
         }
-
-        this._character.stats.hitPoints.current = value
     }
 
-    get tempHitPoints() {
-        return this._character.stats.hitPoints.temp
-    }
-
-    set tempHitPoints(value) {
-        this._character.stats.hitPoints.temp = value
-    }
-
-    get hitDice() {
-        return this._character.stats.hitDice.die
-    }
-
-    set hitDice(value) {
-        const die = value.toLowerCase().split("d")
-        if (die.length === 2 && dice.includes(die[1]) && Number.isInteger(Number(die[0]))) {
-            this._character.stats.hitDice.die = die[1];
-            this.currentHitDice = Number(die[0]);
-            return
+    get statArmorClass() {
+        let result = 0;
+        result += this.statArmorClassBase;
+        if (this.statArmorClassHasDexModifier) {
+            result += (this.abilityDexterityModifier < 2) ? this.abilityDexterityModifier : 2;
         }
-        console.log("ERROR: Dice is not in the known list")
+        result += this.statArmorClassShield;
+        result += this.statArmorClassMisc;
+        return result;
     }
 
-    get maxHitDice() {
-        return this._character.level
+    get statArmorClassBase() {
+        return this._character.stats.armorClass.base;
     }
 
-    get currentAmountHitDice() {
-        return this._character.stats.hitDice.current
+    set statArmorClassBase(value) {
+        this._character.stats.armorClass.base = value;
     }
 
-    set currentAmountHitDice(value) {
-        if (Number.isInteger(value) && value <= this.maxHitDice && value >= 0) {
-            this._character.stats.hitDice.current = value
+    get statArmorClassHasDexModifier() {
+        return this._character.stats.armorClass.hasDexModifier;
+    }
+
+    set statArmorClassHasDexModifier(value) {
+        this._character.stats.armorClass.hasDexModifier = value;
+    }
+
+    get statArmorClassShield() {
+        return this._character.stats.armorClass.shield;
+    }
+
+    set statArmorClassShield(value) {
+        this._character.stats.armorClass.shield = value;
+    }
+
+    get statArmorClassMisc() {
+        return this._character.stats.armorClass.misc;
+    }
+
+    set statArmorClassMisc(value) {
+        this._character.stats.armorClass.misc = value;
+    }
+
+    get statHitPointMaximum() {
+        const values = [this.statHitPointsBase, this.abilityConstitutionModifier];
+        if (this.statHitPointsMisc && this.statHitPointsMisc !== 0) {
+            values.push(this.statHitPointsMisc);
+        }
+        return values.join(" + ");
+    }
+
+    get statHitPointMaximumValue() {
+        return this.statHitPointsBase + this.abilityConstitutionModifier + this.statHitPointsMisc;
+    }
+
+    get statHitPointsBase() {
+        return this._character.stats.hitPoints.base;
+    }
+
+    set statHitPointsBase(value) {
+        this._character.stats.hitPoints.base = value;
+    }
+
+    get statHitPointsMisc() {
+        return this._character.stats.hitPoints.misc;
+    }
+
+    set statHitPointsMisc(value) {
+        this._character.stats.hitPoints.misc = value;
+    }
+
+    get statHitPointsTemp() {
+        return this._character.stats.hitPoints.temp;
+    }
+
+    set statHitPointsTemp(value) {
+        this._character.stats.hitPoints.temp = value;
+    }
+
+    get statHitPointsCurrent() {
+        return this._character.stats.hitPoints.current;
+    }
+
+    set statHitPointsCurrent(value) {
+        if (value > this.statHitPointMaximumValue) {
+            console.error("ERROR: hit points are higher than maximum hit points");
+            this._character.stats.hitPoints.current = this.statHitPointMaximumValue;
             return;
         }
-        console.log("ERROR: not enough hit dice")
+        this._character.stats.hitPoints.current = value;
     }
 
-    get currentHitDice() {
-        return this.currentAmountHitDice + 'D' + this._character.stats.hitDice.die
+    get statHitDie() {
+        return this._character.stats.hitDice.die;
     }
 
-    set currentHitDice(value) {
-        this.currentAmountHitDice = Number(value)
+    set statHitDie(value) {
+        const die = value.toLowerCase().split("d");
+        if (die.length === 2 && dice.includes(die[1]) && Number.isInteger(Number(die[0]))) {
+            this._character.stats.hitDice.die = die[1];
+            this.statCurrentAmountHitDice = Number(die[0]);
+        }
+        else if (dice.includes(value)) {
+            this._character.stats.hitDice.die = value
+        }
+        else {
+            console.log(value)
+            console.error("ERROR: Dice is not in the known list");
+        }
     }
 
-    get deathSaves() {
-        return this._character.stats.deathSaves
+    get statMaxHitDice() {
+        return this.detailLevel;
     }
 
-    set deathSaveSuccesses(value) {
-        this._character.stats.deathSaves.successes = value
+    get statCurrentAmountHitDice() {
+        return this._character.stats.hitDice.current;
     }
 
-    set deathSaveFailures(value) {
-        this._character.stats.deathSaves.failures = value
+    set statCurrentAmountHitDice(value) {
+        if (Number.isInteger(value) && value <= this.statMaxHitDice && value >= 0) {
+            this._character.stats.hitDice.current = value;
+        } else {
+            console.error("ERROR: not enough hit dice");
+        }
+    }
+
+    get statCurrentHitDice() {
+        return this.statCurrentAmountHitDice + 'D' + this.statHitDie;
+    }
+
+    get statSpeed() {
+        return this._character.stats.speed;
+    }
+
+    set statSpeed(value) {
+        this._character.stats.speed = value;
+    }
+
+    get statDeathSavesSuccesses() {
+        return this._character.stats.deathSaves.successes;
+    }
+
+    set statDeathSavesSuccesses(value) {
+        if (value < 0 || value > 3) {
+            console.error("ERROR: death saves successes must be between 0 and 3");
+            return;
+        }
+        this._character.stats.deathSaves.successes = value;
+    }
+
+    get statDeathSavesFailures() {
+        return this._character.stats.deathSaves.failures;
+    }
+
+    set statDeathSavesFailures(value) {
+        if (value < 0 || value > 3) {
+            console.error("ERROR: death saves failures must be between 0 and 3");
+            return;
+        }
+        this._character.stats.deathSaves.failures = value;
     }
 }
