@@ -1,4 +1,5 @@
 <script setup>
+"use strict"
 import router from "@/router.js";
 
 import {onBeforeMount, ref, reactive, watch} from 'vue'
@@ -7,6 +8,7 @@ import {range} from 'lodash';
 
 import {classes, alignments, abilityTypes, abilities, dice, armorTypes} from "@/models/Enums.js";
 import {calculateCoins} from "@/helpers/characterHelpers.js";
+import {ICON_ADD, ICON_REMOVE, ICON_INFO_SMALL} from "@/helpers/icons.js";
 
 // setup() {
 const loading = reactive({
@@ -26,8 +28,12 @@ const deleteModelData = reactive({
   question: undefined
 })
 
-const ICON_ADD = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 -960 960 960\" style=\"fill: var(--color-text); height: var(--font-size); width: var(--font-size);\"><path d=\"M640-121v-120H520v-80h120v-120h80v120h120v80H720v120h-80ZM120-240v-80h80v80h-80Zm160 0v-80h163q-3 21-2.5 40t3.5 40H280ZM120-400v-80h80v80h-80Zm160 0v-80h266q-23 16-41.5 36T472-400H280ZM120-560v-80h80v80h-80Zm160 0v-80h480v80H280ZM120-720v-80h80v80h-80Zm160 0v-80h480v80H280Z\"/></svg>"
-const ICON_REMOVE = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 -960 960 960\" style=\"fill: var(--color-text); height: var(--font-size); width: var(--font-size)\"><path d=\"M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z\"/></svg>"
+const toolTipModel = reactive({
+  open: false,
+  item: undefined,
+  content: undefined
+})
+
 const SPACE_CHAR = ' ‎'
 
 const resetDeleteModelData = () => {
@@ -130,8 +136,18 @@ const atClickSave = async () => {
     Object.entries(editing.items[0].value).forEach((attack) => {
       character.attackUpdate(attack[0], attack[1])
     });
+  } else if (editing.items[0].key.includes('features')) {
+    const feature = {
+      key: editing.items[0].key.split('.')[1],
+      name: undefined,
+      description: undefined
+    }
 
+    editing.items.forEach((i) => {
+      feature[i.key.split('.')[2]] = i.value
+    });
 
+    character.featureUpdate(feature.key, feature.name, feature.description)
   } else {
     editing.items.forEach((item) => {
       saveWithReflect(character, item.key, item.value)
@@ -553,6 +569,9 @@ onBeforeMount(async () => {
                 <p>Cantrips</p>
                 <p v-for="row in character.spellcastingCantrips">
                   - {{ row }}
+<!--                  <span class="clickable" v-html="ICON_INFO_SMALL" @click="() => {-->
+<!--                      console.log('info', row)-->
+<!--                    }"/>-->
                 </p>
                 <br/>
                 <p>Spells</p>
@@ -561,19 +580,29 @@ onBeforeMount(async () => {
                   <p v-if="spells.prepared.length > 0">- Level {{ lvl }}</p>
                   <p v-if="spells.prepared.length > 0" v-for="spell in spells.prepared">
                     {{ SPACE_CHAR.repeat(3) }}- {{ spell }}
+<!--                    <span class="clickable" v-html="ICON_INFO_SMALL" @click="() => {-->
+<!--                      console.log('info', spell)-->
+<!--                    }"/>-->
                   </p>
                 </div>
                 <p class="align-center">Attacks & Spellcasting</p>
               </div>
               <div class="container value-display align-start block no-border-right col flex-1">
                 <div class="flex-1" style="width: 100%">
-                  <div class="container row flex-1" v-for="(feature, index) in character.features">
+                  <div class="container row flex-1" v-for="(feature) in character.features">
                     <div class="flex-1 clickable container col" @click="atClickEdit([
-                       ['Features & Traits', `_character.features.${index}`, feature, ModelTypes.textarea]
+                       ['Feature or Trait', `features.${feature.name}.name`, feature.name, ModelTypes.text],
+                       ['Description', `features.${feature.name}.description`, feature.description, ModelTypes.textarea],
                     ])">
-                      <p v-for="(feat, index) in feature.split('\n')">{{
-                          index === 0 ? '- ' : SPACE_CHAR.repeat(3)
-                        }}{{ feat }}</p>
+                      <p>
+                        - {{ feature.name }}
+                        <span v-if="feature.description" class="clickable" v-html="ICON_INFO_SMALL" @click.stop
+                              @click="() => {
+                                toolTipModel.open = true
+                                toolTipModel.name = feature.name
+                                toolTipModel.description = feature.description
+                              }"/>
+                      </p>
                     </div>
                     <p class="clickable" @click="()=>{
                       deleteModelData.deleteFunction = async ()=>{
@@ -587,7 +616,7 @@ onBeforeMount(async () => {
                     }" v-html="ICON_REMOVE"></p>
                   </div>
                   <div class="container row flex-1 clickable" @click="()=>{
-                      character.featureAdd('New feature or trait')
+                      character.featureAdd('New feature or trait', 'this is what the feature or trait does')
                       firebaseHandler.setCharacterData(character.objectData)
                     }">
                     <p class="flex-1">--Add a feature or trait--</p>
@@ -667,7 +696,7 @@ onBeforeMount(async () => {
             </div>
           </div>
           <div class="container block value-display col flex-2 no-border-right no-border-bottom">
-            <div class="container row">
+            <div class="container row flex-1">
               <div class="container col flex-1 clickable" @click="atClickEdit([
                   ['Copper Coins', 'equipmentCoins', character.equipmentCoins, ModelTypes.coins],
               ])">
@@ -1040,9 +1069,9 @@ onBeforeMount(async () => {
     </div>
   </div>
 
-  <div v-if="showImageModel" class="popup container col" style="align-items: center">
+  <div v-if="showImageModel" class="popup container col" style="align-items: center" @click="showImageModel=false">
     <div class="container row popup-display">
-      <div class="container block value-display col">
+      <div class="container block value-display col" @click.stop>
         <div class="container row input-row">
           <div class="container col">
             <label for="characterImage">Character Appearance</label>
@@ -1056,9 +1085,10 @@ onBeforeMount(async () => {
     </div>
   </div>
 
-  <div v-if="deleteModelData.open" class="popup container col" style="align-items: center">
+  <div v-if="deleteModelData.open" class="popup container col" style="align-items: center"
+       @click="resetDeleteModelData">
     <div class="container row popup-display">
-      <div class="container block value-display col">
+      <div class="container block value-display col" @click.stop>
         <div class="container row input-row">
           <div class="container col">
             <p>{{ deleteModelData.question }}</p>
@@ -1068,6 +1098,31 @@ onBeforeMount(async () => {
         <div class="container row button-row">
           <button @click="deleteModelData.deleteFunction">Confirm</button>
           <button @click="resetDeleteModelData">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div v-if="toolTipModel.open" class="popup container col" style="align-items: center" @click="()=>{
+            toolTipModel.open = false
+            toolTipModel.name = undefined
+            toolTipModel.description = undefined
+          }">
+    <div class="container row popup-display">
+      <div class="container block value-display col" @click.stop>
+        <div class="container row input-row">
+          <div class="container col">
+            <h2>{{ toolTipModel.name }}</h2>
+            <textarea id="tooltip" readonly :value="toolTipModel.description"></textarea>
+          </div>
+        </div>
+        <div class="container row button-row">
+          <button @click="()=>{
+            toolTipModel.open = false
+            toolTipModel.name = undefined
+            toolTipModel.description = undefined
+          }">Close
+          </button>
         </div>
       </div>
     </div>
@@ -1147,6 +1202,28 @@ onBeforeMount(async () => {
         }
       }
     }
+  }
+}
+/* Modern browsers with `scrollbar-*` support */
+@supports (scrollbar-width: auto) {
+  #tooltip {
+    scrollbar-color: var(--color-filler) transparent;
+    scrollbar-width: thin;
+  }
+}
+#tooltip{
+  width: 100%;
+  height: 15rem;
+  padding: .5rem;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  resize: none;
+  --scrollbar-color-track: #0000ff;
+  --scrollbar-color-thumb: #ff69b4;
+
+  &:focus-visible {
+    outline: none;
   }
 }
 </style>

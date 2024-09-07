@@ -1,3 +1,4 @@
+"use strict"
 import {range} from "lodash";
 import {abilityTypes, proficiencyTypes} from "@/models/Enums.js";
 
@@ -44,8 +45,7 @@ export function defaultCharacter(id) {
         additionalFeatures: "",
         treasure: "",
         abilities: {
-            proficiencies: {
-            },
+            proficiencies: {},
             inspiration: 0,
         },
         stats: {
@@ -88,12 +88,10 @@ export function defaultCharacter(id) {
     }
     const defaultSpellBody = {
         prepared: [],
-        known:
-            [],
-        spellSlots:
-            0,
-        spellSlotsExpanded:
-            0
+        known: [],
+        spellSlots: 0,
+        spellSlotsExpanded: 0,
+        // spellDescriptions: {}
     }
 
     range(1, 10).forEach(i => {
@@ -110,4 +108,28 @@ export function defaultCharacter(id) {
 
 
     return defaultCharacter
+}
+
+function typeOfProp(item) {
+    return Array.isArray(item) ? 'list' : typeof item
+}
+
+/**
+ * Converts character object to be compatible with the frontend
+ * @param character
+ * @returns character
+ */
+export function CharacterConversions(character) {
+    if ('features' in character && typeOfProp(character.features) === 'list') {
+        const features = {}
+
+        character.features.forEach(feature => {
+            features[feature] = {
+                name: feature,
+                description: "",
+            }
+        })
+        character.features = features
+    }
+    return character
 }

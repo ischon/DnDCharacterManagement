@@ -1,6 +1,8 @@
+"use strict"
+
 import {classes, alignments, abilityTypes, proficiencyTypes, armorTypes, abilities, dice} from "@/models/Enums.js";
-import {Attack, Item, defaultCharacter} from "@/models/CharacterHelperClasses.js";
-import {calculateCoins, calculateAbilityModifier, toCopperCoins} from "@/helpers/characterHelpers.js";;
+import {Attack, Item, defaultCharacter, CharacterConversions} from "@/models/CharacterHelperClasses.js";
+import {calculateCoins, calculateAbilityModifier, toCopperCoins} from "@/helpers/characterHelpers.js";
 
 export class Character {
     default(id = undefined) {
@@ -21,7 +23,7 @@ export class Character {
             object = this.default(id);
         }
 
-        this._character = object;
+        this._character = CharacterConversions(object);
     }
 
     get id() {
@@ -258,20 +260,44 @@ export class Character {
         this._character.additionalFeatures = value
     }
 
-    featureAdd(feature) {
-        if (!this._character.features.includes(feature)) {
-            this._character.features.push(feature)
+    featureAdd(feature, description) {
+        if (this._character.features[feature] !== undefined) {
+            return
         }
+        this._character.features[feature] = {
+            name: feature,
+            description: description
+        }
+    }
+
+    featureUpdate(oldFeature, feature, description) {
+        if (this._character.features[oldFeature] === undefined) {
+            console.error("ERROR: feature does not exists")
+            return
+        }
+        if (oldFeature !== feature) {
+            this._character.features[feature] = this._character.features[oldFeature]
+            delete this._character.features[oldFeature]
+            this._character.features[feature].name = feature
+        }
+        this._character.features[feature].description = description
     }
 
     get features() {
-        return this._character.features
+        const result = {}
+        Object.entries(this._character.features)
+            .sort()
+            .forEach((category) => result[category[0]] = category[1]);
+
+        return result
     }
 
     featureRemove(feature) {
-        if (this._character.features.includes(feature)) {
-            this._character.features.splice(this._character.features.indexOf(feature), 1)
+        if (this._character.features[feature] === undefined) {
+            return
         }
+
+        delete this._character.features[feature]
     }
 
 
@@ -772,11 +798,9 @@ export class Character {
         if (die.length === 2 && dice.includes(die[1]) && Number.isInteger(Number(die[0]))) {
             this._character.stats.hitDice.die = die[1];
             this.statCurrentAmountHitDice = Number(die[0]);
-        }
-        else if (dice.includes(value)) {
+        } else if (dice.includes(value)) {
             this._character.stats.hitDice.die = value
-        }
-        else {
+        } else {
             console.log(value)
             console.error("ERROR: Dice is not in the known list");
         }

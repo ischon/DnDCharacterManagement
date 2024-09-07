@@ -1,3 +1,4 @@
+"use strict"
 import {initializeApp} from "firebase/app";
 import {getDoc, getFirestore} from "firebase/firestore";
 import {getAuth} from "firebase/auth";

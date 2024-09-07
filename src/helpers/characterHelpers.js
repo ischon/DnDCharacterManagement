@@ -1,3 +1,4 @@
+"use strict"
 export function calculateCoins(coins) {
     /*
     Coin	                CP      SP	    EP	    GP	    PP

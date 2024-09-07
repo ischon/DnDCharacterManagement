@@ -1,3 +1,4 @@
+"use strict"
 export const classes = [
     "Artificer",
     "Barbarian",

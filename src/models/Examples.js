@@ -1,3 +1,4 @@
+"use strict"
 import {Character} from "@/models/Character.js";
 
 // export const owin = new Character(undefined, "lz825uz4")

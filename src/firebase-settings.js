@@ -1,3 +1,4 @@
+"use strict"
 export const firebaseSettings = {
   "apiKey": import.meta.env.VITE_apiKey,
   "authDomain": import.meta.env.VITE_authDomain,
