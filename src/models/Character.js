@@ -62,11 +62,12 @@ export class Character {
     }
 
     proficiencyToggle(type, name) {
-        if (this.proficiencies[type].includes(name)) {
-            this.proficiencyRemove(type, name)
+        const _type = type.toLowerCase()
+        if (this.proficiencies[_type].includes(name)) {
+            this.proficiencyRemove(_type, name)
             return;
         }
-        this.proficiencyAdd(type, name)
+        this.proficiencyAdd(_type, name)
     }
 
     proficiencyRemove(type, name) {

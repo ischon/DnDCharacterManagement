@@ -357,9 +357,11 @@ onBeforeMount(async () => {
             </div>
             <div class="container flex-1 block row labeled-row no-border-left clickable"
                  @click="atClickEdit([
-                      ['Inspiration', 'abilityInspiration', character.abilityInspiration, ModelTypes.number],
+                      ['Inspiration', 'abilityInspiration', character.abilityInspiration, ModelTypes.checkbox],
                  ])">
-              <div class="value flex-1"><p>{{ formatScore(character.abilityInspiration) }}</p></div>
+              <div class="value flex-1">
+                <div class="check" :class="{ selected: character.abilityInspiration }"></div>
+              </div>
               <div class="label flex-2"><p>Inspiration</p></div>
             </div>
             <div v-for="(ability, ability_name) in character.abilities"
@@ -379,7 +381,6 @@ onBeforeMount(async () => {
               <div class="container skill col flex-2">
                 <!--SKILLS-->
                 <div v-for="(skill_stats, skill_name) in ability.skills" class="skill-row flex-1">
-                  <!-- TODO: Find a way to actively update this property when toggled on or of -->
                   <div class="proficient clickable"
                        :class="{ selected: character.proficiencies[ability_name.toLowerCase()].includes(skill_name) }"
                        @click="atClickProficiency(ability_name, skill_name)"></div>
