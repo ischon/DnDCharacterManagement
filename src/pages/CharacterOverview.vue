@@ -8,7 +8,7 @@ import {range} from 'lodash';
 
 import {classes, alignments, abilityTypes, abilities, dice, armorTypes} from "@/models/Enums.js";
 import {calculateCoins} from "@/helpers/characterHelpers.js";
-import {ICON_ADD, ICON_REMOVE, ICON_INFO_SMALL} from "@/helpers/icons.js";
+import {ICON_ADD, ICON_REMOVE, ICON_MINUS, ICON_INFO_SMALL} from "@/helpers/icons.js";
 
 // setup() {
 const loading = reactive({
@@ -579,6 +579,12 @@ onBeforeMount(async () => {
                 <div :style="{'display: none': spells.prepared.length > 0}"
                      v-for="(spells, lvl) in character.spellcastingSpells">
                   <p v-if="spells.prepared.length > 0">- Level {{ lvl }}</p>
+                  <p v-if="spells.prepared.length > 0">{{SPACE_CHAR}}{{SPACE_CHAR}} Slots remaining {{spells.spellSlots - spells.spellSlotsExpanded}}
+                    <span @click="async ()=>{
+                      character.spellcastingSpellSlotsExpanded_set(lvl, spells.spellSlotsExpanded + 1)
+                      await firebaseHandler.setCharacterData(character.objectData)
+                    }" class="clickable" v-html="ICON_MINUS" />
+                  </p>
                   <p v-if="spells.prepared.length > 0" v-for="spell in spells.prepared">
                     {{ SPACE_CHAR.repeat(3) }}- {{ spell }}
 <!--                    <span class="clickable" v-html="ICON_INFO_SMALL" @click="() => {-->
