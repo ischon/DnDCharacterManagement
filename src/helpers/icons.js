@@ -21,5 +21,5 @@ export const ICON_MINUS = buildIcon(MINUS_BODY, false)
 
 export const ICON_ADD_SMALL = buildIcon(ADD_BODY, true)
 export const ICON_REMOVE_SMALL = buildIcon(REMOVE_BODY, true)
-export const ICON_MINUS_SMALL = buildIcon(INFO_BODY, true)
-export const ICON_INFO_SMALL = buildIcon(MINUS_BODY, true)
+export const ICON_MINUS_SMALL = buildIcon(MINUS_BODY, true)
+export const ICON_INFO_SMALL = buildIcon(INFO_BODY, true)
