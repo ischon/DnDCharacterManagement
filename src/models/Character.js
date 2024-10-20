@@ -182,6 +182,7 @@ export class Character {
         let spells = {}
         // prepared spells
         for (const [key, value] of Object.entries(this._character.spellcasting.spells)) {
+            value.known = value.known.sort()
             spells[key] = value
         }
         return spells
