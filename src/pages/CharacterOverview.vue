@@ -287,7 +287,30 @@ onBeforeMount(async () => {
 
 <template>
   <div v-if="!loading.character">
+    <div class="page container col" id="quick-actions">
+      <div class="header container row flex-1">
+        <h1>Quick Actions</h1>
+      </div>
+      <div class="body container row flex-1">
+        <div class="block container value-display justify-center col clickable"
+             @click="">
+          <p class="value medium no-transform ">Long Rest</p>
+        </div>
+        <div class="block container value-display justify-center col clickable"
+             @click="">
+          <p class="value medium no-transform">Short Rest</p>
+        </div>
+        <div class="block container value-display justify-center col clickable"
+             @click="">
+          <p class="value medium no-transform">Level Up</p>
+        </div>
+      </div>
+    </div>
+
     <div class="page container col" id="page-1"> <!-- Page 1 -->
+      <div class="header container row flex-1">
+        <h1>Character Overview</h1>
+      </div>
       <div class="header container row flex-1"> <!-- Header -->
         <div class="container col flex-1"> <!-- Left Column -->
           <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
@@ -570,9 +593,9 @@ onBeforeMount(async () => {
                 <p>Cantrips</p>
                 <p v-for="row in character.spellcastingCantrips">
                   - {{ row }}
-<!--                  <span class="clickable" v-html="ICON_INFO_SMALL" @click="() => {-->
-<!--                      console.log('info', row)-->
-<!--                    }"/>-->
+                  <!--                  <span class="clickable" v-html="ICON_INFO_SMALL" @click="() => {-->
+                  <!--                      console.log('info', row)-->
+                  <!--                    }"/>-->
                 </p>
                 <br/>
                 <p>Spells</p>
@@ -581,8 +604,8 @@ onBeforeMount(async () => {
                   <div class="container row" v-if="spells.prepared.length > 0">
                     <p>- Level {{ lvl }}</p>
                     <p class="flex-1"></p>
-                    <p>{{spells.spellSlots - spells.spellSlotsExpanded}} Slots remaining
-                    <span @click="async ()=>{
+                    <p>{{ spells.spellSlots - spells.spellSlotsExpanded }} Slots remaining
+                      <span @click="async ()=>{
                       character.spellcastingSpellSlotsExpanded_set(lvl, spells.spellSlotsExpanded + 1)
                       await firebaseHandler.setCharacterData(character.objectData)
                     }" class="clickable">—</span>
@@ -1213,6 +1236,7 @@ onBeforeMount(async () => {
     }
   }
 }
+
 /* Modern browsers with `scrollbar-*` support */
 @supports (scrollbar-width: auto) {
   #tooltip {
@@ -1220,7 +1244,8 @@ onBeforeMount(async () => {
     scrollbar-width: thin;
   }
 }
-#tooltip{
+
+#tooltip {
   width: 100%;
   height: 15rem;
   padding: .5rem;
