@@ -200,6 +200,15 @@ export class Character {
     }
 
     spellcastingSpellSlotsExpanded_set(level, value) {
+        if (value < 0) {
+            console.error("ERROR: spell slots expanded must be a positive integer")
+            return
+        }
+        if (value > this.spellcastingSpellSlots_get(level)) {
+            console.error("ERROR: spell slots expanded must be less or equal to spell slots")
+            return
+        }
+
         this._character.spellcasting.spells[level].spellSlotsExpanded = value
     }
 

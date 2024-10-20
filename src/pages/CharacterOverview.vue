@@ -8,7 +8,7 @@ import {range} from 'lodash';
 
 import {classes, alignments, abilityTypes, abilities, dice, armorTypes} from "@/models/Enums.js";
 import {calculateCoins} from "@/helpers/characterHelpers.js";
-import {ICON_ADD, ICON_REMOVE, ICON_INFO_SMALL} from "@/helpers/icons.js";
+import {ICON_ADD, ICON_REMOVE, ICON_MINUS, ICON_INFO_SMALL} from "@/helpers/icons.js";
 
 // setup() {
 const loading = reactive({
@@ -576,15 +576,23 @@ onBeforeMount(async () => {
                 </p>
                 <br/>
                 <p>Spells</p>
-                <div :style="{'display: none': spells.prepared.length > 0}"
+                <div :style="{'display: none': spells.prepared.length > 0}" style="width: 100%"
                      v-for="(spells, lvl) in character.spellcastingSpells">
-                  <p v-if="spells.prepared.length > 0">- Level {{ lvl }}</p>
+                  <div class="container row" v-if="spells.prepared.length > 0">
+                    <p>- Level {{ lvl }}</p>
+                    <p class="flex-1"></p>
+                    <p>{{spells.spellSlots - spells.spellSlotsExpanded}} Slots remaining
+                    <span @click="async ()=>{
+                      character.spellcastingSpellSlotsExpanded_set(lvl, spells.spellSlotsExpanded + 1)
+                      await firebaseHandler.setCharacterData(character.objectData)
+                    }" class="clickable">—</span>
+                    </p>
+                  </div>
+
                   <p v-if="spells.prepared.length > 0" v-for="spell in spells.prepared">
                     {{ SPACE_CHAR.repeat(3) }}- {{ spell }}
-<!--                    <span class="clickable" v-html="ICON_INFO_SMALL" @click="() => {-->
-<!--                      console.log('info', spell)-->
-<!--                    }"/>-->
                   </p>
+                  <p v-if="spells.prepared.length > 0"></p>
                 </div>
                 <p class="align-center">Attacks & Spellcasting</p>
               </div>
