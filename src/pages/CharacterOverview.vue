@@ -6,27 +6,23 @@ import {onBeforeMount, ref, reactive, watch} from 'vue'
 import {FirebaseHandler} from "@/helpers/firebase.js";
 import {range} from 'lodash';
 
-import {classes, alignments, abilityTypes, abilities, dice, armorTypes} from "@/models/Enums.js";
-import {calculateCoins} from "@/helpers/characterHelpers.js";
+import {calculateCoins, longRest} from "@/helpers/characterHelpers.js";
+import {formatScore, formatLength, formatWeight} from "@/helpers/formatHelpers.js";
 import {ICON_ADD, ICON_REMOVE, ICON_MINUS, ICON_INFO_SMALL} from "@/helpers/icons.js";
+
+import {ModelTypes, EditPopup} from "@/helpers/editPopupHelper.js";
+
+const SPACE_CHAR = ' ‎'
 
 // setup() {
 const loading = reactive({
   character: true,
   image: true
 })
-const editing = reactive({
-  open: false,
-  items: []
-})
+
+const editPopup = reactive(new EditPopup())
 
 const showImageModel = ref(false)
-const deleteModelData = reactive({
-  open: false,
-  item: undefined,
-  deleteFunction: undefined,
-  question: undefined
-})
 
 const toolTipModel = reactive({
   open: false,
@@ -34,45 +30,26 @@ const toolTipModel = reactive({
   content: undefined
 })
 
-const SPACE_CHAR = ' ‎'
 
-const resetDeleteModelData = () => {
-  deleteModelData.open = false
-  deleteModelData.item = undefined
-  deleteModelData.deleteFunction = undefined
-  deleteModelData.question = undefined
+const confirmModelData = reactive({
+  open: false,
+  item: undefined,
+  confirmFunction: undefined,
+  question: undefined
+})
+
+const resetConfirmModelData = () => {
+  confirmModelData.open = false
+  confirmModelData.item = undefined
+  confirmModelData.confirmFunction = undefined
+  confirmModelData.question = undefined
 }
 
-class ModelTypes {
-  static disabled = new ModelTypes('disabled', 'input')
-  // static color = new ModelTypes('color', 'input')
-  // static date = new ModelTypes('date', 'input')
-  // static file = new ModelTypes('file', 'input')
-  // static image = new ModelTypes('image', 'input')
-  static number = new ModelTypes('number', 'input')
-  static checkbox = new ModelTypes('checkbox', 'input')
-  static text = new ModelTypes('text', 'input')
-  static textarea = new ModelTypes('textarea', 'textarea')
-  static classes = new ModelTypes('classes', 'select', classes)
-  static alignments = new ModelTypes('alignments', 'select', alignments)
-  static abilityTypes = new ModelTypes('abilityTypes', 'select', abilityTypes)
-  // static proficiencyTypes = new ModelTypes('proficiencyTypes', 'select', proficiencyTypes)
-  static abilities = new ModelTypes('abilities', 'select', abilities)
-  static die = new ModelTypes('dice', 'dice', dice)
-  static weapon = new ModelTypes('weapon', 'weapon')
-  static coins = new ModelTypes('coins', 'coins')
-  static armor = new ModelTypes('armor', 'select', armorTypes)
-
-  constructor(type, element, options = undefined) {
-    this.type = type;
-    this.element = element;
-    this.options = options;
-  }
-}
 
 const characterId = router.currentRoute.value.params.id
 const firebaseHandler = new FirebaseHandler()
 let character = undefined
+const editingPopup = new EditPopup()
 
 const characterImage = ref(undefined)
 
@@ -83,18 +60,6 @@ watch(
     }
 );
 
-const atClickEdit = (items) => {
-  editing.open = true
-  items.forEach((item) => {
-    editing.items.push({
-      name: item[0],
-      key: item[1],
-      value: item[2],
-      type: item[3]
-    })
-  })
-}
-
 const atClickProficiency = (ability_name, skill_name) => {
   character.proficiencyToggle(ability_name, skill_name);
   firebaseHandler.setCharacterData(character.objectData);
@@ -104,64 +69,23 @@ const atClickPrepared = (spell_lvl, spell_name) => {
   firebaseHandler.setCharacterData(character.objectData);
 }
 
-const resetModelData = () => {
-  editing.open = false;
-  editing.items = []
-}
-
-const saveWithReflect = (base, path, value) => {
-  if (path.includes('.')) {
-    const [head, ...tail] = path.split('.')
-    saveWithReflect(base[head], tail.join('.'), value)
-  } else {
-    Reflect.set(base, path, value)
+const openLongRestModal = () => {
+  confirmModelData.open = true
+  confirmModelData.question = 'Are you sure you want to take a Long rest?'
+  confirmModelData.confirmFunction = async () => {
+    longRest(character, true)
+    await firebaseHandler.setCharacterData(character.objectData)
+    confirmModelData.open = false
   }
 }
-
-const atClickSave = async () => {
-  if (editing.items[0].key.includes('tag-equipment')) {
-    const item = {
-      key: editing.items[0].key.split('.')[1],
-      name: undefined,
-      count: undefined,
-      weight: undefined,
-      index: undefined
-    }
-    editing.items.forEach((i) => {
-      item[i.key.split('.')[2]] = i.value
-    });
-
-    character.equipmentUpdate(item.key, item.name, item.count, item.weight, item.index)
-  } else if (editing.items[0].key.includes('attacks')) {
-    Object.entries(editing.items[0].value).forEach((attack) => {
-      character.attackUpdate(attack[0], attack[1])
-    });
-  } else if (editing.items[0].key.includes('features')) {
-    const feature = {
-      key: editing.items[0].key.split('.')[1],
-      name: undefined,
-      description: undefined
-    }
-
-    editing.items.forEach((i) => {
-      feature[i.key.split('.')[2]] = i.value
-    });
-
-    character.featureUpdate(feature.key, feature.name, feature.description)
-  } else {
-    editing.items.forEach((item) => {
-      saveWithReflect(character, item.key, item.value)
-    });
-  }
-
-  await firebaseHandler.setCharacterData(character.objectData)
-  resetModelData()
+const openShortRestModal = () => {
+  editingPopup.atClickEdit(character, [
+      ['Max hit Dice', '', character.statMaxHitDice, ModelTypes.disabled],
+    ['Usable hit Dice', 'statCurrentAmountHitDice', character.statCurrentAmountHitDice, ModelTypes.number],
+    ['Max hit points', '', character.statHitPointMaximumValue, ModelTypes.disabled],
+    [`Current hit points`, 'statHitPointsCurrent', character.statHitPointsCurrent, ModelTypes.number],
+  ])
 }
-
-const atClickCancel = () => {
-  resetModelData()
-}
-
 
 const uploadImage = async (e) => {
   const image = e.target.files[0];
@@ -185,91 +109,12 @@ const uploadImage = async (e) => {
 
 }
 
-const formatScore = (score) => {
-  return score !== 0 ? ((score > 0) ? '+' : '') + score : '-'
-}
-
-// 1 lb = 0.45359237 kg
-const formatWeight = (pounds) => {
-  if (pounds === 0) return '-'
-
-  const weight = [[pounds], [(pounds * 0.45359237)]]
-
-  // pounds and ounces
-  if (weight[0][0] < 0.1) {
-    // pounds to ounces conversion (times 16)
-    weight[0][0] = weight[0][0] * 16
-    weight[0][2] = 'oz'
-  } else {
-    weight[0][2] = 'lb'
-  }
-
-  // kilo's and grams
-  if (weight[1][0] < 0.1) {
-    // kilograms to grams conversion (times 1000)
-    weight[1][0] = weight[1][0] * 1000
-    weight[1][2] = 'g'
-  } else {
-    weight[1][2] = 'kg'
-  }
-
-  for (let i = 0; i < weight.length; i++) {
-    weight[i][1] = weight[i][0]
-    if (weight[i][1] % 1 !== 0) {
-      weight[i][1] = weight[i][1]
-          .toFixed(1)
-          .replace('.', ',')
-      if (weight[i][1].endsWith(',0')) {
-        weight[i][1] = weight[i][1].slice(0, -2)
-      }
-    }
-  }
-
-  return `${weight[0][1]} ${weight[0][2]} | ${weight[1][1]} ${weight[1][2]}`
-}
-
-const formatLength = (foot) => {
-  if (foot === 0) return '-'
-
-  const length = [[foot], [(foot * 0.3048)]]
-
-  // pounds and ounces
-  if (length[0][0] < 1) {
-    // feet to inch conversion (times 12)
-    length[0][0] = length[0][0] * 12
-    length[0][2] = 'in'
-  } else {
-    length[0][2] = 'ft'
-  }
-
-  // kilo's and grams
-  if (length[1][0] < 1) {
-    // meter to centimeter conversion (times 100)
-    length[1][0] = length[1][0] * 100
-    length[1][2] = 'cm'
-  } else {
-    length[1][2] = 'm'
-  }
-
-  for (let i = 0; i < length.length; i++) {
-    length[i][1] = length[i][0]
-    if (length[i][1] % 1 !== 0) {
-      length[i][1] = length[i][1]
-          .toFixed(1)
-          .replace('.', ',')
-      if (length[i][1].endsWith(',0')) {
-        length[i][1] = length[i][1].slice(0, -2)
-      }
-    }
-  }
-
-  return `${length[0][1]} ${length[0][2]} | ${length[1][1]} ${length[1][2]}`
-}
 onBeforeMount(async () => {
   await firebaseHandler.setup()
   firebaseHandler.getCharacterData(characterId).then((data) => {
     character = reactive(data)
     loading.character = false
+    editingPopup.configure(firebaseHandler, character)
   }).catch((error) => {
     loading.character = false
     console.error(error, 'No character found')
@@ -281,6 +126,7 @@ onBeforeMount(async () => {
     loading.image = false
     console.error(error, 'No image found')
   })
+
 })
 
 </script>
@@ -293,11 +139,11 @@ onBeforeMount(async () => {
       </div>
       <div class="body container row flex-1">
         <div class="block container value-display justify-center col clickable"
-             @click="">
+             @click="openLongRestModal">
           <p class="value medium no-transform ">Long Rest</p>
         </div>
         <div class="block container value-display justify-center col clickable"
-             @click="">
+             @click="openShortRestModal">
           <p class="value medium no-transform">Short Rest</p>
         </div>
         <div class="block container value-display justify-center col clickable"
@@ -314,7 +160,7 @@ onBeforeMount(async () => {
       <div class="header container row flex-1"> <!-- Header -->
         <div class="container col flex-1"> <!-- Left Column -->
           <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
-               @click="atClickEdit([['Character Name', 'detailName', character.detailName, ModelTypes.text]])">
+               @click="editingPopup.atClickEdit(character, [['Character Name', 'detailName', character.detailName, ModelTypes.text]])">
             <p class="flex-1 value medium no-transform">{{ character.detailName }}</p>
             <p>Character Name</p>
           </div>
@@ -322,7 +168,7 @@ onBeforeMount(async () => {
         <div class="container col flex-2"> <!-- Right Column -->
           <div class="container row">
             <div class="container block value-display col flex-1 no-border-top clickable"
-                 @click="atClickEdit([
+                 @click="editingPopup.atClickEdit(character, [
                      ['Class', 'detailClass', character.detailClass, ModelTypes.classes],
                      ['Level', 'detailLevel', character.detailLevel, ModelTypes.number]
                      ])">
@@ -332,7 +178,7 @@ onBeforeMount(async () => {
               <p>Class & Level</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top clickable"
-                 @click="atClickEdit([
+                 @click="editingPopup.atClickEdit(character, [
                      ['Background', 'detailBackground', character.detailBackground, ModelTypes.text],
                      ])">
               <p class="flex-1 value medium no-transform">{{ character.detailBackground }}</p>
@@ -345,21 +191,21 @@ onBeforeMount(async () => {
           </div>
           <div class="container row">
             <div class="container block value-display col flex-1 clickable"
-                 @click="atClickEdit([
+                 @click="editingPopup.atClickEdit(character, [
                      ['Race', 'detailRace', character.detailRace, ModelTypes.text],
                      ])">
               <p class="flex-1 value medium no-transform">{{ character.detailRace }}</p>
               <p>Race</p>
             </div>
             <div class="container block value-display col flex-1 clickable"
-                 @click="atClickEdit([
+                 @click="editingPopup.atClickEdit(character, [
                      ['Alignment', 'detailAlignment', character.detailAlignment, ModelTypes.alignments],
                      ])">
               <p class="flex-1 value medium no-transform">{{ character.detailAlignment }}</p>
               <p>Alignment</p>
             </div>
             <div class="container block value-display col flex-1 no-border-right clickable"
-                 @click="atClickEdit([
+                 @click="editingPopup.atClickEdit(character, [
                      ['Experience points', 'detailExperiencePoints', character.detailExperiencePoints, ModelTypes.number],
                      ])">
               <p class="flex-1 value medium no-transform">
@@ -379,7 +225,7 @@ onBeforeMount(async () => {
               <div class="label flex-2"><p>Proficiency Bonus</p></div>
             </div>
             <div class="container flex-1 block row labeled-row no-border-left clickable"
-                 @click="atClickEdit([
+                 @click="editingPopup.atClickEdit(character, [
                       ['Inspiration', 'abilityInspiration', character.abilityInspiration, ModelTypes.checkbox],
                  ])">
               <div class="value flex-1">
@@ -391,7 +237,7 @@ onBeforeMount(async () => {
                  class="container row flex-2 block ability-block no-border-left">
               <!--ABILITY-->
               <div class="container ability col flex-1 clickable"
-                   @click="atClickEdit([
+                   @click="editingPopup.atClickEdit(character, [
                       [ability_name, `ability${ability_name}`, ability.score, ModelTypes.number],
                  ])">
                 <div class="ability-modifier flex-1"><p class="content no-label">{{ formatScore(ability.modifier) }}</p>
@@ -423,7 +269,7 @@ onBeforeMount(async () => {
                 <!--STATS-->
                 <div class="container row flex-1">
                   <div class="container block value-display col flex-1 clickable"
-                       @click="atClickEdit([
+                       @click="editingPopup.atClickEdit(character, [
                           ['Armor class basis', 'statArmorClassBase', character.statArmorClassBase, ModelTypes.number],
                           [`Type of Armor`, 'statArmorClassArmorType', character.statArmorClassArmorType, ModelTypes.armor],
                           ['Added protection from a shield', 'statArmorClassShield', character.statArmorClassShield, ModelTypes.number],
@@ -433,7 +279,7 @@ onBeforeMount(async () => {
                     <p>Armor Class</p>
                   </div>
                   <div class="container block value-display col flex-1 clickable"
-                       @click="atClickEdit([
+                       @click="editingPopup.atClickEdit(character, [
                           ['Dexterity modifier', 'abilityDexterityModifier', character.abilityDexterityModifier, ModelTypes.disabled],
                           [`Additional modifier`, 'abilityInitiativeMisc', character.abilityInitiativeMisc, ModelTypes.number],
                        ])">
@@ -441,7 +287,7 @@ onBeforeMount(async () => {
                     <p>Initiative</p>
                   </div>
                   <div class="container block value-display col flex-1 clickable"
-                       @click="atClickEdit([
+                       @click="editingPopup.atClickEdit(character, [
                           ['Speed', 'statSpeed', character.statSpeed, ModelTypes.number],
                        ])">
                     <p class="flex-1 value">{{ character.statSpeed }}</p>
@@ -449,7 +295,7 @@ onBeforeMount(async () => {
                   </div>
                 </div>
                 <div class="container block value-display col flex-1 clickable"
-                     @click="atClickEdit([
+                     @click="editingPopup.atClickEdit(character, [
                           ['Hit points basis', 'statHitPointsBase', character.statHitPointsBase, ModelTypes.number],
                           ['Constitution modifier', 'abilityConstitutionModifier', character.abilityConstitutionModifier, ModelTypes.disabled],
                           ['Additional hit points', 'statHitPointsMisc', character.statHitPointsMisc, ModelTypes.number],
@@ -460,7 +306,7 @@ onBeforeMount(async () => {
                   <p>Current Hit Points</p>
                 </div>
                 <div class="container block value-display col flex-1 clickable"
-                     @click="atClickEdit([
+                     @click="editingPopup.atClickEdit(character, [
                           ['Temporary hit points', 'statHitPointsTemp', character.statHitPointsTemp, ModelTypes.number],
                        ])">
                   <p class="flex-1 value">{{
@@ -470,7 +316,7 @@ onBeforeMount(async () => {
                 </div>
                 <div class="container row flex-1">
                   <div class="container block value-display col flex-1 clickable"
-                       @click="atClickEdit([
+                       @click="editingPopup.atClickEdit(character, [
                           ['Hit Die', 'statHitDie', character.statHitDie, ModelTypes.die],
                           ['Usable hit Dice', 'statCurrentAmountHitDice', character.statCurrentAmountHitDice, ModelTypes.number],
                        ])">
@@ -479,7 +325,7 @@ onBeforeMount(async () => {
                     <p>Hit Dice</p>
                   </div>
                   <div class="container block value-display col flex-1 clickable"
-                       @click="atClickEdit([
+                       @click="editingPopup.atClickEdit(character, [
                          ['Successful rolls', 'statDeathSavesSuccesses', character.statDeathSavesSuccesses, ModelTypes.number],
                          ['Failed rolls', 'statDeathSavesFailures', character.statDeathSavesFailures, ModelTypes.number],
                   ])">
@@ -506,7 +352,7 @@ onBeforeMount(async () => {
               </div>
               <div class="container col flex-1">
                 <div class="container block value-display col flex-1 no-border-right clickable"
-                     @click="atClickEdit([
+                     @click="editingPopup.atClickEdit(character, [
                          ['Traits', 'detailPersonalityTraits', character.detailPersonalityTraits, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
@@ -517,7 +363,7 @@ onBeforeMount(async () => {
                   <p>Personality Traits</p>
                 </div>
                 <div class="container block value-display col flex-1 no-border-right clickable"
-                     @click="atClickEdit([
+                     @click="editingPopup.atClickEdit(character, [
                          ['Ideals', 'detailIdeals', character.detailIdeals, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
@@ -528,7 +374,7 @@ onBeforeMount(async () => {
                   <p>Ideals</p>
                 </div>
                 <div class="container block value-display col flex-1 no-border-right clickable"
-                     @click="atClickEdit([
+                     @click="editingPopup.atClickEdit(character, [
                          ['Bonds', 'detailBonds', character.detailBonds, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
@@ -540,7 +386,7 @@ onBeforeMount(async () => {
                 </div>
 
                 <div class="container block value-display col flex-1 no-border-right clickable"
-                     @click="atClickEdit([
+                     @click="editingPopup.atClickEdit(character, [
                          ['Flaws', 'detailFlaws', character.detailFlaws, ModelTypes.textarea],
                   ])">
                   <div class="flex-1">
@@ -554,7 +400,7 @@ onBeforeMount(async () => {
             </div>
             <div class="container row flex-1">
               <div class="container block value-display align-start col flex-1">
-                <div class="container col clickable" @click="atClickEdit(
+                <div class="container col clickable" @click="editingPopup.atClickEdit(character, 
                     [
                         ['Attacks', 'attacks', character.attacks, ModelTypes.weapon]
                     ]
@@ -570,14 +416,14 @@ onBeforeMount(async () => {
                     <p class="flex-1">{{ formatScore(row.bonus) }}</p>
                     <p class="flex-2">{{ row.damage }} / {{ row.type }}</p>
                     <p @click.stop @click="()=>{
-                      deleteModelData.deleteFunction = async ()=>{
+                      confirmModelData.confirmFunction = async ()=>{
                         character.attackRemove(row.name)
                         await firebaseHandler.setCharacterData(character.objectData)
-                        resetDeleteModelData()
+                        resetConfirmModelData()
                       };
-                      deleteModelData.open = true
-                      deleteModelData.item = `${row.name} attack`
-                      deleteModelData.question = 'Are you sure you want to delete this attack?'
+                      confirmModelData.open = true
+                      confirmModelData.item = `${row.name} attack`
+                      confirmModelData.question = 'Are you sure you want to delete this attack?'
                     }" v-html="ICON_REMOVE"></p>
                   </div>
                   <div class="container row clickable" @click.stop @click="async () => {
@@ -622,7 +468,7 @@ onBeforeMount(async () => {
               <div class="container value-display align-start block no-border-right col flex-1">
                 <div class="flex-1" style="width: 100%">
                   <div class="container row flex-1" v-for="(feature) in character.features">
-                    <div class="flex-1 clickable container col" @click="atClickEdit([
+                    <div class="flex-1 clickable container col" @click="editingPopup.atClickEdit(character, [
                        ['Feature or Trait', `features.${feature.name}.name`, feature.name, ModelTypes.text],
                        ['Description', `features.${feature.name}.description`, feature.description, ModelTypes.textarea],
                     ])">
@@ -637,14 +483,15 @@ onBeforeMount(async () => {
                       </p>
                     </div>
                     <p class="clickable" @click="()=>{
-                      deleteModelData.deleteFunction = async ()=>{
-                        character.featureRemove(feature)
+                      confirmModelData.confirmFunction = async ()=>{
+                        console.log('REMOVE', feature)
+                        character.featureRemove(feature.name)
                         await firebaseHandler.setCharacterData(character.objectData)
-                        resetDeleteModelData()
+                        resetConfirmModelData()
                       };
-                      deleteModelData.open = true
-                      deleteModelData.item = feature
-                      deleteModelData.question = 'Are you sure you want to delete this feature or trait?'
+                      confirmModelData.open = true
+                      confirmModelData.item = feature.name
+                      confirmModelData.question = 'Are you sure you want to delete this feature or trait?'
                     }" v-html="ICON_REMOVE"></p>
                   </div>
                   <div class="container row flex-1 clickable" @click="()=>{
@@ -667,20 +514,20 @@ onBeforeMount(async () => {
               <div class="flex-1" style="width: 100%">
                 <p>Languages</p>
                 <div class="container row flex-1" v-for="(language, index) in character.languages">
-                  <p class="flex-1 clickable" @click="atClickEdit([
+                  <p class="flex-1 clickable" @click="editingPopup.atClickEdit(character, [
                       ['Languages', `_character.languages.${index}`, language, ModelTypes.text]
                   ])">
                     - {{ language }}
                   </p>
                   <p class="clickable" @click="()=>{
-                      deleteModelData.deleteFunction = async ()=>{
+                      confirmModelData.confirmFunction = async ()=>{
                         character.languageRemove(language)
                         await firebaseHandler.setCharacterData(character.objectData)
-                        resetDeleteModelData()
+                        resetConfirmModelData()
                       };
-                      deleteModelData.open = true
-                      deleteModelData.item = language
-                      deleteModelData.question = 'Are you sure you want to delete this language?'
+                      confirmModelData.open = true
+                      confirmModelData.item = language
+                      confirmModelData.question = 'Are you sure you want to delete this language?'
                     }" v-html="ICON_REMOVE"></p>
                 </div>
                 <div class="container row flex-1 clickable" @click="async () => {
@@ -695,20 +542,20 @@ onBeforeMount(async () => {
                 <div v-for="(items, category) in character.proficiencies">
                   <p v-if="items.length > 0 || category==='items'">{{ category }}</p>
                   <div v-if="category==='items'" class="container row flex-1" v-for="(proficiency, index) in items">
-                    <p class="flex-1 clickable" @click="atClickEdit([
+                    <p class="flex-1 clickable" @click="editingPopup.atClickEdit(character, [
                         ['Proficiencies', `_character.abilities.proficiencies.${category}.${character._character.abilities.proficiencies[category].indexOf(proficiency)}`, proficiency, ModelTypes.text]
                       ])">
                       - {{ proficiency }}
                     </p>
                     <p class="clickable" @click="()=>{
-                      deleteModelData.deleteFunction = async ()=>{
+                      confirmModelData.confirmFunction = async ()=>{
                         character.proficiencyRemove(category, proficiency)
                         await firebaseHandler.setCharacterData(character.objectData)
-                        resetDeleteModelData()
+                        resetConfirmModelData()
                       };
-                      deleteModelData.open = true
-                      deleteModelData.item = proficiency
-                      deleteModelData.question = 'Are you sure you want to delete this proficiency?'
+                      confirmModelData.open = true
+                      confirmModelData.item = proficiency
+                      confirmModelData.question = 'Are you sure you want to delete this proficiency?'
                     }" v-html="ICON_REMOVE"></p>
                   </div>
                   <div v-if="category==='items'" class="container row flex-1 clickable" @click="()=>{
@@ -729,7 +576,7 @@ onBeforeMount(async () => {
           </div>
           <div class="container block value-display col flex-2 no-border-right no-border-bottom">
             <div class="container row flex-1">
-              <div class="container col flex-1 clickable" @click="atClickEdit([
+              <div class="container col flex-1 clickable" @click="editingPopup.atClickEdit(character, [
                   ['Copper Coins', 'equipmentCoins', character.equipmentCoins, ModelTypes.coins],
               ])">
                 <div class="container col block value-display no-border"
@@ -756,7 +603,7 @@ onBeforeMount(async () => {
                       Weight
                     </div>
                   </div>
-                  <div v-for="item in character.equipmentItems" class="equipment-item container row clickable" @click="atClickEdit([
+                  <div v-for="item in character.equipmentItems" class="equipment-item container row clickable" @click="editingPopup.atClickEdit(character, [
                       ['Position', `tag-equipment.${item.name}.index`, item.index, ModelTypes.number],
                       ['Amount', `tag-equipment.${item.name}.count`, item.count, ModelTypes.number],
                       ['Name', `tag-equipment.${item.name}.name`, item.name, ModelTypes.text],
@@ -773,14 +620,14 @@ onBeforeMount(async () => {
                       {{ formatWeight(item.weight * item.count) }}
                     </div>
                     <div class="clickable" @click.stop @click="() =>{
-                      deleteModelData.deleteFunction = async ()=>{
+                      confirmModelData.confirmFunction = async ()=>{
                         character.equipmentRemove(item.name, item.count)
                         await firebaseHandler.setCharacterData(character.objectData)
-                        resetDeleteModelData()
+                        resetConfirmModelData()
                       };
-                      deleteModelData.open = true
-                      deleteModelData.item = `${item.count} ${item.name}`
-                      deleteModelData.question = 'Are you sure you want to delete this item?'
+                      confirmModelData.open = true
+                      confirmModelData.item = `${item.count} ${item.name}`
+                      confirmModelData.question = 'Are you sure you want to delete this item?'
                     }" v-html="ICON_REMOVE"></div>
                   </div>
                   <div class="equipment-item container row clickable" @click="async () => {
@@ -808,7 +655,7 @@ onBeforeMount(async () => {
       <div class="header container row"> <!-- Header -->
         <div class="container col flex-1"> <!-- Left Column -->
           <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
-               @click="atClickEdit([['Character Name', 'detailName', character.detailName, ModelTypes.text]])">
+               @click="editingPopup.atClickEdit(character, [['Character Name', 'detailName', character.detailName, ModelTypes.text]])">
             <p class="flex-1 value medium no-transform">{{ character.detailName }}</p>
             <p>Character Name</p>
           </div>
@@ -816,34 +663,34 @@ onBeforeMount(async () => {
         <div class="container col flex-2"> <!-- Right Column -->
           <div class="container row">
             <div class="container block value-display col flex-1 no-border-top clickable"
-                 @click="atClickEdit([['Character Age in years', 'detailAge', character.detailAge, ModelTypes.number]])">
+                 @click="editingPopup.atClickEdit(character, [['Character Age in years', 'detailAge', character.detailAge, ModelTypes.number]])">
               <p class="flex-1 value medium no-transform">{{ character.detailAge }}</p>
               <p>Age</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top clickable"
-                 @click="atClickEdit([['Character Height in foot', 'detailHeight', character.detailHeight, ModelTypes.number]])">
+                 @click="editingPopup.atClickEdit(character, [['Character Height in foot', 'detailHeight', character.detailHeight, ModelTypes.number]])">
               <p class="flex-1 value medium no-transform">{{ formatLength(character.detailHeight) }}</p>
               <p>Height</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top no-border-right clickable"
-                 @click="atClickEdit([['Character Weight in pounds', 'detailWeight', character.detailWeight, ModelTypes.number]])">
+                 @click="editingPopup.atClickEdit(character, [['Character Weight in pounds', 'detailWeight', character.detailWeight, ModelTypes.number]])">
               <p class="flex-1 value medium no-transform">{{ formatWeight(character.detailWeight) }}</p>
               <p>Weight</p>
             </div>
           </div>
           <div class="container row">
             <div class="container block value-display col flex-1 clickable"
-                 @click="atClickEdit([['Character Eyes', 'detailEyeColor', character.detailEyeColor, ModelTypes.text]])">
+                 @click="editingPopup.atClickEdit(character, [['Character Eyes', 'detailEyeColor', character.detailEyeColor, ModelTypes.text]])">
               <p class="flex-1 value medium no-transform">{{ character.detailEyeColor }}</p>
               <p>Eyes</p>
             </div>
             <div class="container block value-display col flex-1 clickable"
-                 @click="atClickEdit([['Character Skin', 'detailSkinColor', character.detailSkinColor, ModelTypes.text]])">
+                 @click="editingPopup.atClickEdit(character, [['Character Skin', 'detailSkinColor', character.detailSkinColor, ModelTypes.text]])">
               <p class="flex-1 value medium no-transform">{{ character.detailSkinColor }}</p>
               <p>Skin</p>
             </div>
             <div class="container block value-display col flex-1 no-border-right clickable"
-                 @click="atClickEdit([['Character Hair', 'detailHairColor', character.detailHairColor, ModelTypes.text]])">
+                 @click="editingPopup.atClickEdit(character, [['Character Hair', 'detailHairColor', character.detailHairColor, ModelTypes.text]])">
               <p class="flex-1 value medium no-transform">{{ character.detailHairColor }}</p>
               <p>Hair</p>
             </div>
@@ -865,7 +712,7 @@ onBeforeMount(async () => {
             <p>Character Appearance</p>
           </div>
           <div class="container block value-display col flex-2 no-border-left no-border-bottom clickable"
-               @click="atClickEdit([['Character Backstory', 'detailBackstory', character.detailBackstory, ModelTypes.textarea]])">
+               @click="editingPopup.atClickEdit(character, [['Character Backstory', 'detailBackstory', character.detailBackstory, ModelTypes.textarea]])">
             <div class="flex-1">
               <p class="no-transform" v-for="line in character.detailBackstory.split('\n')">
                 {{ line }}
@@ -876,7 +723,7 @@ onBeforeMount(async () => {
         </div>
         <div class="container col flex-2">
           <div class="container block value-display align-start col flex-1 no-border-right clickable"
-               @click="atClickEdit([['Allies & Organizations', 'detailAllies', character.detailAllies, ModelTypes.textarea]])">
+               @click="editingPopup.atClickEdit(character, [['Allies & Organizations', 'detailAllies', character.detailAllies, ModelTypes.textarea]])">
             <div class="flex-1">
               <p class="no-transform" v-for="line in character.detailAllies.split('\n')">
                 {{ line }}
@@ -885,7 +732,7 @@ onBeforeMount(async () => {
             <p class="align-center">Allies & Organizations</p>
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right clickable"
-               @click="atClickEdit([['Additional Features & Traits', 'featureAdditional', character.featureAdditional, ModelTypes.textarea]])">
+               @click="editingPopup.atClickEdit(character, [['Additional Features & Traits', 'featureAdditional', character.featureAdditional, ModelTypes.textarea]])">
             <div class="flex-1">
               <p class="no-transform" v-for="line in character.featureAdditional.split('\n')">
                 {{ line }}
@@ -894,7 +741,7 @@ onBeforeMount(async () => {
             <p class="align-center">Additional Features & Traits</p>
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right no-border-bottom clickable"
-               @click="atClickEdit([['Treasure', 'detailTreasure', character.detailTreasure, ModelTypes.textarea]])">
+               @click="editingPopup.atClickEdit(character, [['Treasure', 'detailTreasure', character.detailTreasure, ModelTypes.textarea]])">
             <div class="flex-1">
               <p class="flex-1 no-transform" v-for="line in character.detailTreasure.split('\n')">
                 {{ line }}
@@ -910,12 +757,12 @@ onBeforeMount(async () => {
         <div class="container col flex-1">
           <div class="container row">
             <div class="container value-display col block flex-3 no-border-top no-border-left clickable"
-                 @click="atClickEdit([['Spellcasting Class', 'spellcasting.class', character.spellcastingClass, ModelTypes.classes]])">
+                 @click="editingPopup.atClickEdit(character, [['Spellcasting Class', 'spellcasting.class', character.spellcastingClass, ModelTypes.classes]])">
               <p class="flex-1 value medium no-transform">{{ character.spellcastingClass }}</p>
               <p>Spellcasting Class</p>
             </div>
             <div class="container block value-display col flex-2 no-border-top clickable"
-                 @click="atClickEdit([['Spellcasting Ability', 'spellcastingAbility', character.spellcastingAbility, ModelTypes.abilityTypes]])">
+                 @click="editingPopup.atClickEdit(character, [['Spellcasting Ability', 'spellcastingAbility', character.spellcastingAbility, ModelTypes.abilityTypes]])">
               <p class="flex-1 value medium no-transform" style="text-transform: capitalize">
                 {{ character.spellcastingAbility }}</p>
               <p>Spellcasting Ability</p>
@@ -943,22 +790,22 @@ onBeforeMount(async () => {
                 <p>Cantrips</p>
               </div>
               <div class="flex-3 container row" v-if="j!==0">
-                <div class="value flex-1" @click="atClickEdit([
+                <div class="value flex-1" @click="editingPopup.atClickEdit(character, [
                   ['Spell Slots', `_character.spellcasting.spells.${j}.spellSlots`, character.spellcastingSpellSlots_get(j), ModelTypes.number],
                 ])">
                   <p>{{ character.spellcastingSpellSlots_get(j) }}</p>
                 </div>
-                <div class="label flex-2" @click="atClickEdit([
+                <div class="label flex-2" @click="editingPopup.atClickEdit(character, [
                   ['Spell Slots', `_character.spellcasting.spells.${j}.spellSlots`, character.spellcastingSpellSlots_get(j), ModelTypes.number],
               ])">
                   <p>Total</p>
                 </div>
-                <div class="value flex-1" @click="atClickEdit([
+                <div class="value flex-1" @click="editingPopup.atClickEdit(character, [
                   ['Spell Slots Expanded', `_character.spellcasting.spells.${j}.spellSlotsExpanded`, character.spellcastingSpellSlotsExpanded_get(j), ModelTypes.number],
                 ])">
                   <p>{{ character.spellcastingSpellSlotsExpanded_get(j) }}</p>
                 </div>
-                <div class="label flex-2" @click.stop @click="atClickEdit([
+                <div class="label flex-2" @click.stop @click="editingPopup.atClickEdit(character, [
                   ['Spell Slots Expanded', `_character.spellcasting.spells.${j}.spellSlotsExpanded`, character.spellcastingSpellSlotsExpanded_get(j), ModelTypes.number],
                 ])">
                   <p>Expanded</p>
@@ -977,23 +824,23 @@ onBeforeMount(async () => {
 
             <div class="container col block no-border">
               <div v-if="j===0" v-for="(cantrip, index) in character.spellcastingCantrips"
-                   class="container row clickable" @click="atClickEdit([
+                   class="container row clickable" @click="editingPopup.atClickEdit(character, [
                   [`Cantrip`, `_character.spellcasting.cantrips.${index}`, character.spellcastingCantrips[index], ModelTypes.text]
               ])">
                 <p class="flex-1">{{ cantrip }}</p>
                 <p @click.stop @click="() =>{
-                  deleteModelData.deleteFunction = async ()=>{
+                  confirmModelData.confirmFunction = async ()=>{
                     character.spellcastingCantripRemove(cantrip)
                     await firebaseHandler.setCharacterData(character.objectData)
-                    resetDeleteModelData()
+                    resetConfirmModelData()
                   };
-                  deleteModelData.open = true
-                  deleteModelData.item = cantrip
-                  deleteModelData.question = 'Are you sure you want to delete this cantrip?'
+                  confirmModelData.open = true
+                  confirmModelData.item = cantrip
+                  confirmModelData.question = 'Are you sure you want to delete this cantrip?'
                 }" v-html="ICON_REMOVE"></p>
               </div>
               <div v-else v-for="(spell, index) in character.spellcastingSpells[j].known"
-                   class="container row clickable" @click="atClickEdit([
+                   class="container row clickable" @click="editingPopup.atClickEdit(character, [
                   [`Spell`, `_character.spellcasting.spells.${j}.known.${index}`, spell, ModelTypes.text]
               ])">
                 <div class="flex-1 container row" style="justify-content: center">
@@ -1004,14 +851,14 @@ onBeforeMount(async () => {
                 </div>
                 <p class="flex-3">{{ spell }}</p>
                 <p @click.stop @click="() =>{
-                  deleteModelData.deleteFunction = async ()=>{
+                  confirmModelData.confirmFunction = async ()=>{
                     character.spellcastingRemove(j, spell)
                     await firebaseHandler.setCharacterData(character.objectData)
-                    resetDeleteModelData()
+                    resetConfirmModelData()
                   };
-                  deleteModelData.open = true
-                  deleteModelData.item = spell
-                  deleteModelData.question = 'Are you sure you want to delete this spell?'
+                  confirmModelData.open = true
+                  confirmModelData.item = spell
+                  confirmModelData.question = 'Are you sure you want to delete this spell?'
                 }" v-html="ICON_REMOVE"></p>
               </div>
             </div>
@@ -1039,19 +886,20 @@ onBeforeMount(async () => {
 
   <!--  MODALS  -->
 
-  <div v-if="editing.open" class="popup container col" style="align-items: center" @click="atClickCancel">
+  <div v-if="editingPopup.editing.open" class="popup container col" style="align-items: center"
+       @click="editingPopup.atClickCancel">
     <div class="container row popup-display">
       <div class="container block value-display col" @click.stop>
 
-        <div class="container row input-row" v-for="item in editing.items">
+        <div class="container row input-row" v-for="item in editingPopup.editing.items">
           <div class="container col">
             <label :for="item.name">{{ item.name }}</label>
             <input v-if="item.type.element === 'input' && item.type.type !== 'disabled'"
                    :type="item.type.type !== 'coin' ? item.type.type : 'number'"
                    :name="item.name"
                    v-model="item.value"
-                   @keydown.enter="atClickSave"
-                   @keydown.esc="atClickCancel"/>
+                   @keydown.enter="editingPopup.atClickSave"
+                   @keydown.esc="editingPopup.atClickCancel"/>
             <input v-if="item.type.element === 'input' && item.type.type === 'disabled'"
                    type="text"
                    disabled
@@ -1062,7 +910,7 @@ onBeforeMount(async () => {
                 :name="item.name"
                 rows="5" cols="40"
                 v-model="item.value"
-                @keydown.esc="atClickCancel"/>
+                @keydown.esc="editingPopup.atClickCancel"/>
             <select v-if="item.type.element === 'select'" :name="item.name" v-model="item.value">
               <option v-for="option in item.type.options" :value="option">
                 {{ option[0].toUpperCase() + option.slice(1) }}
@@ -1085,8 +933,8 @@ onBeforeMount(async () => {
               <input :type="'number'"
                      :name="item.name"
                      v-model="item.value"
-                     @keydown.enter="atClickSave"
-                     @keydown.esc="atClickCancel"/>
+                     @keydown.enter="editingPopup.atClickSave"
+                     @keydown.esc="editingPopup.atClickCancel"/>
               <p></p>
               <p v-for="(coin, name) in calculateCoins(item.value)">{{ coin }} {{ name }}</p>
             </div>
@@ -1094,8 +942,8 @@ onBeforeMount(async () => {
         </div>
 
         <div class="container row button-row">
-          <button @click="atClickSave">Save</button>
-          <button @click="atClickCancel">Cancel</button>
+          <button @click="editingPopup.atClickSave">Save</button>
+          <button @click="editingPopup.atClickCancel">Cancel</button>
         </div>
       </div>
     </div>
@@ -1117,19 +965,19 @@ onBeforeMount(async () => {
     </div>
   </div>
 
-  <div v-if="deleteModelData.open" class="popup container col" style="align-items: center"
-       @click="resetDeleteModelData">
+  <div v-if="confirmModelData.open" class="popup container col" style="align-items: center"
+       @click="resetConfirmModelData">
     <div class="container row popup-display">
       <div class="container block value-display col" @click.stop>
         <div class="container row input-row">
           <div class="container col">
-            <p>{{ deleteModelData.question }}</p>
-            <p>{{ deleteModelData.item }}</p>
+            <p>{{ confirmModelData.question }}</p>
+            <p>{{ confirmModelData.item }}</p>
           </div>
         </div>
         <div class="container row button-row">
-          <button @click="deleteModelData.deleteFunction">Confirm</button>
-          <button @click="resetDeleteModelData">Cancel</button>
+          <button @click="confirmModelData.confirmFunction">Confirm</button>
+          <button @click="resetConfirmModelData">Cancel</button>
         </div>
       </div>
     </div>

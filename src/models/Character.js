@@ -196,7 +196,7 @@ export class Character {
         this._character.spellcasting.spells[level].spellSlots = value
     }
 
-    spellcastingSpellSlotsExpanded_get(level,) {
+    spellcastingSpellSlotsExpanded_get(level) {
         return this._character.spellcasting.spells[level].spellSlotsExpanded
     }
 
@@ -282,7 +282,7 @@ export class Character {
     }
 
     featureUpdate(oldFeature, feature, description) {
-        if (this._character.features[oldFeature] === undefined) {
+        if (this._character.features[oldFeature.name] === undefined) {
             console.error("ERROR: feature does not exists")
             return
         }
