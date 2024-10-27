@@ -80,11 +80,39 @@ const openLongRestModal = () => {
 }
 const openShortRestModal = () => {
   editingPopup.atClickEdit(character, [
-      ['Max hit Dice', '', character.statMaxHitDice, ModelTypes.disabled],
+    ['Max hit Dice', '', character.statMaxHitDice, ModelTypes.disabled],
     ['Usable hit Dice', 'statCurrentAmountHitDice', character.statCurrentAmountHitDice, ModelTypes.number],
     ['Max hit points', '', character.statHitPointMaximumValue, ModelTypes.disabled],
     [`Current hit points`, 'statHitPointsCurrent', character.statHitPointsCurrent, ModelTypes.number],
   ])
+}
+const openLevelUpModal = () => {
+  let items = [
+    ['Character level / Max hit Dice', 'detailLevel', character.detailLevel, ModelTypes.number],
+    ['Usable hit Dice', 'statCurrentAmountHitDice', character.statCurrentAmountHitDice, ModelTypes.number],
+
+    ['Hit points basis', 'statHitPointsBase', character.statHitPointsBase, ModelTypes.number],
+    ['Constitution modifier', 'abilityConstitutionModifier', character.abilityConstitutionModifier, ModelTypes.disabled],
+    ['Additional hit points', 'statHitPointsMisc', character.statHitPointsMisc, ModelTypes.number],
+    [`Current hit points`, 'statHitPointsCurrent', character.statHitPointsCurrent, ModelTypes.number],
+    ['Experience points', 'detailExperiencePoints', character.detailExperiencePoints, ModelTypes.number],
+  ]
+  let spellslots = []
+  // for (let lvl in character.spellcastingSpells) {
+  //   spellslots.push([
+  //       `Spell slots level ${lvl}`,
+  //     `_character.spellcasting.spells.${lvl}.spellSlots`,
+  //     character.spellcastingSpellSlots_get(lvl),
+  //     ModelTypes.number])
+  // }
+
+  let reminders = [
+    ['Reminders', '', 'Features and traits', ModelTypes.disabled],
+    ['', '', 'Spellslots and new spells', ModelTypes.disabled],
+    ['', '', 'Repeating abilities', ModelTypes.disabled],
+  ]
+
+  editingPopup.atClickEdit(character, [...items, ...spellslots, ...reminders])
 }
 
 const uploadImage = async (e) => {
@@ -147,7 +175,7 @@ onBeforeMount(async () => {
           <p class="value medium no-transform">Short Rest</p>
         </div>
         <div class="block container value-display justify-center col clickable"
-             @click="">
+             @click="openLevelUpModal">
           <p class="value medium no-transform">Level Up</p>
         </div>
       </div>
@@ -237,9 +265,24 @@ onBeforeMount(async () => {
                  class="container row flex-2 block ability-block no-border-left">
               <!--ABILITY-->
               <div class="container ability col flex-1 clickable"
-                   @click="editingPopup.atClickEdit(character, [
-                      [ability_name, `ability${ability_name}`, ability.score, ModelTypes.number],
-                 ])">
+                   @click="()=>{
+                     let items = [
+                      [ability_name, `ability${ability_name}`, ability.score, ModelTypes.number]
+                     ]
+                     let bonusItems = []
+
+                     console.log('ability', ability_name)
+                     if (ability_name === 'Constitution') {
+                       bonusItems = [
+                         ['Reminder', '', 'Update your health by 1 ', ModelTypes.disabled],
+                         ['', '', 'for each level you have', ModelTypes.disabled],
+                         ['', '', 'if your modifier changes', ModelTypes.disabled]
+                       ]
+                     }
+
+                     editingPopup.atClickEdit(character, [...items, ...bonusItems])
+
+                 }">
                 <div class="ability-modifier flex-1"><p class="content no-label">{{ formatScore(ability.modifier) }}</p>
                 </div>
                 <div class="ability-score flex-1">
