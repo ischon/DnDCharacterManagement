@@ -1,4 +1,7 @@
 "use strict"
+
+import {range} from "lodash";
+
 export function calculateCoins(coins) {
     /*
     Coin	                CP      SP	    EP	    GP	    PP
@@ -47,3 +50,21 @@ export function calculateAbilityModifier(score) {
     return Math.floor((score - 10) / 2);
 }
 
+export function longRest(character) {
+    character.statHitPointsCurrent = character.statHitPointMaximumValue
+    let maxHitDiceRecovery = Math.floor(character.statMaxHitDice / 2)
+    if (maxHitDiceRecovery < 1) {
+        maxHitDiceRecovery = 1
+    }
+    if (character.statCurrentAmountHitDice + maxHitDiceRecovery > character.statMaxHitDice) {
+        character.statCurrentAmountHitDice = character.statMaxHitDice
+    } else {
+        character.statCurrentAmountHitDice += maxHitDiceRecovery
+    }
+
+    for (let lvl = 1; lvl <= 9; lvl++) {
+        if (character.spellcastingSpellSlotsExpanded_get(lvl) > 0) {
+            character.spellcastingSpellSlotsExpanded_set(lvl, 0)
+        }
+    }
+}
