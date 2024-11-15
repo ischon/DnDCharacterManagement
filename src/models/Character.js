@@ -1,7 +1,7 @@
-"use strict"
+"use strict";
 
 import {classes, alignments, abilityTypes, proficiencyTypes, armorTypes, abilities, dice} from "@/models/Enums.js";
-import {Attack, Item, defaultCharacter, CharacterConversions} from "@/models/CharacterHelperClasses.js";
+import {Attack, Item, defaultCharacter, CharacterConversions, newCharacterId} from "@/models/CharacterHelperClasses.js";
 import {calculateCoins, calculateAbilityModifier, toCopperCoins} from "@/helpers/characterHelpers.js";
 
 export class Character {
@@ -12,7 +12,7 @@ export class Character {
             } else if (this._character !== undefined) {
                 return this._character.id;
             }
-            return Date.now().toString(36).slice(-8);
+            return newCharacterId();
         }
 
         return defaultCharacter(_getIdWithFailSave(id))

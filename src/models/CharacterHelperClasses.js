@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 import {range} from "lodash";
 import {abilityTypes, proficiencyTypes} from "@/models/Enums.js";
 
@@ -18,6 +18,10 @@ export class Item {
         this.count = count;
         this.weight = weight;
     }
+}
+
+export function newCharacterId() {
+    return Date.now().toString(36).slice(-8);
 }
 
 export function defaultCharacter(id) {

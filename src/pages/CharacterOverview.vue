@@ -8,7 +8,7 @@ import {range} from 'lodash';
 
 import {calculateCoins, longRest} from "@/helpers/characterHelpers.js";
 import {formatScore, formatLength, formatWeight} from "@/helpers/formatHelpers.js";
-import {ICON_ADD, ICON_REMOVE, ICON_MINUS, ICON_INFO_SMALL} from "@/helpers/icons.js";
+import {ICONS} from "@/helpers/icons.js";
 
 import {ModelTypes, EditPopup} from "@/helpers/editPopupHelper.js";
 
@@ -471,14 +471,14 @@ onBeforeMount(async () => {
                       confirmModelData.open = true
                       confirmModelData.item = `${row.name} attack`
                       confirmModelData.question = 'Are you sure you want to delete this attack?'
-                    }" v-html="ICON_REMOVE"></p>
+                    }" v-html="ICONS.REMOVE.MEDIUM"></p>
                   </div>
                   <div class="container row clickable" @click.stop @click="async () => {
                       character.attackAdd('Name', 0, 'Damage', 'Type')
                       await firebaseHandler.setCharacterData(character.objectData)
                     }">
                     <p class="flex-1" style="text-align: center">--Add a new attack--</p>
-                    <p v-html="ICON_ADD"></p>
+                    <p v-html="ICONS.ADD.MEDIUM"></p>
                   </div>
                 </div>
 
@@ -486,7 +486,7 @@ onBeforeMount(async () => {
                 <p>Cantrips</p>
                 <p v-for="row in character.spellcastingCantrips">
                   - {{ row }}
-                  <!--                  <span class="clickable" v-html="ICON_INFO_SMALL" @click="() => {-->
+                  <!--                  <span class="clickable" v-html="ICONS.INFO.SMALL" @click="() => {-->
                   <!--                      console.log('info', row)-->
                   <!--                    }"/>-->
                 </p>
@@ -521,7 +521,7 @@ onBeforeMount(async () => {
                     ])">
                       <p>
                         - {{ feature.name }}
-                        <span v-if="feature.description" class="clickable" v-html="ICON_INFO_SMALL" @click.stop
+                        <span v-if="feature.description" class="clickable" v-html="ICONS.INFO.SMALL" @click.stop
                               @click="() => {
                                 toolTipModel.open = true
                                 toolTipModel.name = feature.name
@@ -539,14 +539,14 @@ onBeforeMount(async () => {
                       confirmModelData.open = true
                       confirmModelData.item = feature.name
                       confirmModelData.question = 'Are you sure you want to delete this feature or trait?'
-                    }" v-html="ICON_REMOVE"></p>
+                    }" v-html="ICONS.REMOVE.MEDIUM"></p>
                   </div>
                   <div class="container row flex-1 clickable" @click="()=>{
                       character.featureAdd('New feature or trait', 'this is what the feature or trait does')
                       firebaseHandler.setCharacterData(character.objectData)
                     }">
                     <p class="flex-1">--Add a feature or trait--</p>
-                    <p v-html="ICON_ADD"></p>
+                    <p v-html="ICONS.ADD.MEDIUM"></p>
                   </div>
                 </div>
                 <p class="align-center">Features & Traits</p>
@@ -577,14 +577,14 @@ onBeforeMount(async () => {
                         confirmModelData.open = true
                         confirmModelData.item = language
                         confirmModelData.question = 'Are you sure you want to delete this language?'
-                      }" v-html="ICON_REMOVE"></p>
+                      }" v-html="ICONS.REMOVE.MEDIUM"></p>
                   </div>
                   <div class="container row flex-1 clickable" @click="async () => {
                           character.languageAdd('New Language')
                           await firebaseHandler.setCharacterData(character.objectData)
                         }">
                     <p class="flex-1">--add a new language--</p>
-                    <p v-html="ICON_ADD"></p>
+                    <p v-html="ICONS.ADD.MEDIUM"></p>
                   </div>
                   <br/>
                   <p>Proficiencies</p>
@@ -605,14 +605,14 @@ onBeforeMount(async () => {
                         confirmModelData.open = true
                         confirmModelData.item = proficiency
                         confirmModelData.question = 'Are you sure you want to delete this proficiency?'
-                      }" v-html="ICON_REMOVE"></p>
+                      }" v-html="ICONS.REMOVE.MEDIUM"></p>
                     </div>
                     <div v-if="category==='items'" class="container row flex-1 clickable" @click="()=>{
                         character.proficiencyAdd(category, 'New item proficiency')
                         firebaseHandler.setCharacterData(character.objectData)
                       }">
                       <p class="flex-1">--Add a proficiency--</p>
-                      <p v-html="ICON_ADD"></p>
+                      <p v-html="ICONS.ADD.MEDIUM"></p>
                     </div>
                     <p v-if="items.length > 0 && category!=='items'" v-for="proficiency in items">
                       - {{ proficiency }}
@@ -680,7 +680,7 @@ onBeforeMount(async () => {
                       confirmModelData.open = true
                       confirmModelData.item = `${item.count} ${item.name}`
                       confirmModelData.question = 'Are you sure you want to delete this item?'
-                    }" v-html="ICON_REMOVE"></div>
+                    }" v-html="ICONS.REMOVE.MEDIUM"></div>
                     </div>
                     <div class="equipment-item container row clickable" @click="async () => {
                       character.equipmentAdd('new item', 1, 0)
@@ -690,7 +690,7 @@ onBeforeMount(async () => {
                       <div class="flex-2"></div>
                       <div class="flex-8">--Add a new item--</div>
                       <div class="flex-4"></div>
-                      <div v-html="ICON_ADD"></div>
+                      <div v-html="ICONS.ADD.MEDIUM"></div>
                     </div>
                   </div>
                 </div>
@@ -898,7 +898,7 @@ onBeforeMount(async () => {
                   confirmModelData.open = true
                   confirmModelData.item = cantrip
                   confirmModelData.question = 'Are you sure you want to delete this cantrip?'
-                }" v-html="ICON_REMOVE"></p>
+                }" v-html="ICONS.REMOVE.MEDIUM"></p>
               </div>
               <div v-else v-for="(spell, index) in character.spellcastingSpells[j].known"
                    class="container row clickable" @click="editingPopup.atClickEdit(character, [
@@ -920,7 +920,7 @@ onBeforeMount(async () => {
                   confirmModelData.open = true
                   confirmModelData.item = spell
                   confirmModelData.question = 'Are you sure you want to delete this spell?'
-                }" v-html="ICON_REMOVE"></p>
+                }" v-html="ICONS.REMOVE.MEDIUM"></p>
               </div>
             </div>
             <div class="container col block no-border">
@@ -929,14 +929,14 @@ onBeforeMount(async () => {
                 firebaseHandler.setCharacterData(character.objectData)
               }">
                 <p class="flex-1">--Add a cantrip--</p>
-                <p v-html="ICON_ADD"></p>
+                <p v-html="ICONS.ADD.MEDIUM"></p>
               </div>
               <div v-if="j!==0" class="clickable container row" @click.stop @click="()=>{
                 character.spellcastingAdd(j, 'New Spell')
                 firebaseHandler.setCharacterData(character.objectData)
               }">
                 <p class="flex-1">--Add a spell--</p>
-                <p v-html="ICON_ADD"></p>
+                <p v-html="ICONS.ADD.MEDIUM"></p>
               </div>
             </div>
           </div>

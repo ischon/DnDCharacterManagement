@@ -1,9 +1,8 @@
 "use strict"
 import {initializeApp} from "firebase/app";
-import {getDoc, getFirestore} from "firebase/firestore";
+import {collection, doc, setDoc, getDoc, getDocs, getFirestore} from "firebase/firestore";
 import {getAuth} from "firebase/auth";
 import {getAnalytics} from "firebase/analytics";
-import {doc, setDoc} from "firebase/firestore";
 import {GoogleAuthProvider, signInWithCredential} from "@firebase/auth";
 import {getStorage, ref, uploadString, uploadBytes, getDownloadURL} from "firebase/storage";
 import {Character} from "@/models/Character.js";
@@ -24,6 +23,7 @@ export class FirebaseHandler {
     constructor() {
         this.paths = {
             user: "users/{uid}",
+            characters: "users/{uid}/characters",
             character: "users/{uid}/characters/{characterId}",
         }
     }
@@ -51,11 +51,6 @@ export class FirebaseHandler {
 
     }
 
-    getUserData() {
-
-        return {}
-    }
-
     async setData(data, path, ...pathSegments) {
         // return
         await setDoc(doc(this.db, path, ...pathSegments), data);
@@ -71,6 +66,36 @@ export class FirebaseHandler {
             console.warn("No such document!");
             return undefined;
         }
+    }
+
+    async getCharactersData() {
+        // const path = this.paths["character"]
+        //     .replace("{uid}", this.firebaseUser.uid)
+        //     .split("/");
+        // const data = await this.getData(...path)
+        //     .catch((error) => {
+        //             console.error(error)
+        //         }
+        //     )
+        // return new Character(data, characterId);
+
+        const path = this.paths.characters
+            .replace("{uid}", this.firebaseUser.uid);
+
+        const collectionRef = collection(this.db, path);
+        const charactersData = await getDocs(collectionRef);
+
+        console.log(charactersData)
+
+        const characters = []
+
+        charactersData.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            characters.push(new Character(doc.data(), doc.id));
+        });
+
+        return characters;
+
     }
 
     async setCharacterData(character) {
