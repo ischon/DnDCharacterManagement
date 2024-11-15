@@ -204,7 +204,7 @@ onBeforeMount(async () => {
               <p class="flex-1 value medium no-transform">{{ character.detailClass }} lvl {{
                   character.detailLevel
                 }}</p>
-              <p class="flex-1 value medium no-transform">{{character.detailSubClass}}</p>
+              <p class="flex-1 value medium no-transform">{{ character.detailSubClass }}</p>
               <p>Class & Level</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top clickable"
@@ -247,7 +247,7 @@ onBeforeMount(async () => {
       </div>
 
       <div class="body container col">
-        <div class="container row flex-2">
+        <div class="container row flex-1">
           <div class="container col flex-1">
             <!-- ABILITY SCORES -->
             <div class="container flex-1 block row labeled-row no-border-left">
@@ -554,117 +554,122 @@ onBeforeMount(async () => {
 
         </div>
         <div class="container row flex-1">
-          <div class="container block value-display col flex-1 no-border-left no-border-bottom">
-            <div class="container col flex-1">
-              <div class="flex-1" style="width: 100%">
-                <p>Languages</p>
-                <div class="container row flex-1" v-for="(language, index) in character.languages">
-                  <p class="flex-1 clickable" @click="editingPopup.atClickEdit(character, [
-                      ['Languages', `_character.languages.${index}`, language, ModelTypes.text]
-                  ])">
-                    - {{ language }}
-                  </p>
-                  <p class="clickable" @click="()=>{
-                      confirmModelData.confirmFunction = async ()=>{
-                        character.languageRemove(language)
-                        await firebaseHandler.setCharacterData(character.objectData)
-                        resetConfirmModelData()
-                      };
-                      confirmModelData.open = true
-                      confirmModelData.item = language
-                      confirmModelData.question = 'Are you sure you want to delete this language?'
-                    }" v-html="ICON_REMOVE"></p>
-                </div>
-                <div class="container row flex-1 clickable" @click="async () => {
-                        character.languageAdd('New Language')
-                        await firebaseHandler.setCharacterData(character.objectData)
-                      }">
-                  <p class="flex-1">--add a new language--</p>
-                  <p v-html="ICON_ADD"></p>
-                </div>
-                <br/>
-                <p>Proficiencies</p>
-                <div v-for="(items, category) in character.proficiencies">
-                  <p v-if="items.length > 0 || category==='items'">{{ category }}</p>
-                  <div v-if="category==='items'" class="container row flex-1" v-for="(proficiency, index) in items">
+
+          <div class="container col flex-1">
+            <div class="container flex-1 block col value-display no-border-left no-border-bottom">
+              <div class="container col flex-1">
+                <div class="flex-1" style="width: 100%">
+                  <p>Languages</p>
+                  <div class="container row flex-1" v-for="(language, index) in character.languages">
                     <p class="flex-1 clickable" @click="editingPopup.atClickEdit(character, [
-                        ['Proficiencies', `_character.abilities.proficiencies.${category}.${character._character.abilities.proficiencies[category].indexOf(proficiency)}`, proficiency, ModelTypes.text]
-                      ])">
-                      - {{ proficiency }}
+                        ['Languages', `_character.languages.${index}`, language, ModelTypes.text]
+                    ])">
+                      - {{ language }}
                     </p>
                     <p class="clickable" @click="()=>{
-                      confirmModelData.confirmFunction = async ()=>{
-                        character.proficiencyRemove(category, proficiency)
-                        await firebaseHandler.setCharacterData(character.objectData)
-                        resetConfirmModelData()
-                      };
-                      confirmModelData.open = true
-                      confirmModelData.item = proficiency
-                      confirmModelData.question = 'Are you sure you want to delete this proficiency?'
-                    }" v-html="ICON_REMOVE"></p>
+                        confirmModelData.confirmFunction = async ()=>{
+                          character.languageRemove(language)
+                          await firebaseHandler.setCharacterData(character.objectData)
+                          resetConfirmModelData()
+                        };
+                        confirmModelData.open = true
+                        confirmModelData.item = language
+                        confirmModelData.question = 'Are you sure you want to delete this language?'
+                      }" v-html="ICON_REMOVE"></p>
                   </div>
-                  <div v-if="category==='items'" class="container row flex-1 clickable" @click="()=>{
-                      character.proficiencyAdd(category, 'New item proficiency')
-                      firebaseHandler.setCharacterData(character.objectData)
-                    }">
-                    <p class="flex-1">--Add a proficiency--</p>
+                  <div class="container row flex-1 clickable" @click="async () => {
+                          character.languageAdd('New Language')
+                          await firebaseHandler.setCharacterData(character.objectData)
+                        }">
+                    <p class="flex-1">--add a new language--</p>
                     <p v-html="ICON_ADD"></p>
                   </div>
-                  <p v-if="items.length > 0 && category!=='items'" v-for="proficiency in items">
-                    - {{ proficiency }}
-                  </p>
-                  <br v-if="items.length > 0 || category==='items'"/>
+                  <br/>
+                  <p>Proficiencies</p>
+                  <div v-for="(items, category) in character.proficiencies">
+                    <p v-if="items.length > 0 || category==='items'">{{ category }}</p>
+                    <div v-if="category==='items'" class="container row flex-1" v-for="(proficiency, index) in items">
+                      <p class="flex-1 clickable" @click="editingPopup.atClickEdit(character, [
+                          ['Proficiencies', `_character.abilities.proficiencies.${category}.${character._character.abilities.proficiencies[category].indexOf(proficiency)}`, proficiency, ModelTypes.text]
+                        ])">
+                        - {{ proficiency }}
+                      </p>
+                      <p class="clickable" @click="()=>{
+                        confirmModelData.confirmFunction = async ()=>{
+                          character.proficiencyRemove(category, proficiency)
+                          await firebaseHandler.setCharacterData(character.objectData)
+                          resetConfirmModelData()
+                        };
+                        confirmModelData.open = true
+                        confirmModelData.item = proficiency
+                        confirmModelData.question = 'Are you sure you want to delete this proficiency?'
+                      }" v-html="ICON_REMOVE"></p>
+                    </div>
+                    <div v-if="category==='items'" class="container row flex-1 clickable" @click="()=>{
+                        character.proficiencyAdd(category, 'New item proficiency')
+                        firebaseHandler.setCharacterData(character.objectData)
+                      }">
+                      <p class="flex-1">--Add a proficiency--</p>
+                      <p v-html="ICON_ADD"></p>
+                    </div>
+                    <p v-if="items.length > 0 && category!=='items'" v-for="proficiency in items">
+                      - {{ proficiency }}
+                    </p>
+                    <br v-if="items.length > 0 || category==='items'"/>
+                  </div>
                 </div>
+                <p class="align-center">Languages & Other Proficiencies</p>
               </div>
-              <p class="align-center">Languages & Other Proficiencies</p>
             </div>
           </div>
-          <div class="container block value-display col flex-2 no-border-right no-border-bottom">
-            <div class="container row flex-1">
-              <div class="container col flex-1 clickable" @click="editingPopup.atClickEdit(character, [
+          <div class="container col flex-2">
+            <div class="container flex-1 block col value-display no-border-right no-border-bottom">
+              <div class="container row flex-1">
+                <div class="container col flex-1 clickable" @click="editingPopup.atClickEdit(character, [
                   ['Copper Coins', 'equipmentCoins', character.equipmentCoins, ModelTypes.coins],
               ])">
-                <div class="container col block value-display no-border"
-                     v-for="(value, type) in character.equipmentCoinFormatted">
-                  <p class="value flex-1">
-                    {{ value }}
-                  </p>
-                  <p>
-                    {{ type }}
-                  </p>
-                </div>
-              </div>
-              <div class="container row flex-4">
-                <div class="container col ">
-                  <div class="equipment-item container row">
-                    <div class="flex-2"></div>
-                    <div class="flex-2">
-                      Count
-                    </div>
-                    <div class="flex-8">
-                      Name
-                    </div>
-                    <div class="flex-4">
-                      Weight
-                    </div>
+                  <div class="container col block value-display no-border"
+                       v-for="(value, type) in character.equipmentCoinFormatted">
+                    <p class="value flex-1">
+                      {{ value }}
+                    </p>
+                    <p>
+                      {{ type }}
+                    </p>
                   </div>
-                  <div v-for="item in character.equipmentItems" class="equipment-item container row clickable" @click="editingPopup.atClickEdit(character, [
+                </div>
+                <div class="container row flex-4">
+                  <div class="container col ">
+                    <div class="equipment-item container row">
+                      <div class="flex-2"></div>
+                      <div class="flex-2">
+                        Count
+                      </div>
+                      <div class="flex-8">
+                        Name
+                      </div>
+                      <div class="flex-4">
+                        Weight
+                      </div>
+                    </div>
+                    <div v-for="item in character.equipmentItems" class="equipment-item container row clickable"
+                         @click="editingPopup.atClickEdit(character, [
                       ['Position', `tag-equipment.${item.name}.index`, item.index, ModelTypes.number],
                       ['Amount', `tag-equipment.${item.name}.count`, item.count, ModelTypes.number],
                       ['Name', `tag-equipment.${item.name}.name`, item.name, ModelTypes.text],
                       ['Weight', `tag-equipment.${item.name}.weight`, item.weight, ModelTypes.number],
                   ])">
-                    <div class="flex-2"></div>
-                    <div class="flex-2">
-                      {{ item.count }}
-                    </div>
-                    <div class="flex-8">
-                      {{ item.name }}
-                    </div>
-                    <div class="flex-4">
-                      {{ formatWeight(item.weight * item.count) }}
-                    </div>
-                    <div class="clickable" @click.stop @click="() =>{
+                      <div class="flex-2"></div>
+                      <div class="flex-2">
+                        {{ item.count }}
+                      </div>
+                      <div class="flex-8">
+                        {{ item.name }}
+                      </div>
+                      <div class="flex-4">
+                        {{ formatWeight(item.weight * item.count) }}
+                      </div>
+                      <div class="clickable" @click.stop @click="() =>{
                       confirmModelData.confirmFunction = async ()=>{
                         character.equipmentRemove(item.name, item.count)
                         await firebaseHandler.setCharacterData(character.objectData)
@@ -674,25 +679,27 @@ onBeforeMount(async () => {
                       confirmModelData.item = `${item.count} ${item.name}`
                       confirmModelData.question = 'Are you sure you want to delete this item?'
                     }" v-html="ICON_REMOVE"></div>
-                  </div>
-                  <div class="equipment-item container row clickable" @click="async () => {
+                    </div>
+                    <div class="equipment-item container row clickable" @click="async () => {
                       character.equipmentAdd('new item', 1, 0)
                       await firebaseHandler.setCharacterData(character.objectData)
                     }">
-                    <div class="flex-2"></div>
-                    <div class="flex-2"></div>
-                    <div class="flex-8">--Add a new item--</div>
-                    <div class="flex-4"></div>
-                    <div v-html="ICON_ADD"></div>
+                      <div class="flex-2"></div>
+                      <div class="flex-2"></div>
+                      <div class="flex-8">--Add a new item--</div>
+                      <div class="flex-4"></div>
+                      <div v-html="ICON_ADD"></div>
+                    </div>
                   </div>
                 </div>
               </div>
+              <br>
+              <p>
+                Equipment
+              </p>
             </div>
-            <br>
-            <p>
-              Equipment
-            </p>
           </div>
+
         </div>
       </div>
     </div>
@@ -801,24 +808,29 @@ onBeforeMount(async () => {
       <div class="header container row"> <!-- Header -->
         <div class="container col flex-1">
           <div class="container row">
-            <div class="container value-display col block flex-3 no-border-top no-border-left clickable"
+
+            <div class="container row flex-1">
+            <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
                  @click="editingPopup.atClickEdit(character, [['Spellcasting Class', 'spellcasting.class', character.spellcastingClass, ModelTypes.classes]])">
               <p class="flex-1 value medium no-transform">{{ character.spellcastingClass }}</p>
               <p>Spellcasting Class</p>
             </div>
-            <div class="container block value-display col flex-2 no-border-top clickable"
+            </div>
+            <div class="container row flex-2">
+            <div class="container block value-display col flex-1 no-border-top clickable"
                  @click="editingPopup.atClickEdit(character, [['Spellcasting Ability', 'spellcastingAbility', character.spellcastingAbility, ModelTypes.abilityTypes]])">
               <p class="flex-1 value medium no-transform" style="text-transform: capitalize">
                 {{ character.spellcastingAbility }}</p>
               <p>Spellcasting Ability</p>
             </div>
-            <div class="container block value-display col flex-2 no-border-top">
+            <div class="container block value-display col flex-1 no-border-top">
               <p class="flex-1 value medium no-transform">{{ character.spellcastingSpellSaveDc }}</p>
               <p>Spell Save DC</p>
             </div>
-            <div class="container block value-display col flex-2 no-border-top no-border-right">
+            <div class="container block value-display col flex-1 no-border-top no-border-right">
               <p class="flex-1 value medium no-transform">{{ formatScore(character.spellcastingAttackBonus) }}</p>
               <p>Spell Attack Bonus</p>
+            </div>
             </div>
           </div>
         </div>
