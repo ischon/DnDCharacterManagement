@@ -25,6 +25,7 @@ export function defaultCharacter(id) {
         id: id,
         name: "",
         class: "",
+        subclass: "",
         level: 0,
         race: "",
         background: "",
@@ -131,5 +132,10 @@ export function CharacterConversions(character) {
         })
         character.features = features
     }
+
+    if (!('subclass' in character)){
+        character.subclass = ""
+    }
+
     return character
 }

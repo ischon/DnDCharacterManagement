@@ -198,11 +198,13 @@ onBeforeMount(async () => {
             <div class="container block value-display col flex-1 no-border-top clickable"
                  @click="editingPopup.atClickEdit(character, [
                      ['Class', 'detailClass', character.detailClass, ModelTypes.classes],
+                     ['Sub Class', 'detailSubClass', character.detailSubClass, ModelTypes.text],
                      ['Level', 'detailLevel', character.detailLevel, ModelTypes.number]
                      ])">
               <p class="flex-1 value medium no-transform">{{ character.detailClass }} lvl {{
                   character.detailLevel
                 }}</p>
+              <p class="flex-1 value medium no-transform">{{character.detailSubClass}}</p>
               <p>Class & Level</p>
             </div>
             <div class="container block value-display col flex-1 no-border-top clickable"

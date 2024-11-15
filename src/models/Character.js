@@ -678,6 +678,14 @@ export class Character {
         }
     }
 
+    get detailSubClass() {
+        return this._character.subclass;
+    }
+
+    set detailSubClass(value) {
+        this._character.subclass = value;
+    }
+
     get detailAlignment() {
         return this._character.alignment
     }
