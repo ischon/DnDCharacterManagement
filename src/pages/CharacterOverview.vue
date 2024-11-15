@@ -12,6 +12,8 @@ import {ICON_ADD, ICON_REMOVE, ICON_MINUS, ICON_INFO_SMALL} from "@/helpers/icon
 
 import {ModelTypes, EditPopup} from "@/helpers/editPopupHelper.js";
 
+import "@/styles/popup.scss"
+
 const SPACE_CHAR = ' ‎'
 
 // setup() {
@@ -811,7 +813,9 @@ onBeforeMount(async () => {
 
             <div class="container row flex-1">
             <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
-                 @click="editingPopup.atClickEdit(character, [['Spellcasting Class', 'spellcasting.class', character.spellcastingClass, ModelTypes.classes]])">
+                 @click="editingPopup.atClickEdit(character, [
+                     ['Spellcasting Class', 'spellcastingClass', character.spellcastingClass, ModelTypes.classes]
+                     ])">
               <p class="flex-1 value medium no-transform">{{ character.spellcastingClass }}</p>
               <p>Spellcasting Class</p>
             </div>
@@ -1067,79 +1071,148 @@ onBeforeMount(async () => {
 </template>
 
 <style scoped lang="scss">
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 100;
-  justify-content: center;
 
-  .popup-display {
-    min-width: 20rem;
-    width: 50%;
-    justify-content: center;
+@import '@/styles/mixins/space_childeren.scss';
 
-    .value-display {
-      padding: 4rem 2rem;
-      min-width: 15rem;
-      border-radius: 1rem;
-      border-width: .25rem;
+.page {
+  margin-bottom: 2rem;
+  min-height: 100vh;
 
-      .input-row, .button-row {
-        justify-content: center;
+  &#quick-actions {
+    min-height: 5rem;
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+#quick-actions .container {
+  width: auto;
+}
+
+#quick-actions .block.value-display {
+  margin: .5rem 1rem;
+  padding: .5rem 1rem;
+  transition: background-color 0.25s ease;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover {
+    background: var(--color-background-mute);
+  }
+}
+
+#page-3 .labeled-row .value p {
+  height: auto;
+}
+
+
+.ability-block {
+  align-items: center;
+  text-transform: uppercase;
+
+  .container.ability {
+    align-items: center;
+
+    .ability-modifier {
+      background-color: var(--color-border);
+      border-radius: 999999px;
+      width: 50%;
+      text-align: center;
+    }
+
+    .ability-score {
+
+      .ability-score-value {
+        text-align: center;
+        font-size: 200%;
       }
 
-      .input-row {
-        margin-bottom: 1rem;
-
-        > div {
-          align-items: center;
-        }
-
-        label {
-          text-transform: none;
-        }
-
-        input, textarea, select {
-          padding: .5rem;
-          border-radius: .5rem;
-        }
-
-        input {
-          text-align: center;
-
-          &[type="text"] {
-            width: 15rem;
-          }
-
-          &[type="number"] {
-            text-align: start;
-            width: 5rem;
-          }
-        }
-
-        textarea {
-          min-width: 15rem;
-        }
-
-        select {
-          width: 15rem;
-        }
-
-      }
-
-      .button-row {
-        button {
-          padding: .5rem;
-          border-radius: .5rem;
-          margin-right: 1rem;
-        }
+      .ability-score-label {
+        text-align: center;
+        font-size: 70%;
       }
     }
   }
+
+  .container.skill {
+    background: var(--color-background-soft);
+    border-radius: 1.5rem;
+    align-items: center;
+    align-self: start;
+
+    .skill-row {
+      display: flex;
+      padding: .25rem 1rem;
+      align-items: center;
+      width: 100%;
+
+      @include space-children;
+
+      .proficient {
+        width: 1rem;
+        height: 1rem;
+        background-color: var(--color-border);
+        border-radius: 999999px;
+
+        &.selected {
+          background: var(--color-filler);
+        }
+      }
+
+      .skill-score {
+        font-size: 50%;
+
+      }
+
+      .skill-name {
+        font-size: 50%;
+      }
+    }
+  }
+}
+
+.equipment-item {
+  font-size: 70%;
+  text-transform: none;
+
+  @include space-children;
+}
+
+.death-saves {
+  padding: .25rem;
+
+  .label {
+    text-transform: uppercase;
+    font-size: 70%;
+
+  }
+}
+
+.checks {
+  @include space-children(0.25rem);
+}
+
+.check {
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--color-border);
+  border-radius: 999999px;
+
+  &.selected {
+    background: var(--color-filler);
+  }
+}
+
+.character-appearance {
+  max-width: 100%;
 }
 
 /* Modern browsers with `scrollbar-*` support */

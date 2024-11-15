@@ -1,29 +1,5 @@
-@mixin space-children($margin-size: 0.5rem) {
-  & > * {
-    margin: 0 $margin-size;
-  }
 
-  & > *:first-child {
-    margin-left: 0;
-  }
-
-  & > *:last-child {
-    margin-right: 0;
-  }
-}
-
-.page {
-  margin-bottom: 2rem;
-  min-height: 100vh;
-
-  &#quick-actions {
-    min-height: 5rem;
-  }
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
+@import '@/styles/mixins/space_childeren.scss';
 
 .header {
   width: 100%;
@@ -68,36 +44,9 @@
   }
 }
 
-.top-item {
-  text-align: center;
-
-  .content {
-    padding: .5rem .5rem .25rem .5rem;
-    //background: var(--color-background-mute);
-    //border-radius: 1rem 1rem 0 0;
-
-    &.no-label {
-      border-radius: 1rem;
-      padding: .5rem;
-    }
-  }
-
-  .label {
-    padding: .25rem .5rem .5rem .5rem;
-    //background: var(--color-background-mute);
-    //border-radius: 0 0 1rem 1rem;
-    font-size: 70%;
-    text-transform: uppercase;
-
-  }
-}
-
 .block {
   padding: .5rem 0.25rem;
-  border-top: .125rem solid var(--color-border);
-  border-bottom: .125rem solid var(--color-border);
-  border-right: .125rem solid var(--color-border);
-  border-left: .125rem solid var(--color-border);
+  border: .125rem solid var(--color-border);
   background: var(--color-background-soft);
 
   &.no-border-right {
@@ -153,133 +102,6 @@
   }
 }
 
-#quick-actions .container {
-  width: auto;
-}
-
-#quick-actions .block.value-display {
-  margin: .5rem 1rem;
-  padding: .5rem 1rem;
-  transition: background-color 0.25s ease;
-
-  &:first-child {
-    margin-left: 0;
-  }
-
-  &:last-child {
-    margin-right: 0;
-  }
-
-  &:hover {
-    background: var(--color-background-mute);
-  }
-
-
-}
-
-#page-3 .labeled-row .value p {
-  height: auto;
-}
-
-
-// move to CharacterOverview.vue
-.ability-block {
-  align-items: center;
-  text-transform: uppercase;
-
-  .container.ability {
-    align-items: center;
-
-    .ability-modifier {
-      background-color: var(--color-border);
-      border-radius: 999999px;
-      width: 50%;
-      text-align: center;
-    }
-
-    .ability-score {
-
-      .ability-score-value {
-        text-align: center;
-        font-size: 200%;
-      }
-
-      .ability-score-label {
-        text-align: center;
-        font-size: 70%;
-      }
-    }
-  }
-
-  .container.skill {
-    background: var(--color-background-soft);
-    border-radius: 1.5rem;
-    align-items: center;
-    align-self: start;
-
-    .skill-row {
-      display: flex;
-      padding: .25rem 1rem;
-      align-items: center;
-      width: 100%;
-
-      @include space-children;
-
-      .proficient {
-        width: 1rem;
-        height: 1rem;
-        background-color: var(--color-border);
-        border-radius: 999999px;
-
-        &.selected {
-          background: var(--color-filler);
-        }
-      }
-
-      .skill-score {
-        font-size: 50%;
-
-      }
-
-      .skill-name {
-        font-size: 50%;
-      }
-    }
-  }
-}
-
-.equipment-item {
-  font-size: 70%;
-  text-transform: none;
-
-  @include space-children;
-}
-
-.death-saves {
-  padding: .25rem;
-
-  .label {
-    text-transform: uppercase;
-    font-size: 70%;
-
-  }
-}
-
-.checks {
-  @include space-children(0.25rem);
-}
-
-.check {
-  width: 1rem;
-  height: 1rem;
-  background-color: var(--color-border);
-  border-radius: 999999px;
-
-  &.selected {
-    background: var(--color-filler);
-  }
-}
-
 .block.value-display {
   align-items: center;
   text-transform: uppercase;
@@ -318,6 +140,3 @@
   }
 }
 
-.character-appearance {
-  max-width: 100%;
-}

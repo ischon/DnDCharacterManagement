@@ -1,0 +1,74 @@
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  justify-content: center;
+
+  .popup-display {
+    min-width: 20rem;
+    width: 50%;
+    justify-content: center;
+
+    .value-display {
+      padding: 4rem 2rem;
+      min-width: 15rem;
+      border-radius: 1rem;
+      border-width: .25rem;
+
+      .input-row, .button-row {
+        justify-content: center;
+      }
+
+      .input-row {
+        margin-bottom: 1rem;
+
+        > div {
+          align-items: center;
+        }
+
+        label {
+          text-transform: none;
+        }
+
+        input, textarea, select {
+          padding: .5rem;
+          border-radius: .5rem;
+        }
+
+        input {
+          text-align: center;
+
+          &[type="text"] {
+            width: 15rem;
+          }
+
+          &[type="number"] {
+            text-align: start;
+            width: 5rem;
+          }
+        }
+
+        textarea {
+          min-width: 15rem;
+        }
+
+        select {
+          width: 15rem;
+        }
+
+      }
+
+      .button-row {
+        button {
+          padding: .5rem;
+          border-radius: .5rem;
+          margin-right: 1rem;
+        }
+      }
+    }
+  }
+}
