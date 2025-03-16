@@ -301,7 +301,7 @@ export class Character {
     }
 
     featureUpdate(oldFeature, feature, description) {
-        if (this._character.features[oldFeature.name] === undefined) {
+        if (this._character.features[oldFeature] === undefined) {
             console.error("ERROR: feature does not exists")
             return
         }
