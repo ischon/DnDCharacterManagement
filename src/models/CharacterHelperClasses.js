@@ -48,6 +48,7 @@ export function defaultCharacter(id) {
         bonds: "",
         flaws: "",
         allies: "",
+        notes: "",
         additionalFeatures: "",
         treasure: "",
         abilities: {
@@ -148,6 +149,10 @@ export function CharacterConversions(character) {
             attack.index = index;
         });
 
+    }
+
+    if (!('notes' in character)) {
+        character["notes"] = ""
     }
 
     return character

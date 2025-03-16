@@ -777,6 +777,15 @@ onBeforeMount(async () => {
         </div>
         <div class="container col flex-2">
           <div class="container block value-display align-start col flex-1 no-border-right clickable"
+          @click="editingPopup.atClickEdit(character, [['Important Notes', 'notes', character.notes, ModelTypes.textarea]])">
+            <div class="flex-1">
+              <p class="no-transform" v-for="line in character.notes.split('\n')">
+                      {{ line }}
+                  </p>
+            </div>
+            <p class="align-center">Important Notes</p>
+          </div>
+          <div class="container block value-display align-start col flex-1 no-border-right clickable"
                @click="editingPopup.atClickEdit(character, [['Allies & Organizations', 'detailAllies', character.detailAllies, ModelTypes.textarea]])">
             <div class="flex-1">
               <p class="no-transform" v-for="line in character.detailAllies.split('\n')">
@@ -786,11 +795,11 @@ onBeforeMount(async () => {
             <p class="align-center">Allies & Organizations</p>
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right clickable"
-               @click="editingPopup.atClickEdit(character, [['Additional Features & Traits', 'featureAdditional', character.featureAdditional, ModelTypes.textarea]])">
+          @click="editingPopup.atClickEdit(character, [['Additional Features & Traits', 'featureAdditional', character.featureAdditional, ModelTypes.textarea]])">
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.featureAdditional.split('\n')">
-                {{ line }}
-              </p>
+                  <p class="no-transform" v-for="line in character.featureAdditional.split('\n')">
+                      {{ line }}
+                  </p>
             </div>
             <p class="align-center">Additional Features & Traits</p>
           </div>

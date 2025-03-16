@@ -274,6 +274,13 @@ export class Character {
         }
     }
 
+    get notes() {
+        return this._character.notes
+    }
+
+    set notes(value) {
+        this._character.notes = value
+    }
 
     get featureAdditional() {
         return this._character.additionalFeatures
