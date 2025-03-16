@@ -102,11 +102,23 @@ export class Character {
 
 
     attackAdd(name, bonus, damage, type) {
-        this._character.attacks[name] = new Attack(name, bonus, damage, type)
+        this._character.attacks[name] = new Attack(name, bonus, damage, type, this._character.attacks.length+1)
     }
 
     get attacks() {
-        return this._character.attacks
+        let objects = Object.entries(this._character.attacks)
+        objects.sort((a, b) => {
+            if (a[1].index < b[1].index) {
+                return -1;
+            } else if (b[1].index > a[1].index) {
+                return 1;
+            }
+            // a must be equal to b
+            return 0;
+        })
+        const result = {}
+        objects.forEach((item) => result[item[0]] = item[1]);
+        return result
     }
 
     attackUpdate(key, attack) {

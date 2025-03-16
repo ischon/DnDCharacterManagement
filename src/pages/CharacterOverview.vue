@@ -984,6 +984,7 @@ onBeforeMount(async () => {
             </select>
             <div v-if="item.type.element === 'weapon'">
               <div class="container row" v-for="row in item.value">
+                <input type="number" v-model="row.index" placeholder="Position">
                 <input type="text" v-model="row.name" placeholder="Name">
                 <input type="number" v-model="row.bonus" placeholder="Bonus">
                 <input type="text" v-model="row.damage" placeholder="Damage">

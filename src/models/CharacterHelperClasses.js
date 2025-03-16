@@ -3,7 +3,8 @@ import {range} from "lodash";
 import {abilityTypes, proficiencyTypes} from "@/models/Enums.js";
 
 export class Attack {
-    constructor(name, bonus, damage, type) {
+    constructor(name, bonus, damage, type, index = 0) {
+        this.index = index;
         this.name = name;
         this.bonus = bonus;
         this.damage = damage;
@@ -137,8 +138,16 @@ export function CharacterConversions(character) {
         character.features = features
     }
 
-    if (!('subclass' in character)){
+    if (!('subclass' in character)) {
         character.subclass = ""
+    }
+
+
+    if ('attacks' in character && Object.keys(character['attacks']).length > 0 && !('index' in Object.values(character['attacks'])[0])) {
+        Object.entries(character.attacks).forEach(([item, attack], index) => {
+            attack.index = index;
+        });
+
     }
 
     return character
