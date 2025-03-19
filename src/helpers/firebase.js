@@ -85,7 +85,7 @@ export class FirebaseHandler {
         const collectionRef = collection(this.db, path);
         const charactersData = await getDocs(collectionRef);
 
-        console.log(charactersData)
+        // console.log(charactersData)
 
         const characters = []
 

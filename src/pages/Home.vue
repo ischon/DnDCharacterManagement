@@ -33,7 +33,7 @@ async function loadCharacters() {
       .filter(item => item.id !== exampleCharacter.id)
       .sort((a, b) => a.detailName.localeCompare(b.detailName))
   newCharacter = ref(newCharacterId())
-  console.log(characters);
+  // console.log(characters);
   loading.value = false
 }
 

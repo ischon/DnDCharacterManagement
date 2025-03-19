@@ -33,4 +33,4 @@ for (let icon in bodies) {
         ICONS[icon][size] = buildIcon(bodies[icon], Sizes[size])
     }
 }
-console.log(ICONS)
+// console.log(ICONS)

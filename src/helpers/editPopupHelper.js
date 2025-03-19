@@ -73,13 +73,14 @@ export class EditPopup {
                 name: undefined,
                 count: undefined,
                 weight: undefined,
-                index: undefined
+                index: undefined,
+                description: undefined
             }
             this.editing.items.forEach((i) => {
                 item[i.key.split('.')[2]] = i.value
             });
 
-            this.character.equipmentUpdate(item.key, item.name, item.count, item.weight, item.index)
+            this.character.equipmentUpdate(item.key, item.name, item.count, item.weight, item.index, item.description)
         } else if (this.editing.items[0].key.includes('attacks')) {
             Object.entries(this.editing.items[0].value).forEach((attack) => {
                 this.character.attackUpdate(attack[0], attack[1])

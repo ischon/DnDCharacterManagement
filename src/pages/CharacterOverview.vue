@@ -275,7 +275,7 @@ onBeforeMount(async () => {
                      ]
                      let bonusItems = []
 
-                     console.log('ability', ability_name)
+                     // console.log('ability', ability_name)
                      if (ability_name === 'Constitution') {
                        bonusItems = [
                          ['Reminder', '', 'Update your health by 1 ', ModelTypes.disabled],
@@ -531,7 +531,7 @@ onBeforeMount(async () => {
                     </div>
                     <p class="clickable" @click="()=>{
                       confirmModelData.confirmFunction = async ()=>{
-                        console.log('REMOVE', feature)
+                        // console.log('REMOVE', feature)
                         character.featureRemove(feature.name)
                         await firebaseHandler.setCharacterData(character.objectData)
                         resetConfirmModelData()
@@ -660,6 +660,7 @@ onBeforeMount(async () => {
                       ['Amount', `tag-equipment.${item.name}.count`, item.count, ModelTypes.number],
                       ['Name', `tag-equipment.${item.name}.name`, item.name, ModelTypes.text],
                       ['Weight', `tag-equipment.${item.name}.weight`, item.weight, ModelTypes.number],
+                      [ 'Description', `tag-equipment.${item.name}.description`, item.description, ModelTypes.textarea],
                   ])">
                       <div class="flex-2"></div>
                       <div class="flex-2">
@@ -667,6 +668,12 @@ onBeforeMount(async () => {
                       </div>
                       <div class="flex-8">
                         {{ item.name }}
+                        <span v-if="item.description" class="clickable" v-html="ICONS.INFO.SMALL" @click.stop
+                              @click="() => {
+                                toolTipModel.open = true
+                                toolTipModel.name = item.name
+                                toolTipModel.description = item.description
+                              }"/>
                       </div>
                       <div class="flex-4">
                         {{ formatWeight(item.weight * item.count) }}

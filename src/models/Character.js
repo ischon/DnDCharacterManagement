@@ -331,12 +331,12 @@ export class Character {
     }
 
 
-    equipmentAdd(name, count, weight) {
+    equipmentAdd(name, count, weight, description) {
         if (this._character.equipment[name] !== undefined) {
             this._character.equipment[name].count += count
             return
         }
-        this._character.equipment[name] = new Item(Object.keys(this._character.equipment).length, name, count, weight)
+        this._character.equipment[name] = new Item(Object.keys(this._character.equipment).length, name, count, weight, description)
     }
 
     get equipmentItems() {
@@ -369,7 +369,7 @@ export class Character {
         delete this._character.equipment[name]
     }
 
-    equipmentUpdate(oldName, name, count, weight, index) {
+    equipmentUpdate(oldName, name, count, weight, index, description) {
         if (this._character.equipment[oldName] === undefined) {
             console.error("ERROR: equipment does not exists")
             return
@@ -383,6 +383,7 @@ export class Character {
         this._character.equipment[name].count = count
         this._character.equipment[name].weight = weight
         this._character.equipment[name].index = index
+        this._character.equipment[name].description = description
 
     }
 

@@ -1,5 +1,5 @@
 "use strict";
-import {range} from "lodash";
+import {eq, range} from "lodash";
 import {abilityTypes, proficiencyTypes} from "@/models/Enums.js";
 
 export class Attack {
@@ -13,11 +13,12 @@ export class Attack {
 }
 
 export class Item {
-    constructor(index, name, count, weight) {
+    constructor(index, name, count, weight, description) {
         this.index = index
         this.name = name;
         this.count = count;
         this.weight = weight;
+        this.description = description
     }
 }
 
