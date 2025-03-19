@@ -98,7 +98,19 @@ export class EditPopup {
 
             this.character.featureUpdate(feature.key, feature.name, feature.description)
         } else {
+
+
             this.editing.items.forEach((item) => {
+                if (item.name === "Spell"){
+                    const spell_path = item.key.split('.')
+                    const current_spell = this.character._character.spellcasting.spells[spell_path[3]].known[spell_path[5]]
+                    if (this.character._character.spellcasting.spells[spell_path[3]].prepared.includes(current_spell)) {
+                        this.character.spellcastingPreparedRemove(spell_path[3], current_spell)
+                        this.character.spellcastingPreparedAdd(spell_path[3], item.value)
+
+                    }
+
+                }
                 this.saveWithReflect(this.character, item.key, item.value)
             });
         }
