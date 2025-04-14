@@ -628,7 +628,7 @@ onBeforeMount(async () => {
             <div class="container flex-1 block col value-display no-border-right no-border-bottom">
               <div class="container row flex-1">
                 <div class="container col flex-1 clickable" @click="editingPopup.atClickEdit(character, [
-                  ['Copper Coins', 'equipmentCoins', character.equipmentCoins, ModelTypes.coins],
+                  ['Coins', 'equipmentCoins', character.equipmentCoins, ModelTypes.coins],
               ])">
                   <div class="container col block value-display no-border"
                        v-for="(value, type) in character.equipmentCoinFormatted">
@@ -784,11 +784,11 @@ onBeforeMount(async () => {
         </div>
         <div class="container col flex-2">
           <div class="container block value-display align-start col flex-1 no-border-right clickable"
-          @click="editingPopup.atClickEdit(character, [['Important Notes', 'notes', character.notes, ModelTypes.textarea]])">
+               @click="editingPopup.atClickEdit(character, [['Important Notes', 'notes', character.notes, ModelTypes.textarea]])">
             <div class="flex-1">
               <p class="no-transform" v-for="line in character.notes.split('\n')">
-                      {{ line }}
-                  </p>
+                {{ line }}
+              </p>
             </div>
             <p class="align-center">Important Notes</p>
           </div>
@@ -802,11 +802,11 @@ onBeforeMount(async () => {
             <p class="align-center">Allies & Organizations</p>
           </div>
           <div class="container block value-display align-start col flex-1 no-border-right clickable"
-          @click="editingPopup.atClickEdit(character, [['Additional Features & Traits', 'featureAdditional', character.featureAdditional, ModelTypes.textarea]])">
+               @click="editingPopup.atClickEdit(character, [['Additional Features & Traits', 'featureAdditional', character.featureAdditional, ModelTypes.textarea]])">
             <div class="flex-1">
-                  <p class="no-transform" v-for="line in character.featureAdditional.split('\n')">
-                      {{ line }}
-                  </p>
+              <p class="no-transform" v-for="line in character.featureAdditional.split('\n')">
+                {{ line }}
+              </p>
             </div>
             <p class="align-center">Additional Features & Traits</p>
           </div>
@@ -828,29 +828,29 @@ onBeforeMount(async () => {
           <div class="container row">
 
             <div class="container row flex-1">
-            <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
-                 @click="editingPopup.atClickEdit(character, [
+              <div class="container value-display col block flex-1 no-border-top no-border-left clickable"
+                   @click="editingPopup.atClickEdit(character, [
                      ['Spellcasting Class', 'spellcastingClass', character.spellcastingClass, ModelTypes.classes]
                      ])">
-              <p class="flex-1 value medium no-transform">{{ character.spellcastingClass }}</p>
-              <p>Spellcasting Class</p>
-            </div>
+                <p class="flex-1 value medium no-transform">{{ character.spellcastingClass }}</p>
+                <p>Spellcasting Class</p>
+              </div>
             </div>
             <div class="container row flex-2">
-            <div class="container block value-display col flex-1 no-border-top clickable"
-                 @click="editingPopup.atClickEdit(character, [['Spellcasting Ability', 'spellcastingAbility', character.spellcastingAbility, ModelTypes.abilityTypes]])">
-              <p class="flex-1 value medium no-transform" style="text-transform: capitalize">
-                {{ character.spellcastingAbility }}</p>
-              <p>Spellcasting Ability</p>
-            </div>
-            <div class="container block value-display col flex-1 no-border-top">
-              <p class="flex-1 value medium no-transform">{{ character.spellcastingSpellSaveDc }}</p>
-              <p>Spell Save DC</p>
-            </div>
-            <div class="container block value-display col flex-1 no-border-top no-border-right">
-              <p class="flex-1 value medium no-transform">{{ formatScore(character.spellcastingAttackBonus) }}</p>
-              <p>Spell Attack Bonus</p>
-            </div>
+              <div class="container block value-display col flex-1 no-border-top clickable"
+                   @click="editingPopup.atClickEdit(character, [['Spellcasting Ability', 'spellcastingAbility', character.spellcastingAbility, ModelTypes.abilityTypes]])">
+                <p class="flex-1 value medium no-transform" style="text-transform: capitalize">
+                  {{ character.spellcastingAbility }}</p>
+                <p>Spellcasting Ability</p>
+              </div>
+              <div class="container block value-display col flex-1 no-border-top">
+                <p class="flex-1 value medium no-transform">{{ character.spellcastingSpellSaveDc }}</p>
+                <p>Spell Save DC</p>
+              </div>
+              <div class="container block value-display col flex-1 no-border-top no-border-right">
+                <p class="flex-1 value medium no-transform">{{ formatScore(character.spellcastingAttackBonus) }}</p>
+                <p>Spell Attack Bonus</p>
+              </div>
             </div>
           </div>
         </div>
@@ -1008,13 +1008,49 @@ onBeforeMount(async () => {
               </div>
             </div>
             <div v-if="item.type.element === 'coins'">
-              <input :type="'number'"
-                     :name="item.name"
-                     v-model="item.value"
-                     @keydown.enter="editingPopup.atClickSave"
-                     @keydown.esc="editingPopup.atClickCancel"/>
-              <p></p>
-              <p v-for="(coin, name) in calculateCoins(item.value)">{{ coin }} {{ name }}</p>
+              <div class="container row">
+                <p>Copper:
+                  <input type="number" name="copper"
+                         v-model="item.value.copper"
+                         @keydown.enter="editingPopup.atClickSave"
+                         @keydown.esc="editingPopup.atClickCancel"/>
+                </p>
+                <p>Silver:
+                  <input type="number" name="silver"
+                         v-model="item.value.silver"
+                         @keydown.enter="editingPopup.atClickSave"
+                         @keydown.esc="editingPopup.atClickCancel"/>
+                </p>
+                <p>Electrum:
+                  <input type="number" name="electrum"
+                         v-model="item.value.electrum"
+                         @keydown.enter="editingPopup.atClickSave"
+                         @keydown.esc="editingPopup.atClickCancel"/>
+                </p>
+                <p>Gold:
+                  <input type="number" name="gold"
+                         v-model="item.value.gold"
+                         @keydown.enter="editingPopup.atClickSave"
+                         @keydown.esc="editingPopup.atClickCancel"/>
+                </p>
+                <p>Platinum:
+                  <input type="number" name="platinum"
+                         v-model="item.value.platinum"
+                         @keydown.enter="editingPopup.atClickSave"
+                         @keydown.esc="editingPopup.atClickCancel"/>
+                </p>
+              </div>
+              <div class="cointainer row">
+                <p>
+<!--                  TODO: FORMAT-->
+                  Coin	        CP      SP	    EP	    GP	    PP
+                  Copper Piece    1       1/10    1/50    1/100	1/1,000
+                  Silver Piece    10      1       1/5	    1/10    1/100
+                  Electrum Piece  50      5       1       1/2     1/20
+                  Gold Piece      100     10      2       1       1/10
+                  Platinum Piece  1,000   100     20      10      1
+                </p>
+              </div>
             </div>
           </div>
         </div>

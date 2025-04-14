@@ -12,8 +12,8 @@ export function calculateCoins(coins) {
     Platinum Piece  (pp)    1,000   100     20      10      1
      */
     let cp = coins
-    // let pp = Math.floor(cp / 1000)
-    // cp -= pp * 1000
+    let pp = Math.floor(cp / 1000)
+    cp -= pp * 1000
     let gp = Math.floor(cp / 100)
     cp -= gp * 100
     // let ep = Math.floor(cp / 50)
@@ -24,9 +24,9 @@ export function calculateCoins(coins) {
     return {
         'Copper Coins': cp,
         'Silver Coins': sp,
-        // 'Electrum Coins': ep,
+        'Electrum Coins': ep,
         'Gold Coins': gp,
-        // 'Platinum Coins': pp
+        'Platinum Coins': pp
     }
 }
 
