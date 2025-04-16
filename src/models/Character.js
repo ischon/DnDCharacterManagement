@@ -2,7 +2,7 @@
 
 import {classes, alignments, abilityTypes, proficiencyTypes, armorTypes, abilities, dice} from "@/models/Enums.js";
 import {Attack, Item, defaultCharacter, CharacterConversions, newCharacterId} from "@/models/CharacterHelperClasses.js";
-import {calculateCoins, calculateAbilityModifier, toCopperCoins} from "@/helpers/characterHelpers.js";
+import {calculateAbilityModifier} from "@/helpers/characterHelpers.js";
 
 export class Character {
     default(id = undefined) {
@@ -388,17 +388,30 @@ export class Character {
     }
 
     equipmentCoinAdd(coins, type) {
-        let cp = toCopperCoins(coins, type)
-        this._character.coins += cp
+        // let cp = toCopperCoins(coins, type)
+        type = type.toLowerCase();
+        if (Number.isInteger(coins) && coins > 0 && typeof type === "string" && type in this._character.coins) {
+            this._character.coins[type] += coins
+        }
+        else {
+            console.error("ERROR: coins must be a positive integer or the type does nog exist")
+        }
     }
 
     equipmentCoinRemove(coins, type) {
-        let cp = toCopperCoins(coins, type)
-        if (this._character.coins < cp) {
-            console.error("ERROR: not enough coins")
-            return
+        // let cp = toCopperCoins(coins, type)
+        type = type.toLowerCase();
+        if (Number.isInteger(coins) && coins > 0 && typeof type === "string" && type in this._character.coins) {
+            if (this._character.coins[type] < coins) {
+                console.error("ERROR: not enough coins")
+                return
+            }
+            this._character.coins[type] -= coins
         }
-        this._character.coins -= cp
+        else {
+            console.error("ERROR: coins must be a positive integer or the type does nog exist")
+        }
+
     }
 
     get equipmentCoins() {
@@ -406,15 +419,22 @@ export class Character {
     }
 
     set equipmentCoins(value) {
-        if (!Number.isInteger(value) || value < 0) {
+        if (typeof value !== "object" || value === null) { // todo: make the check work for the list
             console.error("ERROR: coins must be a positive integer")
+            return
         }
 
         this._character.coins = value
     }
 
     get equipmentCoinFormatted() {
-        return calculateCoins(this._character.coins)
+        return  {
+            'Copper Coins': this._character.coins.copper,
+            'Silver Coins': this._character.coins.silver,
+            'Electrum Coins': this._character.coins.electrum,
+            'Gold Coins': this._character.coins.gold,
+            'Platinum Coins': this._character.coins.platinum,
+        }
     }
 
     get abilityStrength() {

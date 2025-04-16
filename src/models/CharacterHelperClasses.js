@@ -1,6 +1,7 @@
 "use strict";
 import {eq, range} from "lodash";
 import {abilityTypes, proficiencyTypes} from "@/models/Enums.js";
+import {Character} from "@/models/Character.js";
 
 export class Attack {
     constructor(name, bonus, damage, type, index = 0) {
@@ -154,6 +155,36 @@ export function CharacterConversions(character) {
 
     if (!('notes' in character)) {
         character["notes"] = ""
+    }
+
+    if ('coins' in character && typeOfProp(character.coins) === 'number') {
+        /*
+            Coin	        CP      SP	    EP	    GP	    PP
+            Copper Piece    1       1/10    1/50    1/100	1/1,000
+            Silver Piece    10      1       1/5	    1/10    1/100
+            Electrum Piece  50      5       1       1/2     1/20
+            Gold Piece      100     10      2       1       1/10
+            Platinum Piece  1,000   100     20      10      1
+         */
+        let coins = {
+            copper: 0,
+            silver: 0,
+            electrum: 0,
+            gold: 0,
+            platinum: 0
+        }
+        let coinCount = character.coins
+        // coins.platinum = Math.floor(coinCount / 1000)
+        // coinCount -= coins.platinum * 1000
+        coins.gold = Math.floor(coinCount / 100)
+        coinCount -= coins.gold * 100
+        // coins.electrum = Math.floor(coinCount / 50)
+        // coinCount -= coins.electrum * 50
+        coins.silver = Math.floor(coinCount / 10)
+        coinCount -= coins.silver * 10
+        coins.copper = coinCount
+
+        character.coins = coins
     }
 
     return character
