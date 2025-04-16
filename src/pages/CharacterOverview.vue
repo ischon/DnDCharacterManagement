@@ -6,7 +6,7 @@ import {onBeforeMount, ref, reactive, watch} from 'vue'
 import {FirebaseHandler} from "@/helpers/firebase.js";
 import {range} from 'lodash';
 
-import {calculateCoins, longRest} from "@/helpers/characterHelpers.js";
+import {longRest} from "@/helpers/characterHelpers.js";
 import {formatScore, formatLength, formatWeight} from "@/helpers/formatHelpers.js";
 import {ICONS} from "@/helpers/icons.js";
 
@@ -15,6 +15,14 @@ import {ModelTypes, EditPopup} from "@/helpers/editPopupHelper.js";
 import "@/styles/popup.scss"
 
 const SPACE_CHAR = ' ‎'
+const COIN_CALCULATION = `
+Coin       CP    SP    EP    GP    PP
+Copper     1     1/10  1/50  1/100 1/1000
+Silver     10    1     1/5   1/10  1/100
+Electrum   50    5     1     1/2   1/20
+Gold       100   10    2     1     1/10
+Platinum   1000  100   20    10    1
+`
 
 // setup() {
 const loading = reactive({
@@ -1040,16 +1048,8 @@ onBeforeMount(async () => {
                          @keydown.esc="editingPopup.atClickCancel"/>
                 </p>
               </div>
-              <div class="cointainer row">
-                <p>
-<!--                  TODO: FORMAT-->
-                  Coin	        CP      SP	    EP	    GP	    PP
-                  Copper Piece    1       1/10    1/50    1/100	1/1,000
-                  Silver Piece    10      1       1/5	    1/10    1/100
-                  Electrum Piece  50      5       1       1/2     1/20
-                  Gold Piece      100     10      2       1       1/10
-                  Platinum Piece  1,000   100     20      10      1
-                </p>
+              <div class="container row">
+                <textarea id="tooltip" style="height: 10rem" readonly :value="COIN_CALCULATION"></textarea>
               </div>
             </div>
           </div>

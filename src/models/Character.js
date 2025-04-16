@@ -419,15 +419,15 @@ export class Character {
     }
 
     set equipmentCoins(value) {
-        if (!Number.isInteger(value) || value < 0) { // todo: make the check work for the list
+        if (typeof value !== "object" || value === null) { // todo: make the check work for the list
             console.error("ERROR: coins must be a positive integer")
+            return
         }
 
         this._character.coins = value
     }
 
     get equipmentCoinFormatted() {
-        // return calculateCoins(this._character.coins)
         return  {
             'Copper Coins': this._character.coins.copper,
             'Silver Coins': this._character.coins.silver,
