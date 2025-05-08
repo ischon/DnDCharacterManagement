@@ -41,7 +41,7 @@ export class FirebaseHandler {
       // Initialize credential and sign in
       this.credential = GoogleAuthProvider.credential(token)
       await signInWithCredential(this.auth, this.credential)
-      this.firebaseUser = getAuth().currentUser
+      this.firebaseUser = this.auth.currentUser
 
       if (!this.firebaseUser) {
         throw new Error('Failed to get current user after sign in')
