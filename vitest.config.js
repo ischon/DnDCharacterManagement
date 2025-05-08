@@ -8,16 +8,11 @@ export default defineConfig({
     globals: true,
     environment: 'happy-dom',
     setupFiles: ['src/setupTests.js'],
-    environmentMatchGlobs: [
-      ['src/**/*.test.js', 'happy-dom']
-    ],
+    environmentMatchGlobs: [['src/**/*.test.js', 'happy-dom']],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'src/setupTests.js',
-      ],
+      exclude: ['node_modules/', 'src/setupTests.js'],
       thresholds: {
         lines: 80,
         functions: 80,

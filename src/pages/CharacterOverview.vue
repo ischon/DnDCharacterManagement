@@ -28,8 +28,6 @@ Platinum   1000  100   20    10    1
     image: true
   })
 
-  const editPopup = reactive(new EditPopup())
-
   const showImageModel = ref(false)
 
   const toolTipModel = reactive({
@@ -55,9 +53,10 @@ Platinum   1000  100   20    10    1
   const characterId = router.currentRoute.value.params.id
   const firebaseHandler = new FirebaseHandler()
   let character = undefined
-  const editingPopup = new EditPopup()
 
   const characterImage = ref(undefined)
+
+  const editingPopup = new EditPopup()
 
   watch(
     () => router.currentRoute.value.params.id,
@@ -205,7 +204,7 @@ Platinum   1000  100   20    10    1
 
 <template>
   <div v-if="!loading.character">
-    <div class="page container col" id="quick-actions">
+    <div id="quick-actions" class="page container col">
       <div class="header container row flex-1">
         <h1>Quick Actions</h1>
       </div>
@@ -231,7 +230,7 @@ Platinum   1000  100   20    10    1
       </div>
     </div>
 
-    <div class="page container col" id="page-1">
+    <div id="page-1" class="page container col">
       <!-- Page 1 -->
       <div class="header container row flex-1">
         <h1>Character Overview</h1>
@@ -366,6 +365,7 @@ Platinum   1000  100   20    10    1
             </div>
             <div
               v-for="(ability, ability_name) in character.abilities"
+              :key="ability_name"
               class="container row flex-2 block ability-block no-border-left"
             >
               <!--ABILITY-->
@@ -401,7 +401,7 @@ Platinum   1000  100   20    10    1
               </div>
               <div class="container skill col flex-2">
                 <!--SKILLS-->
-                <div v-for="(skill_stats, skill_name) in ability.skills" class="skill-row flex-1">
+                <div v-for="(skill, skill_name) in ability.skills" :key="skill_name" class="skill-row flex-1">
                   <div
                     class="proficient clickable"
                     :class="{
@@ -410,7 +410,7 @@ Platinum   1000  100   20    10    1
                     }"
                     @click="atClickProficiency(ability_name, skill_name)"
                   ></div>
-                  <div class="skill-score">{{ formatScore(skill_stats.value) }}</div>
+                  <div class="skill-score">{{ formatScore(skill.value) }}</div>
                   <div class="skill-name">{{ skill_name }}</div>
                 </div>
               </div>
@@ -593,9 +593,9 @@ Platinum   1000  100   20    10    1
                         <div class="label flex-2">successes</div>
                         <div class="checks flex-1 container row">
                           <div
+                            v-for="key in range(0, 3)"
                             class="check"
                             :class="{ selected: key < character.statDeathSavesSuccesses }"
-                            v-for="key in range(0, 3)"
                           ></div>
                         </div>
                       </div>
@@ -603,9 +603,9 @@ Platinum   1000  100   20    10    1
                         <div class="label flex-2">Failures</div>
                         <div class="checks flex-1 container row">
                           <div
+                            v-for="key in range(0, 3)"
                             class="check"
                             :class="{ selected: key < character.statDeathSavesFailures }"
-                            v-for="key in range(0, 3)"
                           ></div>
                         </div>
                       </div>
@@ -630,8 +630,8 @@ Platinum   1000  100   20    10    1
                 >
                   <div class="flex-1">
                     <p
-                      class="no-transform"
                       v-for="traits in character.detailPersonalityTraits.split('\n')"
+                      class="no-transform"
                     >
                       {{ traits }}
                     </p>
@@ -647,7 +647,7 @@ Platinum   1000  100   20    10    1
                   "
                 >
                   <div class="flex-1">
-                    <p class="no-transform" v-for="ideal in character.detailIdeals.split('\n')">
+                    <p v-for="ideal in character.detailIdeals.split('\n')" class="no-transform">
                       {{ ideal }}
                     </p>
                   </div>
@@ -662,7 +662,7 @@ Platinum   1000  100   20    10    1
                   "
                 >
                   <div class="flex-1">
-                    <p class="no-transform" v-for="bond in character.detailBonds.split('\n')">
+                    <p v-for="bond in character.detailBonds.split('\n')" class="no-transform">
                       {{ bond }}
                     </p>
                   </div>
@@ -678,7 +678,7 @@ Platinum   1000  100   20    10    1
                   "
                 >
                   <div class="flex-1">
-                    <p class="no-transform" v-for="flaw in character.detailFlaws.split('\n')">
+                    <p v-for="flaw in character.detailFlaws.split('\n')" class="no-transform">
                       {{ flaw }}
                     </p>
                   </div>
@@ -702,7 +702,7 @@ Platinum   1000  100   20    10    1
                     <p class="flex-2">Damage/ type</p>
                     <p></p>
                   </div>
-                  <div class="container row" v-for="row in character.attacks">
+                  <div v-for="row in character.attacks" :key="row.name" class="container row">
                     <p class="flex-2">{{ row.name }}</p>
                     <p class="flex-1">{{ formatScore(row.bonus) }}</p>
                     <p class="flex-2">{{ row.damage }} / {{ row.type }}</p>
@@ -749,16 +749,18 @@ Platinum   1000  100   20    10    1
                 <br />
                 <p>Spells</p>
                 <div
+                  v-for="(spells, lvl) in character.spellcastingSpells"
+                  :key="lvl"
                   :style="{ 'display: none': spells.prepared.length > 0 }"
                   style="width: 100%"
-                  v-for="(spells, lvl) in character.spellcastingSpells"
                 >
-                  <div class="container row" v-if="spells.prepared.length > 0">
+                  <div v-if="spells.prepared.length > 0" class="container row">
                     <p>- Level {{ lvl }}</p>
                     <p class="flex-1"></p>
                     <p>
                       {{ spells.spellSlots - spells.spellSlotsExpanded }} Slots remaining
                       <span
+                        class="clickable"
                         @click="
                           async () => {
                             character.spellcastingSpellSlotsExpanded_set(
@@ -768,22 +770,23 @@ Platinum   1000  100   20    10    1
                             await firebaseHandler.setCharacterData(character.objectData)
                           }
                         "
-                        class="clickable"
                         >—</span
                       >
                     </p>
                   </div>
 
-                  <p v-if="spells.prepared.length > 0" v-for="spell in spells.prepared">
-                    {{ SPACE_CHAR.repeat(3) }}- {{ spell }}
-                  </p>
+                  <template v-if="spells.prepared.length > 0">
+                    <p v-for="spell in spells.prepared" :key="spell">
+                      {{ SPACE_CHAR.repeat(3) }}- {{ spell }}
+                    </p>
+                  </template>
                   <p v-if="spells.prepared.length > 0"></p>
                 </div>
                 <p class="align-center">Attacks & Spellcasting</p>
               </div>
               <div class="container value-display align-start block no-border-right col flex-1">
                 <div class="flex-1" style="width: 100%">
-                  <div class="container row flex-1" v-for="feature in character.features">
+                  <div v-for="feature in character.features" :key="feature.name" class="container row flex-1">
                     <div
                       class="flex-1 clickable container col"
                       @click="
@@ -808,7 +811,6 @@ Platinum   1000  100   20    10    1
                         <span
                           v-if="feature.description"
                           class="clickable"
-                          v-html="ICONS.INFO.SMALL"
                           @click.stop
                           @click="
                             () => {
@@ -817,6 +819,7 @@ Platinum   1000  100   20    10    1
                               toolTipModel.description = feature.description
                             }
                           "
+                          v-html="ICONS.INFO.SMALL"
                         />
                       </p>
                     </div>
@@ -867,8 +870,9 @@ Platinum   1000  100   20    10    1
                 <div class="flex-1" style="width: 100%">
                   <p>Languages</p>
                   <div
-                    class="container row flex-1"
                     v-for="(language, index) in character.languages"
+                    :key="language"
+                    class="container row flex-1"
                   >
                     <p
                       class="flex-1 clickable"
@@ -915,9 +919,10 @@ Platinum   1000  100   20    10    1
                   <div v-for="(items, category) in character.proficiencies">
                     <p v-if="items.length > 0 || category === 'items'">{{ category }}</p>
                     <div
+                      v-for="(proficiency, idx) in items"
+                      :key="idx"
                       v-if="category === 'items'"
                       class="container row flex-1"
-                      v-for="(proficiency, index) in items"
                     >
                       <p
                         class="flex-1 clickable"
@@ -965,7 +970,7 @@ Platinum   1000  100   20    10    1
                       <p class="flex-1">--Add a proficiency--</p>
                       <p v-html="ICONS.ADD.MEDIUM"></p>
                     </div>
-                    <p v-if="items.length > 0 && category !== 'items'" v-for="proficiency in items">
+                    <p v-for="proficiency in items" v-if="items.length > 0 && category !== 'items'">
                       - {{ proficiency }}
                     </p>
                     <br v-if="items.length > 0 || category === 'items'" />
@@ -987,8 +992,9 @@ Platinum   1000  100   20    10    1
                   "
                 >
                   <div
-                    class="container col block value-display no-border"
                     v-for="(value, type) in character.equipmentCoinFormatted"
+                    :key="type"
+                    class="container col block value-display no-border"
                   >
                     <p class="value flex-1">
                       {{ value }}
@@ -1008,6 +1014,7 @@ Platinum   1000  100   20    10    1
                     </div>
                     <div
                       v-for="item in character.equipmentItems"
+                      :key="item.name"
                       class="equipment-item container row clickable"
                       @click="
                         editingPopup.atClickEdit(character, [
@@ -1048,7 +1055,6 @@ Platinum   1000  100   20    10    1
                         <span
                           v-if="item.description"
                           class="clickable"
-                          v-html="ICONS.INFO.SMALL"
                           @click.stop
                           @click="
                             () => {
@@ -1057,6 +1063,7 @@ Platinum   1000  100   20    10    1
                               toolTipModel.description = item.description
                             }
                           "
+                          v-html="ICONS.INFO.SMALL"
                         />
                       </div>
                       <div class="flex-4">
@@ -1105,7 +1112,7 @@ Platinum   1000  100   20    10    1
         </div>
       </div>
     </div>
-    <div class="page container col" id="page-2">
+    <div id="page-2" class="page container col">
       <!-- Page 2 -->
       <div class="header container row">
         <!-- Header -->
@@ -1242,7 +1249,7 @@ Platinum   1000  100   20    10    1
             "
           >
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.detailBackstory.split('\n')">
+              <p v-for="line in character.detailBackstory.split('\n')" class="no-transform">
                 {{ line }}
               </p>
             </div>
@@ -1259,7 +1266,7 @@ Platinum   1000  100   20    10    1
             "
           >
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.notes.split('\n')">
+              <p v-for="line in character.notes.split('\n')" class="no-transform">
                 {{ line }}
               </p>
             </div>
@@ -1279,7 +1286,7 @@ Platinum   1000  100   20    10    1
             "
           >
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.detailAllies.split('\n')">
+              <p v-for="line in character.detailAllies.split('\n')" class="no-transform">
                 {{ line }}
               </p>
             </div>
@@ -1299,7 +1306,7 @@ Platinum   1000  100   20    10    1
             "
           >
             <div class="flex-1">
-              <p class="no-transform" v-for="line in character.featureAdditional.split('\n')">
+              <p v-for="line in character.featureAdditional.split('\n')" class="no-transform">
                 {{ line }}
               </p>
             </div>
@@ -1314,7 +1321,7 @@ Platinum   1000  100   20    10    1
             "
           >
             <div class="flex-1">
-              <p class="flex-1 no-transform" v-for="line in character.detailTreasure.split('\n')">
+              <p v-for="line in character.detailTreasure.split('\n')" class="flex-1 no-transform">
                 {{ line }}
               </p>
             </div>
@@ -1323,7 +1330,7 @@ Platinum   1000  100   20    10    1
         </div>
       </div>
     </div>
-    <div class="page container col" id="page-3">
+    <div id="page-3" class="page container col">
       <div class="header container row">
         <!-- Header -->
         <div class="container col flex-1">
@@ -1383,16 +1390,17 @@ Platinum   1000  100   20    10    1
       </div>
       <div class="body container row">
         <div
-          class="container col flex-1"
           v-for="(i, key) in [
             [0, 1, 2],
             [3, 4, 5],
             [6, 7, 8, 9]
           ]"
+          class="container col flex-1"
         >
           <div
-            class="container block value-display col flex-1"
             v-for="j in i"
+            :key="j"
+            class="container block value-display col flex-1"
             :class="{
               'no-border-bottom': [2, 5, 9].includes(j),
               'no-border-left': key === 0,
@@ -1403,10 +1411,10 @@ Platinum   1000  100   20    10    1
               <div class="value flex-1">
                 <p>lvl {{ j }}</p>
               </div>
-              <div class="label flex-3" v-if="j === 0">
+              <div v-if="j === 0" class="label flex-3">
                 <p>Cantrips</p>
               </div>
-              <div class="flex-3 container row" v-if="j !== 0">
+              <div v-if="j !== 0" class="flex-3 container row">
                 <div
                   class="value flex-1"
                   @click="
@@ -1482,15 +1490,16 @@ Platinum   1000  100   20    10    1
 
             <div class="container col block no-border">
               <div
+                v-for="(cantrip, idx) in character.spellcastingCantrips"
                 v-if="j === 0"
-                v-for="(cantrip, index) in character.spellcastingCantrips"
+                :key="`cantrip-${idx}`"
                 class="container row clickable"
                 @click="
                   editingPopup.atClickEdit(character, [
                     [
                       `Cantrip`,
-                      `_character.spellcasting.cantrips.${index}`,
-                      character.spellcastingCantrips[index],
+                      `_character.spellcasting.cantrips.${idx}`,
+                      character.spellcastingCantrips[idx],
                       ModelTypes.text
                     ]
                   ])
@@ -1515,14 +1524,15 @@ Platinum   1000  100   20    10    1
                 ></p>
               </div>
               <div
+                v-for="(spell, idx) in character.spellcastingSpells[j].known"
                 v-else
-                v-for="(spell, index) in character.spellcastingSpells[j].known"
+                :key="`spell-${j}-${idx}`"
                 class="container row clickable"
                 @click="
                   editingPopup.atClickEdit(character, [
                     [
                       `Spell`,
-                      `_character.spellcasting.spells.${j}.known.${index}`,
+                      `_character.spellcasting.spells.${j}.known.${idx}`,
                       spell,
                       ModelTypes.text
                     ]
@@ -1602,14 +1612,14 @@ Platinum   1000  100   20    10    1
   >
     <div class="container row popup-display">
       <div class="container block value-display col" @click.stop>
-        <div class="container row input-row" v-for="item in editingPopup.editing.items">
+        <div v-for="item in editingPopup.editing.items" class="container row input-row">
           <div class="container col">
             <label :for="item.name">{{ item.name }}</label>
             <input
               v-if="item.type.element === 'input' && item.type.type !== 'disabled'"
+              v-model="item.value"
               :type="item.type.type !== 'coin' ? item.type.type : 'number'"
               :name="item.name"
-              v-model="item.value"
               @keydown.enter="editingPopup.atClickSave"
               @keydown.esc="editingPopup.atClickCancel"
             />
@@ -1622,27 +1632,27 @@ Platinum   1000  100   20    10    1
             />
             <textarea
               v-if="item.type.element === 'textarea'"
+              v-model="item.value"
               :name="item.name"
               rows="5"
               cols="40"
-              v-model="item.value"
               @keydown.esc="editingPopup.atClickCancel"
             />
-            <select v-if="item.type.element === 'select'" :name="item.name" v-model="item.value">
+            <select v-if="item.type.element === 'select'" v-model="item.value" :name="item.name">
               <option v-for="option in item.type.options" :value="option">
                 {{ option[0].toUpperCase() + option.slice(1) }}
               </option>
             </select>
-            <select v-if="item.type.element === 'dice'" :name="item.name" v-model="item.value">
+            <select v-if="item.type.element === 'dice'" v-model="item.value" :name="item.name">
               <option v-for="option in item.type.options" :value="option">D{{ option }}</option>
             </select>
             <div v-if="item.type.element === 'weapon'">
-              <div class="container row" v-for="row in item.value">
-                <input type="number" v-model="row.index" placeholder="Position" />
-                <input type="text" v-model="row.name" placeholder="Name" />
-                <input type="number" v-model="row.bonus" placeholder="Bonus" />
-                <input type="text" v-model="row.damage" placeholder="Damage" />
-                <input type="text" v-model="row.type" placeholder="Type" />
+              <div v-for="row in item.value" class="container row">
+                <input v-model="row.index" type="number" placeholder="Position" />
+                <input v-model="row.name" type="text" placeholder="Name" />
+                <input v-model="row.bonus" type="number" placeholder="Bonus" />
+                <input v-model="row.damage" type="text" placeholder="Damage" />
+                <input v-model="row.type" type="text" placeholder="Type" />
               </div>
             </div>
             <div v-if="item.type.element === 'coins'">
@@ -1650,9 +1660,9 @@ Platinum   1000  100   20    10    1
                 <p>
                   Copper:
                   <input
+                    v-model="item.value.copper"
                     type="number"
                     name="copper"
-                    v-model="item.value.copper"
                     @keydown.enter="editingPopup.atClickSave"
                     @keydown.esc="editingPopup.atClickCancel"
                   />
@@ -1660,9 +1670,9 @@ Platinum   1000  100   20    10    1
                 <p>
                   Silver:
                   <input
+                    v-model="item.value.silver"
                     type="number"
                     name="silver"
-                    v-model="item.value.silver"
                     @keydown.enter="editingPopup.atClickSave"
                     @keydown.esc="editingPopup.atClickCancel"
                   />
@@ -1670,9 +1680,9 @@ Platinum   1000  100   20    10    1
                 <p>
                   Electrum:
                   <input
+                    v-model="item.value.electrum"
                     type="number"
                     name="electrum"
-                    v-model="item.value.electrum"
                     @keydown.enter="editingPopup.atClickSave"
                     @keydown.esc="editingPopup.atClickCancel"
                   />
@@ -1680,9 +1690,9 @@ Platinum   1000  100   20    10    1
                 <p>
                   Gold:
                   <input
+                    v-model="item.value.gold"
                     type="number"
                     name="gold"
-                    v-model="item.value.gold"
                     @keydown.enter="editingPopup.atClickSave"
                     @keydown.esc="editingPopup.atClickCancel"
                   />
@@ -1690,9 +1700,9 @@ Platinum   1000  100   20    10    1
                 <p>
                   Platinum:
                   <input
+                    v-model="item.value.platinum"
                     type="number"
                     name="platinum"
-                    v-model="item.value.platinum"
                     @keydown.enter="editingPopup.atClickSave"
                     @keydown.esc="editingPopup.atClickCancel"
                   />
@@ -1730,10 +1740,10 @@ Platinum   1000  100   20    10    1
           <div class="container col">
             <label for="characterImage">Character Appearance</label>
             <input
+              id="characterImage"
               type="file"
               accept="image/*"
               name="Character Appearance"
-              id="characterImage"
               @change="uploadImage"
             />
           </div>

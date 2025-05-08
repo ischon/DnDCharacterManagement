@@ -1,7 +1,27 @@
 'use strict'
-import { eq, range } from 'lodash'
+
+import { range } from 'lodash'
 import { abilityTypes, proficiencyTypes } from '@/models/Enums.js'
-import { Character } from '@/models/Character.js'
+
+export class Equipment {
+  constructor(data = {}) {
+    this.name = data.name || ''
+    this.description = data.description || ''
+    this.amount = data.amount || 1
+    this.weight = data.weight || 0
+    this.value = data.value || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 }
+  }
+}
+
+export class Feature {
+  constructor(data = {}) {
+    this.name = data.name || ''
+    this.description = data.description || ''
+    this.uses = data.uses || 0
+    this.usesMax = data.usesMax || 0
+    this.recharge = data.recharge || ''
+  }
+}
 
 export class Attack {
   constructor(name, bonus, damage, type, index = 0) {
@@ -189,4 +209,8 @@ export function CharacterConversions(character) {
   }
 
   return character
+}
+
+export function calculateModifier(score) {
+  return Math.floor((score - 10) / 2)
 }

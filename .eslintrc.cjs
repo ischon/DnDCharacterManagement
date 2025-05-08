@@ -3,13 +3,9 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true,
+    node: true
   },
-  extends: [
-    'plugin:vue/vue3-recommended',
-    'eslint:recommended',
-    '@vue/eslint-config-prettier'
-  ],
+  extends: ['plugin:vue/vue3-recommended', 'eslint:recommended', '@vue/eslint-config-prettier'],
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module'
@@ -18,13 +14,16 @@ module.exports = {
     'vue/multi-word-component-names': 'off',
     'vue/no-v-html': 'off',
     'vue/require-default-prop': 'off',
-    'vue/max-attributes-per-line': ['error', {
-      singleline: {
-        max: 3
-      },
-      multiline: {
-        max: 1
+    'vue/max-attributes-per-line': [
+      'error',
+      {
+        singleline: {
+          max: 3
+        },
+        multiline: {
+          max: 1
+        }
       }
-    }]
+    ]
   }
 }

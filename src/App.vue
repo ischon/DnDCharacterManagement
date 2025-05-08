@@ -13,10 +13,6 @@
   firebaseHandler.setup().then(() => {
     uid.value = firebaseHandler.firebaseUser.uid.slice(0, 8)
   })
-
-  const email = localStorage.getItem('UserData')
-    ? JSON.parse(localStorage.getItem('UserData')).email
-    : undefined
 </script>
 
 <template>
