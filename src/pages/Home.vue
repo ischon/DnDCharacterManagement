@@ -72,8 +72,8 @@
     <character-card
       v-if="demoCharacter"
       :character="demoCharacter"
-      @click="navigateToCharacter(demoCharacter.id)"
       class="example-character"
+      @click="navigateToCharacter(demoCharacter.id)"
     >
       <template #prefix>
         <span class="example-label">Example character</span>
@@ -82,10 +82,7 @@
 
     <hr />
 
-    <router-link
-      class="item"
-      :to="{ path: '/character/' + newCharacter }"
-    >
+    <router-link class="item" :to="{ path: '/character/' + newCharacter }">
       <span v-html="ICONS.ADD.XXLARGE"></span> Add new character
     </router-link>
   </div>

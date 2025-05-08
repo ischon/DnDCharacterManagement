@@ -169,7 +169,7 @@ export function CharacterConversions(character) {
     Object.keys(character['attacks']).length > 0 &&
     !('index' in Object.values(character['attacks'])[0])
   ) {
-    Object.entries(character.attacks).forEach(([item, attack], index) => {
+    Object.entries(character.attacks).forEach(([, attack], index) => {
       attack.index = index
     })
   }

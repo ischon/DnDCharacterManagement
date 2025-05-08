@@ -60,5 +60,3 @@ export function longRest(character, full = false) {
     character.spellcastingSpells[level].slotsUsed = 0
   }
 }
-
-const coinTypes = ['cp', 'sp', 'ep', 'gp', 'pp']

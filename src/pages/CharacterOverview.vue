@@ -401,7 +401,11 @@ Platinum   1000  100   20    10    1
               </div>
               <div class="container skill col flex-2">
                 <!--SKILLS-->
-                <div v-for="(skill, skill_name) in ability.skills" :key="skill_name" class="skill-row flex-1">
+                <div
+                  v-for="(skill, skill_name) in ability.skills"
+                  :key="skill_name"
+                  class="skill-row flex-1"
+                >
                   <div
                     class="proficient clickable"
                     :class="{
@@ -594,6 +598,7 @@ Platinum   1000  100   20    10    1
                         <div class="checks flex-1 container row">
                           <div
                             v-for="key in range(0, 3)"
+                            :key="'success-' + key"
                             class="check"
                             :class="{ selected: key < character.statDeathSavesSuccesses }"
                           ></div>
@@ -604,6 +609,7 @@ Platinum   1000  100   20    10    1
                         <div class="checks flex-1 container row">
                           <div
                             v-for="key in range(0, 3)"
+                            :key="'failure-' + key"
                             class="check"
                             :class="{ selected: key < character.statDeathSavesFailures }"
                           ></div>
@@ -630,7 +636,8 @@ Platinum   1000  100   20    10    1
                 >
                   <div class="flex-1">
                     <p
-                      v-for="traits in character.detailPersonalityTraits.split('\n')"
+                      v-for="(traits, index) in character.detailPersonalityTraits.split('\n')"
+                      :key="'trait-' + index"
                       class="no-transform"
                     >
                       {{ traits }}
@@ -647,7 +654,11 @@ Platinum   1000  100   20    10    1
                   "
                 >
                   <div class="flex-1">
-                    <p v-for="ideal in character.detailIdeals.split('\n')" class="no-transform">
+                    <p
+                      v-for="(ideal, index) in character.detailIdeals.split('\n')"
+                      :key="'ideal-' + index"
+                      class="no-transform"
+                    >
                       {{ ideal }}
                     </p>
                   </div>
@@ -662,7 +673,11 @@ Platinum   1000  100   20    10    1
                   "
                 >
                   <div class="flex-1">
-                    <p v-for="bond in character.detailBonds.split('\n')" class="no-transform">
+                    <p
+                      v-for="(bond, index) in character.detailBonds.split('\n')"
+                      :key="'bond-' + index"
+                      class="no-transform"
+                    >
                       {{ bond }}
                     </p>
                   </div>
@@ -678,7 +693,11 @@ Platinum   1000  100   20    10    1
                   "
                 >
                   <div class="flex-1">
-                    <p v-for="flaw in character.detailFlaws.split('\n')" class="no-transform">
+                    <p
+                      v-for="(flaw, index) in character.detailFlaws.split('\n')"
+                      :key="'flaw-' + index"
+                      class="no-transform"
+                    >
                       {{ flaw }}
                     </p>
                   </div>
@@ -740,17 +759,14 @@ Platinum   1000  100   20    10    1
 
                 <br />
                 <p>Cantrips</p>
-                <p v-for="row in character.spellcastingCantrips">
+                <p v-for="(row, index) in character.spellcastingCantrips" :key="'cantrip-' + index">
                   - {{ row }}
-                  <!--                  <span class="clickable" v-html="ICONS.INFO.SMALL" @click="() => {-->
-                  <!--                      console.log('info', row)-->
-                  <!--                    }"/>-->
                 </p>
                 <br />
                 <p>Spells</p>
                 <div
                   v-for="(spells, lvl) in character.spellcastingSpells"
-                  :key="lvl"
+                  :key="'spell-level-' + lvl"
                   :style="{ 'display: none': spells.prepared.length > 0 }"
                   style="width: 100%"
                 >
@@ -776,7 +792,7 @@ Platinum   1000  100   20    10    1
                   </div>
 
                   <template v-if="spells.prepared.length > 0">
-                    <p v-for="spell in spells.prepared" :key="spell">
+                    <p v-for="spell in spells.prepared" :key="'spell-' + spell">
                       {{ SPACE_CHAR.repeat(3) }}- {{ spell }}
                     </p>
                   </template>
@@ -786,79 +802,103 @@ Platinum   1000  100   20    10    1
               </div>
               <div class="container value-display align-start block no-border-right col flex-1">
                 <div class="flex-1" style="width: 100%">
-                  <div v-for="feature in character.features" :key="feature.name" class="container row flex-1">
-                    <div
-                      class="flex-1 clickable container col"
-                      @click="
-                        editingPopup.atClickEdit(character, [
-                          [
-                            'Feature or Trait',
-                            `features.${feature.name}.name`,
-                            feature.name,
-                            ModelTypes.text
-                          ],
-                          [
-                            'Description',
-                            `features.${feature.name}.description`,
-                            feature.description,
-                            ModelTypes.textarea
-                          ]
-                        ])
-                      "
-                    >
-                      <p>
-                        - {{ feature.name }}
-                        <span
-                          v-if="feature.description"
-                          class="clickable"
-                          @click.stop
-                          @click="
-                            () => {
-                              toolTipModel.open = true
-                              toolTipModel.name = feature.name
-                              toolTipModel.description = feature.description
-                            }
-                          "
-                          v-html="ICONS.INFO.SMALL"
-                        />
-                      </p>
+                  <div
+                    v-for="(item, index) in character.equipmentItems"
+                    :key="'equipment-' + index"
+                    class="equipment-item container row clickable"
+                    @click="
+                      editingPopup.atClickEdit(character, [
+                        [
+                          'Position',
+                          `tag-equipment.${item.name}.index`,
+                          item.index,
+                          ModelTypes.number
+                        ],
+                        [
+                          'Amount',
+                          `tag-equipment.${item.name}.count`,
+                          item.count,
+                          ModelTypes.number
+                        ],
+                        ['Name', `tag-equipment.${item.name}.name`, item.name, ModelTypes.text],
+                        [
+                          'Weight',
+                          `tag-equipment.${item.name}.weight`,
+                          item.weight,
+                          ModelTypes.number
+                        ],
+                        [
+                          'Description',
+                          `tag-equipment.${item.name}.description`,
+                          item.description,
+                          ModelTypes.textarea
+                        ]
+                      ])
+                    "
+                  >
+                    <div class="flex-2"></div>
+                    <div class="flex-2">
+                      {{ item.count }}
                     </div>
-                    <p
+                    <div class="flex-8">
+                      {{ item.name }}
+                      <span
+                        v-if="item.description"
+                        class="clickable"
+                        @click.stop
+                        @click="
+                          () => {
+                            toolTipModel.open = true
+                            toolTipModel.name = item.name
+                            toolTipModel.description = item.description
+                          }
+                        "
+                        v-html="ICONS.INFO.SMALL"
+                      />
+                    </div>
+                    <div class="flex-4">
+                      {{ formatWeight(item.weight * item.count) }}
+                    </div>
+                    <div
                       class="clickable"
+                      @click.stop
                       @click="
                         () => {
                           confirmModelData.confirmFunction = async () => {
-                            // console.log('REMOVE', feature)
-                            character.featureRemove(feature.name)
+                            character.equipmentRemove(item.name, item.count)
                             await firebaseHandler.setCharacterData(character.objectData)
                             resetConfirmModelData()
                           }
                           confirmModelData.open = true
-                          confirmModelData.item = feature.name
-                          confirmModelData.question =
-                            'Are you sure you want to delete this feature or trait?'
+                          confirmModelData.item = `${item.count} ${item.name}`
+                          confirmModelData.question = 'Are you sure you want to delete this item?'
                         }
                       "
                       v-html="ICONS.REMOVE.MEDIUM"
-                    ></p>
+                    ></div>
                   </div>
                   <div
-                    class="container row flex-1 clickable"
+                    class="equipment-item container row clickable"
                     @click="
-                      () => {
-                        character.featureAdd(
-                          'New feature or trait',
-                          'this is what the feature or trait does'
+                      async () => {
+                        await character.equipmentAdd(
+                          'New equipment',
+                          'this is what the equipment does',
+                          1,
+                          0
                         )
-                        firebaseHandler.setCharacterData(character.objectData)
+                        await firebaseHandler.setCharacterData(character.objectData)
                       }
                     "
                   >
-                    <p class="flex-1">--Add a feature or trait--</p>
-                    <p v-html="ICONS.ADD.MEDIUM"></p>
+                    <div class="flex-2"></div>
+                    <div class="flex-2"></div>
+                    <div class="flex-8">--Add a new item--</div>
+                    <div class="flex-4"></div>
+                    <div v-html="ICONS.ADD.MEDIUM"></div>
                   </div>
                 </div>
-                <p class="align-center">Features & Traits</p>
+                <p class="align-center">Equipment</p>
               </div>
             </div>
           </div>
@@ -916,63 +956,51 @@ Platinum   1000  100   20    10    1
                   </div>
                   <br />
                   <p>Proficiencies</p>
-                  <div v-for="(items, category) in character.proficiencies">
+                  <div v-for="(items, category) in character.proficiencies" :key="category">
                     <p v-if="items.length > 0 || category === 'items'">{{ category }}</p>
-                    <div
-                      v-for="(proficiency, idx) in items"
-                      :key="idx"
-                      v-if="category === 'items'"
-                      class="container row flex-1"
-                    >
-                      <p
-                        class="flex-1 clickable"
-                        @click="
-                          editingPopup.atClickEdit(character, [
-                            [
-                              'Proficiencies',
-                              `_character.abilities.proficiencies.${category}.${character._character.abilities.proficiencies[category].indexOf(proficiency)}`,
-                              proficiency,
-                              ModelTypes.text
-                            ]
-                          ])
-                        "
+                    <template v-if="category === 'items'">
+                      <div
+                        v-for="(proficiency, idx) in items"
+                        :key="idx"
+                        class="container row flex-1"
                       >
-                        - {{ proficiency }}
-                      </p>
-                      <p
-                        class="clickable"
-                        @click="
-                          () => {
-                            confirmModelData.confirmFunction = async () => {
-                              character.proficiencyRemove(category, proficiency)
-                              await firebaseHandler.setCharacterData(character.objectData)
-                              resetConfirmModelData()
+                        <p
+                          class="flex-1 clickable"
+                          @click="
+                            editingPopup.atClickEdit(character, [
+                              [
+                                'Proficiencies',
+                                `_character.abilities.proficiencies.${category}.${character._character.abilities.proficiencies[category].indexOf(proficiency)}`,
+                                proficiency,
+                                ModelTypes.text
+                              ]
+                            ])
+                          "
+                        >
+                          - {{ proficiency }}
+                        </p>
+                        <p
+                          class="clickable"
+                          @click="
+                            () => {
+                              confirmModelData.confirmFunction = async () => {
+                                character.proficiencyRemove(category, proficiency)
+                                await firebaseHandler.setCharacterData(character.objectData)
+                                resetConfirmModelData()
+                              }
+                              confirmModelData.open = true
+                              confirmModelData.item = proficiency
+                              confirmModelData.question =
+                                'Are you sure you want to delete this proficiency?'
                             }
-                            confirmModelData.open = true
-                            confirmModelData.item = proficiency
-                            confirmModelData.question =
-                              'Are you sure you want to delete this proficiency?'
-                          }
-                        "
-                        v-html="ICONS.REMOVE.MEDIUM"
-                      ></p>
-                    </div>
-                    <div
-                      v-if="category === 'items'"
-                      class="container row flex-1 clickable"
-                      @click="
-                        () => {
-                          character.proficiencyAdd(category, 'New item proficiency')
-                          firebaseHandler.setCharacterData(character.objectData)
-                        }
-                      "
-                    >
-                      <p class="flex-1">--Add a proficiency--</p>
-                      <p v-html="ICONS.ADD.MEDIUM"></p>
-                    </div>
-                    <p v-for="proficiency in items" v-if="items.length > 0 && category !== 'items'">
-                      - {{ proficiency }}
-                    </p>
+                          "
+                          v-html="ICONS.REMOVE.MEDIUM"
+                        ></p>
+                      </div>
+                    </template>
+                    <template v-if="items.length > 0 && category !== 'items'">
+                      <p v-for="proficiency in items" :key="proficiency">- {{ proficiency }}</p>
+                    </template>
                     <br v-if="items.length > 0 || category === 'items'" />
                   </div>
                 </div>
@@ -1013,61 +1041,60 @@ Platinum   1000  100   20    10    1
                       <div class="flex-4">Weight</div>
                     </div>
                     <div
-                      v-for="item in character.equipmentItems"
-                      :key="item.name"
+                      v-for="(equipment, index) in character.equipment"
+                      :key="'equipment-' + index"
                       class="equipment-item container row clickable"
                       @click="
                         editingPopup.atClickEdit(character, [
                           [
-                            'Position',
-                            `tag-equipment.${item.name}.index`,
-                            item.index,
-                            ModelTypes.number
-                          ],
-                          [
-                            'Amount',
-                            `tag-equipment.${item.name}.count`,
-                            item.count,
-                            ModelTypes.number
-                          ],
-                          ['Name', `tag-equipment.${item.name}.name`, item.name, ModelTypes.text],
-                          [
-                            'Weight',
-                            `tag-equipment.${item.name}.weight`,
-                            item.weight,
-                            ModelTypes.number
+                            'Equipment',
+                            `equipment.${equipment.name}.name`,
+                            equipment.name,
+                            ModelTypes.text
                           ],
                           [
                             'Description',
-                            `tag-equipment.${item.name}.description`,
-                            item.description,
+                            `equipment.${equipment.name}.description`,
+                            equipment.description,
                             ModelTypes.textarea
+                          ],
+                          [
+                            'Amount',
+                            `equipment.${equipment.name}.amount`,
+                            equipment.amount,
+                            ModelTypes.number
+                          ],
+                          [
+                            'Weight',
+                            `equipment.${equipment.name}.weight`,
+                            equipment.weight,
+                            ModelTypes.number
                           ]
                         ])
                       "
                     >
                       <div class="flex-2"></div>
                       <div class="flex-2">
-                        {{ item.count }}
+                        {{ equipment.amount }}
                       </div>
                       <div class="flex-8">
-                        {{ item.name }}
+                        {{ equipment.name }}
                         <span
-                          v-if="item.description"
+                          v-if="equipment.description"
                           class="clickable"
                           @click.stop
                           @click="
                             () => {
                               toolTipModel.open = true
-                              toolTipModel.name = item.name
-                              toolTipModel.description = item.description
+                              toolTipModel.name = equipment.name
+                              toolTipModel.description = equipment.description
                             }
                           "
                           v-html="ICONS.INFO.SMALL"
                         />
                       </div>
                       <div class="flex-4">
-                        {{ formatWeight(item.weight * item.count) }}
+                        {{ formatWeight(equipment.weight * equipment.amount) }}
                       </div>
                       <div
                         class="clickable"
@@ -1075,13 +1102,14 @@ Platinum   1000  100   20    10    1
                         @click="
                           () => {
                             confirmModelData.confirmFunction = async () => {
-                              character.equipmentRemove(item.name, item.count)
+                              character.equipmentRemove(equipment.name)
                               await firebaseHandler.setCharacterData(character.objectData)
                               resetConfirmModelData()
                             }
                             confirmModelData.open = true
-                            confirmModelData.item = `${item.count} ${item.name}`
-                            confirmModelData.question = 'Are you sure you want to delete this item?'
+                            confirmModelData.item = equipment.name
+                            confirmModelData.question =
+                              'Are you sure you want to delete this equipment?'
                           }
                         "
                         v-html="ICONS.REMOVE.MEDIUM"
@@ -1091,14 +1119,19 @@ Platinum   1000  100   20    10    1
                       class="equipment-item container row clickable"
                       @click="
                         async () => {
-                          character.equipmentAdd('new item', 1, 0)
+                          await character.equipmentAdd(
+                            'New equipment',
+                            'this is what the equipment does',
+                            1,
+                            0
+                          )
                           await firebaseHandler.setCharacterData(character.objectData)
                         }
                       "
                     >
                       <div class="flex-2"></div>
                       <div class="flex-2"></div>
-                      <div class="flex-8">--Add a new item--</div>
+                      <div class="flex-8">--Add equipment--</div>
                       <div class="flex-4"></div>
                       <div v-html="ICONS.ADD.MEDIUM"></div>
                     </div>
@@ -1249,7 +1282,11 @@ Platinum   1000  100   20    10    1
             "
           >
             <div class="flex-1">
-              <p v-for="line in character.detailBackstory.split('\n')" class="no-transform">
+              <p
+                v-for="(line, index) in character.detailBackstory.split('\n')"
+                :key="'backstory-' + index"
+                class="no-transform"
+              >
                 {{ line }}
               </p>
             </div>
@@ -1266,7 +1303,11 @@ Platinum   1000  100   20    10    1
             "
           >
             <div class="flex-1">
-              <p v-for="line in character.notes.split('\n')" class="no-transform">
+              <p
+                v-for="(line, index) in character.notes.split('\n')"
+                :key="'notes-' + index"
+                class="no-transform"
+              >
                 {{ line }}
               </p>
             </div>
@@ -1286,7 +1327,11 @@ Platinum   1000  100   20    10    1
             "
           >
             <div class="flex-1">
-              <p v-for="line in character.detailAllies.split('\n')" class="no-transform">
+              <p
+                v-for="(line, index) in character.detailAllies.split('\n')"
+                :key="'allies-' + index"
+                class="no-transform"
+              >
                 {{ line }}
               </p>
             </div>
@@ -1306,7 +1351,11 @@ Platinum   1000  100   20    10    1
             "
           >
             <div class="flex-1">
-              <p v-for="line in character.featureAdditional.split('\n')" class="no-transform">
+              <p
+                v-for="(line, index) in character.featureAdditional.split('\n')"
+                :key="'features-' + index"
+                class="no-transform"
+              >
                 {{ line }}
               </p>
             </div>
@@ -1321,7 +1370,11 @@ Platinum   1000  100   20    10    1
             "
           >
             <div class="flex-1">
-              <p v-for="line in character.detailTreasure.split('\n')" class="flex-1 no-transform">
+              <p
+                v-for="(line, index) in character.detailTreasure.split('\n')"
+                :key="'treasure-' + index"
+                class="flex-1 no-transform"
+              >
                 {{ line }}
               </p>
             </div>
@@ -1395,6 +1448,7 @@ Platinum   1000  100   20    10    1
             [3, 4, 5],
             [6, 7, 8, 9]
           ]"
+          :key="'spell-levels-' + key"
           class="container col flex-1"
         >
           <div
@@ -1489,40 +1543,41 @@ Platinum   1000  100   20    10    1
             </div>
 
             <div class="container col block no-border">
-              <div
-                v-for="(cantrip, idx) in character.spellcastingCantrips"
-                v-if="j === 0"
-                :key="`cantrip-${idx}`"
-                class="container row clickable"
-                @click="
-                  editingPopup.atClickEdit(character, [
-                    [
-                      `Cantrip`,
-                      `_character.spellcasting.cantrips.${idx}`,
-                      character.spellcastingCantrips[idx],
-                      ModelTypes.text
-                    ]
-                  ])
-                "
-              >
-                <p class="flex-1">{{ cantrip }}</p>
-                <p
-                  @click.stop
+              <template v-if="j === 0">
+                <div
+                  v-for="(cantrip, idx) in character.spellcastingCantrips"
+                  :key="`cantrip-${idx}`"
+                  class="container row clickable"
                   @click="
-                    () => {
-                      confirmModelData.confirmFunction = async () => {
-                        character.spellcastingCantripRemove(cantrip)
-                        await firebaseHandler.setCharacterData(character.objectData)
-                        resetConfirmModelData()
-                      }
-                      confirmModelData.open = true
-                      confirmModelData.item = cantrip
-                      confirmModelData.question = 'Are you sure you want to delete this cantrip?'
-                    }
+                    editingPopup.atClickEdit(character, [
+                      [
+                        `Cantrip`,
+                        `_character.spellcasting.cantrips.${idx}`,
+                        character.spellcastingCantrips[idx],
+                        ModelTypes.text
+                      ]
+                    ])
                   "
-                  v-html="ICONS.REMOVE.MEDIUM"
-                ></p>
-              </div>
+                >
+                  <p class="flex-1">{{ cantrip }}</p>
+                  <p
+                    @click.stop
+                    @click="
+                      () => {
+                        confirmModelData.confirmFunction = async () => {
+                          character.spellcastingCantripRemove(cantrip)
+                          await firebaseHandler.setCharacterData(character.objectData)
+                          resetConfirmModelData()
+                        }
+                        confirmModelData.open = true
+                        confirmModelData.item = cantrip
+                        confirmModelData.question = 'Are you sure you want to delete this cantrip?'
+                      }
+                    "
+                    v-html="ICONS.REMOVE.MEDIUM"
+                  ></p>
+                </div>
+              </template>
               <div
                 v-for="(spell, idx) in character.spellcastingSpells[j].known"
                 v-else
@@ -1612,7 +1667,11 @@ Platinum   1000  100   20    10    1
   >
     <div class="container row popup-display">
       <div class="container block value-display col" @click.stop>
-        <div v-for="item in editingPopup.editing.items" class="container row input-row">
+        <div
+          v-for="item in editingPopup.editing.items"
+          :key="'edit-item-' + item.name"
+          class="container row input-row"
+        >
           <div class="container col">
             <label :for="item.name">{{ item.name }}</label>
             <input
@@ -1639,15 +1698,21 @@ Platinum   1000  100   20    10    1
               @keydown.esc="editingPopup.atClickCancel"
             />
             <select v-if="item.type.element === 'select'" v-model="item.value" :name="item.name">
-              <option v-for="option in item.type.options" :value="option">
+              <option v-for="option in item.type.options" :key="'select-' + option" :value="option">
                 {{ option[0].toUpperCase() + option.slice(1) }}
               </option>
             </select>
             <select v-if="item.type.element === 'dice'" v-model="item.value" :name="item.name">
-              <option v-for="option in item.type.options" :value="option">D{{ option }}</option>
+              <option v-for="option in item.type.options" :key="'dice-' + option" :value="option">
+                D{{ option }}
+              </option>
             </select>
             <div v-if="item.type.element === 'weapon'">
-              <div v-for="row in item.value" class="container row">
+              <div
+                v-for="(row, index) in item.value"
+                :key="'weapon-' + index"
+                class="container row"
+              >
                 <input v-model="row.index" type="number" placeholder="Position" />
                 <input v-model="row.name" type="text" placeholder="Name" />
                 <input v-model="row.bonus" type="number" placeholder="Bonus" />
