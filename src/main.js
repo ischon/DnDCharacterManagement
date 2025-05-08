@@ -10,7 +10,7 @@ import router from '@/router.js'
 const app = createApp(App)
 
 app.use(vue3GoogleLogin, {
-    clientId: import.meta.env.VITE_cliendId
+    clientId: import.meta.env.VITE_CLIENT_ID
 })
 app.use(router)
 

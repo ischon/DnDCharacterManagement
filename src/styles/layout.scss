@@ -1,5 +1,4 @@
-
-@import '@/styles/mixins/space_childeren.scss';
+@use '@/styles/mixins/space_childeren.scss' as *;
 
 .header {
   width: 100%;
@@ -139,4 +138,3 @@
     }
   }
 }
-

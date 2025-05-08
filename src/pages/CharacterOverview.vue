@@ -12,8 +12,6 @@ import {ICONS} from "@/helpers/icons.js";
 
 import {ModelTypes, EditPopup} from "@/helpers/editPopupHelper.js";
 
-import "@/styles/popup.scss"
-
 const SPACE_CHAR = ' ‎'
 const COIN_CALCULATION = `
 Coin       CP    SP    EP    GP    PP
@@ -455,7 +453,7 @@ onBeforeMount(async () => {
             </div>
             <div class="container row flex-1">
               <div class="container block value-display align-start col flex-1">
-                <div class="container col clickable" @click="editingPopup.atClickEdit(character, 
+                <div class="container col clickable" @click="editingPopup.atClickEdit(character,
                     [
                         ['Attacks', 'attacks', character.attacks, ModelTypes.weapon]
                     ]
@@ -1124,8 +1122,8 @@ onBeforeMount(async () => {
 </template>
 
 <style scoped lang="scss">
-
-@import '@/styles/mixins/space_childeren.scss';
+@use '@/styles/popup.scss' as *;
+@use '@/styles/mixins/space_childeren.scss' as *;
 
 .page {
   margin-bottom: 2rem;

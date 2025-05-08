@@ -1,6 +1,21 @@
-# dnd-app
+# DnD App
+
+[![Test](https://github.com/yourusername/dnd-app/actions/workflows/test.yml/badge.svg)](https://github.com/yourusername/dnd-app/actions/workflows/test.yml)
 
 This template should help get you started developing with Vue 3 in Vite.
+
+## Testing
+
+The project uses Vitest for testing with coverage reporting. Coverage reports are generated during CI/CD and can be found in the GitHub Actions artifacts.
+
+To run tests locally:
+```sh
+# Run all tests
+npm test
+
+# Run tests with coverage
+npm run test:coverage
+```
 
 ## Recommended IDE Setup
 
