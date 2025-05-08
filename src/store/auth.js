@@ -5,7 +5,7 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const isAuthenticated = ref(false)
 
-  const setUser = (userData) => {
+  const setUser = userData => {
     user.value = userData
     isAuthenticated.value = !!userData
   }

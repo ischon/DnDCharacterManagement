@@ -1,11 +1,7 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-<h1>You have been logged out</h1>
+  <h1>You have been logged out</h1>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

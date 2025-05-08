@@ -17,9 +17,10 @@
       padding: 4rem 2rem;
       min-width: 15rem;
       border-radius: 1rem;
-      border-width: .25rem;
+      border-width: 0.25rem;
 
-      .input-row, .button-row {
+      .input-row,
+      .button-row {
         justify-content: center;
       }
 
@@ -34,19 +35,21 @@
           text-transform: none;
         }
 
-        input, textarea, select {
-          padding: .5rem;
-          border-radius: .5rem;
+        input,
+        textarea,
+        select {
+          padding: 0.5rem;
+          border-radius: 0.5rem;
         }
 
         input {
           text-align: center;
 
-          &[type="text"] {
+          &[type='text'] {
             width: 15rem;
           }
 
-          &[type="number"] {
+          &[type='number'] {
             text-align: start;
             width: 5rem;
           }
@@ -59,13 +62,12 @@
         select {
           width: 15rem;
         }
-
       }
 
       .button-row {
         button {
-          padding: .5rem;
-          border-radius: .5rem;
+          padding: 0.5rem;
+          border-radius: 0.5rem;
           margin-right: 1rem;
         }
       }

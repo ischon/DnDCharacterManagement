@@ -17,28 +17,28 @@
 </template>
 
 <script setup>
-// Layout component logic here
+  // Layout component logic here
 </script>
 
 <style scoped lang="scss">
-.default-layout {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+  .default-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
 
-.main-content {
-  flex: 1;
-  padding: 1rem;
-}
+  .main-content {
+    flex: 1;
+    padding: 1rem;
+  }
 
-.header {
-  padding: 1rem;
-  background-color: #f8f9fa;
-}
+  .header {
+    padding: 1rem;
+    background-color: #f8f9fa;
+  }
 
-.footer {
-  padding: 1rem;
-  background-color: #f8f9fa;
-}
+  .footer {
+    padding: 1rem;
+    background-color: #f8f9fa;
+  }
 </style>

@@ -1,5 +1,5 @@
-"use strict"
-import {Character} from "@/models/Character.js";
+'use strict'
+import { Character } from '@/models/Character.js'
 
 // export const owin = new Character(undefined, "lz825uz4")
 // // character personality
@@ -149,31 +149,31 @@ import {Character} from "@/models/Character.js";
 // owin.equipmentAdd("Book (Journal)", 1, 5) // backstory
 // owin.equipmentCoinAdd(25, "GOLD")
 
-export const exampleCharacter = new Character(undefined, "lzrh8rb4")
-exampleCharacter.detailName = "Brevnick"
-exampleCharacter.detailClass = "Cleric"
+export const exampleCharacter = new Character(undefined, 'lzrh8rb4')
+exampleCharacter.detailName = 'Brevnick'
+exampleCharacter.detailClass = 'Cleric'
 exampleCharacter.detailLevel = 1
-exampleCharacter.detailBackground = "Soldier"
-exampleCharacter.detailRace = "Hill Dwarf"
+exampleCharacter.detailBackground = 'Soldier'
+exampleCharacter.detailRace = 'Hill Dwarf'
 exampleCharacter.detailHeight = 4
 exampleCharacter.detailWeight = 130
 exampleCharacter.detailAge = 75
-exampleCharacter.detailEyeColor = "Brown"
-exampleCharacter.detailHairColor = "Black"
-exampleCharacter.detailSkinColor = "Pale"
-exampleCharacter.detailAlignment = "Lawful good"
+exampleCharacter.detailEyeColor = 'Brown'
+exampleCharacter.detailHairColor = 'Black'
+exampleCharacter.detailSkinColor = 'Pale'
+exampleCharacter.detailAlignment = 'Lawful good'
 exampleCharacter.detailExperiencePoints = 0
-exampleCharacter.equipmentCoinAdd(10, "GOLD")
-exampleCharacter.languageAdd("Common")
-exampleCharacter.languageAdd("Dwarvish")
-exampleCharacter.languageAdd("Elvish")
-exampleCharacter.languageAdd("Goblin")
-exampleCharacter.proficiencyAdd("wisdom", "Saving Throws")
-exampleCharacter.proficiencyAdd("charisma", "Saving Throws")
-exampleCharacter.proficiencyAdd("strength", "Athletics")
-exampleCharacter.proficiencyAdd("charisma", "Intimidation")
-exampleCharacter.proficiencyAdd("wisdom", "Medicine")
-exampleCharacter.proficiencyAdd("intelligence", "Religion")
+exampleCharacter.equipmentCoinAdd(10, 'GOLD')
+exampleCharacter.languageAdd('Common')
+exampleCharacter.languageAdd('Dwarvish')
+exampleCharacter.languageAdd('Elvish')
+exampleCharacter.languageAdd('Goblin')
+exampleCharacter.proficiencyAdd('wisdom', 'Saving Throws')
+exampleCharacter.proficiencyAdd('charisma', 'Saving Throws')
+exampleCharacter.proficiencyAdd('strength', 'Athletics')
+exampleCharacter.proficiencyAdd('charisma', 'Intimidation')
+exampleCharacter.proficiencyAdd('wisdom', 'Medicine')
+exampleCharacter.proficiencyAdd('intelligence', 'Religion')
 exampleCharacter.abilityStrength = 14
 exampleCharacter.abilityDexterity = 8
 exampleCharacter.abilityConstitution = 15
@@ -182,88 +182,78 @@ exampleCharacter.abilityWisdom = 16
 exampleCharacter.abilityCharisma = 12
 exampleCharacter.abilityInspiration = 0
 exampleCharacter.statArmorClassBase = 14
-exampleCharacter.statArmorClassArmorType = "Heavy"
+exampleCharacter.statArmorClassArmorType = 'Heavy'
 exampleCharacter.statArmorClassShield = 2
 exampleCharacter.statSpeed = 25
 exampleCharacter.statHitPointsBase = 8
 exampleCharacter.statHitPointsMisc = 1
 exampleCharacter.statHitPointsCurrent = exampleCharacter.statHitPointMaximumValue
-exampleCharacter.statHitDie = "1D8"
-exampleCharacter.attackAdd("Mace", 4, "1d6 + 2", "Bludgeoning")
-exampleCharacter.attackAdd("Handaxe", 4, "1d6 + 2", "Slashing")
-exampleCharacter.featureAdd("Divine Domain")
-exampleCharacter.featureAdd("Disciple of Life")
-exampleCharacter.featureAdd("Darkvision")
-exampleCharacter.featureAdd("Dwarven Resilience")
-exampleCharacter.featureAdd("Stonecunning")
-exampleCharacter.featureAdd("Dwarven Toughness")
-exampleCharacter.featureAdd("Heavy Armor")
-exampleCharacter.spellcastingClass = "Cleric"
-exampleCharacter.spellcastingAbility = "wisdom"
-exampleCharacter.spellcastingCantripAdd("Light")
-exampleCharacter.spellcastingCantripAdd("Thaumaturgy")
-exampleCharacter.spellcastingCantripAdd("Sacred flame")
+exampleCharacter.statHitDie = '1D8'
+exampleCharacter.attackAdd('Mace', 4, '1d6 + 2', 'Bludgeoning')
+exampleCharacter.attackAdd('Handaxe', 4, '1d6 + 2', 'Slashing')
+exampleCharacter.featureAdd('Divine Domain')
+exampleCharacter.featureAdd('Disciple of Life')
+exampleCharacter.featureAdd('Darkvision')
+exampleCharacter.featureAdd('Dwarven Resilience')
+exampleCharacter.featureAdd('Stonecunning')
+exampleCharacter.featureAdd('Dwarven Toughness')
+exampleCharacter.featureAdd('Heavy Armor')
+exampleCharacter.spellcastingClass = 'Cleric'
+exampleCharacter.spellcastingAbility = 'wisdom'
+exampleCharacter.spellcastingCantripAdd('Light')
+exampleCharacter.spellcastingCantripAdd('Thaumaturgy')
+exampleCharacter.spellcastingCantripAdd('Sacred flame')
 exampleCharacter.spellcastingSpellSlots_set(1, 2)
-exampleCharacter.spellcastingAdd(1, "Bless")
-exampleCharacter.spellcastingPreparedAdd(1, "Bless")
-exampleCharacter.spellcastingAdd(1, "Cure wounds")
-exampleCharacter.spellcastingPreparedAdd(1, "Cure wounds")
-exampleCharacter.spellcastingAdd(1 ,"Detect magic (ritual)")
-exampleCharacter.spellcastingPreparedAdd(1, "Detect magic (ritual)")
-exampleCharacter.spellcastingAdd(1, "Healing word")
-exampleCharacter.spellcastingPreparedAdd(1, "Healing word")
-exampleCharacter.spellcastingAdd(1, "Sanctuary")
-exampleCharacter.spellcastingPreparedAdd(1, "Sanctuary")
-exampleCharacter.spellcastingAdd(1, "Command")
-exampleCharacter.spellcastingPreparedAdd(1, "Command")
-exampleCharacter.detailBackstory = "" +
-    "You trained as a soldier on the island of Mintarn and joined a mercenary company." +
-    " You traveled to the city of Neverwinter with your company to serve in both the army and city watch." +
-    " Over time, you grew disillusioned with many of your fellow soldiers." +
-    " They seemed to enjoy their authority at the expense of the people they’re supposed to protect." +
-    "\n\n" +
-    "Your background shaped your character in important ways." +
-    " You learned several languages in the course of your military career." +
-    " Your skill proficiencies in Athletics and Intimidation reflect your physical training and an ability to overawe foes." +
-    "\n\n" +
-    " Recently you’ve had dreams of a shadow creeping across the sea like a shroud, swallowing an island in darkness." +
-    " Though you dismissed the dreams at first, you began to hear a voice calling you to stand against death’s endless hunger." +
-    " Certain of your deity’s wishes, you resigned your post and set out on your quest" +
-    "\n\n" +
-    "Banish a Shadow of Death." +
-    "\n" +
-    "Researching images from your dreams pointed you to Stormwreck Isle, not far from Neverwinter." +
-    " A remote cloister there holds a temple to the dragon god Bahamut, who is a patron of heroes and a champion of justice." +
-    " Someone at the cloister may hold the key to the impending doom your deity wishes you to avert."
-exampleCharacter.detailAllies = "" +
-    "Deity\n" +
-    "- Marthammor Duin" +
-    "\n\n" +
-    "Organizations\n" +
-    "- The army of Mintarn"
-exampleCharacter.equipmentAdd("Chain mail", 1, 55)
-exampleCharacter.equipmentAdd("Shield", 1, 6)
-exampleCharacter.equipmentAdd("Mace", 1, 4)
-exampleCharacter.equipmentAdd("Handaxe", 1, 2)
-exampleCharacter.equipmentAdd("Holy symbol", 1, 1)
-exampleCharacter.equipmentAdd("Backpack", 1, 5)
-exampleCharacter.equipmentAdd("Bedroll", 1, 7)
-exampleCharacter.equipmentAdd("Mess kit", 1, 1)
-exampleCharacter.equipmentAdd("Tinderbox", 1, 1)
-exampleCharacter.equipmentAdd("Torches", 10, 0.5)
-exampleCharacter.equipmentAdd("Rations", 10, 2)
-exampleCharacter.equipmentAdd("Waterskin", 1, 5)
-exampleCharacter.equipmentAdd("Hempen rope", 50, 0.2)
-exampleCharacter.equipmentAdd("Insignia of rank", 1, 0)
-exampleCharacter.equipmentAdd("Broken blade taken as a trophy from a fallen enemy", 1, 2)
-exampleCharacter.equipmentAdd("Set of bone dice", 1, 0)
-exampleCharacter.equipmentAdd("Set of common clothes", 1, 3)
-exampleCharacter.equipmentAdd("Pouch", 1, 1)
-exampleCharacter.detailTreasure = "" +
-    "Broken blade taken as a trophy from a fallen enemy"
-
-
-
-
-
-
+exampleCharacter.spellcastingAdd(1, 'Bless')
+exampleCharacter.spellcastingPreparedAdd(1, 'Bless')
+exampleCharacter.spellcastingAdd(1, 'Cure wounds')
+exampleCharacter.spellcastingPreparedAdd(1, 'Cure wounds')
+exampleCharacter.spellcastingAdd(1, 'Detect magic (ritual)')
+exampleCharacter.spellcastingPreparedAdd(1, 'Detect magic (ritual)')
+exampleCharacter.spellcastingAdd(1, 'Healing word')
+exampleCharacter.spellcastingPreparedAdd(1, 'Healing word')
+exampleCharacter.spellcastingAdd(1, 'Sanctuary')
+exampleCharacter.spellcastingPreparedAdd(1, 'Sanctuary')
+exampleCharacter.spellcastingAdd(1, 'Command')
+exampleCharacter.spellcastingPreparedAdd(1, 'Command')
+exampleCharacter.detailBackstory =
+  '' +
+  'You trained as a soldier on the island of Mintarn and joined a mercenary company.' +
+  ' You traveled to the city of Neverwinter with your company to serve in both the army and city watch.' +
+  ' Over time, you grew disillusioned with many of your fellow soldiers.' +
+  ' They seemed to enjoy their authority at the expense of the people they’re supposed to protect.' +
+  '\n\n' +
+  'Your background shaped your character in important ways.' +
+  ' You learned several languages in the course of your military career.' +
+  ' Your skill proficiencies in Athletics and Intimidation reflect your physical training and an ability to overawe foes.' +
+  '\n\n' +
+  ' Recently you’ve had dreams of a shadow creeping across the sea like a shroud, swallowing an island in darkness.' +
+  ' Though you dismissed the dreams at first, you began to hear a voice calling you to stand against death’s endless hunger.' +
+  ' Certain of your deity’s wishes, you resigned your post and set out on your quest' +
+  '\n\n' +
+  'Banish a Shadow of Death.' +
+  '\n' +
+  'Researching images from your dreams pointed you to Stormwreck Isle, not far from Neverwinter.' +
+  ' A remote cloister there holds a temple to the dragon god Bahamut, who is a patron of heroes and a champion of justice.' +
+  ' Someone at the cloister may hold the key to the impending doom your deity wishes you to avert.'
+exampleCharacter.detailAllies =
+  '' + 'Deity\n' + '- Marthammor Duin' + '\n\n' + 'Organizations\n' + '- The army of Mintarn'
+exampleCharacter.equipmentAdd('Chain mail', 1, 55)
+exampleCharacter.equipmentAdd('Shield', 1, 6)
+exampleCharacter.equipmentAdd('Mace', 1, 4)
+exampleCharacter.equipmentAdd('Handaxe', 1, 2)
+exampleCharacter.equipmentAdd('Holy symbol', 1, 1)
+exampleCharacter.equipmentAdd('Backpack', 1, 5)
+exampleCharacter.equipmentAdd('Bedroll', 1, 7)
+exampleCharacter.equipmentAdd('Mess kit', 1, 1)
+exampleCharacter.equipmentAdd('Tinderbox', 1, 1)
+exampleCharacter.equipmentAdd('Torches', 10, 0.5)
+exampleCharacter.equipmentAdd('Rations', 10, 2)
+exampleCharacter.equipmentAdd('Waterskin', 1, 5)
+exampleCharacter.equipmentAdd('Hempen rope', 50, 0.2)
+exampleCharacter.equipmentAdd('Insignia of rank', 1, 0)
+exampleCharacter.equipmentAdd('Broken blade taken as a trophy from a fallen enemy', 1, 2)
+exampleCharacter.equipmentAdd('Set of bone dice', 1, 0)
+exampleCharacter.equipmentAdd('Set of common clothes', 1, 3)
+exampleCharacter.equipmentAdd('Pouch', 1, 1)
+exampleCharacter.detailTreasure = '' + 'Broken blade taken as a trophy from a fallen enemy'
