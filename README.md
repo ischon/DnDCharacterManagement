@@ -1,6 +1,6 @@
 # DnD App
 
-[![Test](https://github.com/yourusername/dnd-app/actions/workflows/test.yml/badge.svg)](https://github.com/yourusername/dnd-app/actions/workflows/test.yml)
+[![Test](https://github.com/pokemonspeler/DnDCharacterManagement/actions/workflows/test.yml/badge.svg)](https://github.com/pokemonspeler/DnDCharacterManagement/actions/workflows/test.yml)
 
 This template should help get you started developing with Vue 3 in Vite.
 
