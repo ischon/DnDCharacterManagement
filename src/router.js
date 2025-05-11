@@ -59,4 +59,5 @@ router.beforeEach(async (to, from, next) => {
   }
 })
 
+export { routes }
 export default router

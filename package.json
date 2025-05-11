@@ -33,6 +33,7 @@
     "@vue/test-utils": "^2.4.4",
     "eslint": "^8.56.0",
     "eslint-plugin-vue": "^9.21.1",
+    "flush-promises": "^1.0.2",
     "happy-dom": "^12.10.3",
     "prettier": "^3.2.5",
     "sass": "^1.71.0",
