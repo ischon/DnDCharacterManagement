@@ -41,7 +41,12 @@ describe('EditPopup', () => {
     expect(popup.editing.open).toBe(true)
     expect(popup.character).toBe(character)
     expect(popup.editing.items.length).toBe(2)
-    expect(popup.editing.items[0]).toMatchObject({ name: 'Name', key: 'key', value: 'value', type: ModelTypes.text })
+    expect(popup.editing.items[0]).toMatchObject({
+      name: 'Name',
+      key: 'key',
+      value: 'value',
+      type: ModelTypes.text
+    })
   })
 
   it('should reset model data', () => {
@@ -87,7 +92,14 @@ describe('EditPopup', () => {
       { key: 'tag-equipment.item1.description', value: 'A sharp sword' }
     ]
     await popup.atClickSave()
-    expect(mockCharacter.equipmentUpdate).toHaveBeenCalledWith('item1', 'Sword', 1, 5, 0, 'A sharp sword')
+    expect(mockCharacter.equipmentUpdate).toHaveBeenCalledWith(
+      'item1',
+      'Sword',
+      1,
+      5,
+      0,
+      'A sharp sword'
+    )
     expect(mockFirebaseHandler.setCharacterData).toHaveBeenCalled()
   })
 
@@ -101,10 +113,18 @@ describe('EditPopup', () => {
     popup.configure(mockFirebaseHandler)
     popup.character = mockCharacter
     popup.editing.items = [
-      { key: 'attacks', value: { attack1: { name: 'Slash', bonus: 5, damage: '1d8', type: 'slashing' } } }
+      {
+        key: 'attacks',
+        value: { attack1: { name: 'Slash', bonus: 5, damage: '1d8', type: 'slashing' } }
+      }
     ]
     await popup.atClickSave()
-    expect(mockCharacter.attackUpdate).toHaveBeenCalledWith('attack1', { name: 'Slash', bonus: 5, damage: '1d8', type: 'slashing' })
+    expect(mockCharacter.attackUpdate).toHaveBeenCalledWith('attack1', {
+      name: 'Slash',
+      bonus: 5,
+      damage: '1d8',
+      type: 'slashing'
+    })
     expect(mockFirebaseHandler.setCharacterData).toHaveBeenCalled()
   })
 
@@ -122,7 +142,11 @@ describe('EditPopup', () => {
       { key: 'features.feature1.description', value: 'Feature Description' }
     ]
     await popup.atClickSave()
-    expect(mockCharacter.featureUpdate).toHaveBeenCalledWith('feature1', 'Feature Name', 'Feature Description')
+    expect(mockCharacter.featureUpdate).toHaveBeenCalledWith(
+      'feature1',
+      'Feature Name',
+      'Feature Description'
+    )
     expect(mockFirebaseHandler.setCharacterData).toHaveBeenCalled()
   })
 
@@ -150,8 +174,8 @@ describe('EditPopup', () => {
       { name: 'Spell', key: '_character.spellcasting.spells.1.known.0', value: 'Lightning Bolt' }
     ]
     await popup.atClickSave()
-    expect(mockCharacter.spellcastingPreparedRemove).toHaveBeenCalledWith("1", 'Fireball')
-    expect(mockCharacter.spellcastingPreparedAdd).toHaveBeenCalledWith("1", 'Lightning Bolt')
+    expect(mockCharacter.spellcastingPreparedRemove).toHaveBeenCalledWith('1', 'Fireball')
+    expect(mockCharacter.spellcastingPreparedAdd).toHaveBeenCalledWith('1', 'Lightning Bolt')
     expect(mockFirebaseHandler.setCharacterData).toHaveBeenCalled()
   })
 })

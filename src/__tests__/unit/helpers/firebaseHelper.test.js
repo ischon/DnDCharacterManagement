@@ -38,10 +38,16 @@ vi.mock('firebase/storage', () => ({
 const localStorageMock = (() => {
   let store = {}
   return {
-    getItem: (key) => store[key] || null,
-    setItem: (key, value) => { store[key] = value.toString() },
-    removeItem: (key) => { delete store[key] },
-    clear: () => { store = {} }
+    getItem: key => store[key] || null,
+    setItem: (key, value) => {
+      store[key] = value.toString()
+    },
+    removeItem: key => {
+      delete store[key]
+    },
+    clear: () => {
+      store = {}
+    }
   }
 })()
 Object.defineProperty(global, 'localStorage', { value: localStorageMock })
@@ -176,6 +182,8 @@ describe('FirebaseHandler', () => {
     handler.storage = 'storage'
     const error = new Error('Upload failed')
     uploadBytes.mockImplementation(() => Promise.reject(error))
-    await expect(handler.setCharacterImage('char1', new Blob(['test'], { type: 'image/png' }))).rejects.toThrow('Upload failed')
+    await expect(
+      handler.setCharacterImage('char1', new Blob(['test'], { type: 'image/png' }))
+    ).rejects.toThrow('Upload failed')
   })
 })

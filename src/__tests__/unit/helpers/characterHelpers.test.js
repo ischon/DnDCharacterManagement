@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { calculateCoins, toCopperCoins, calculateAbilityModifier, longRest } from '@/helpers/characterHelpers.js'
+import {
+  calculateCoins,
+  toCopperCoins,
+  calculateAbilityModifier,
+  longRest
+} from '@/helpers/characterHelpers.js'
 
 describe('characterHelpers', () => {
   describe('calculateCoins', () => {

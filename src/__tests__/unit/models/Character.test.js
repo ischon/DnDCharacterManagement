@@ -53,13 +53,13 @@ describe('Character', () => {
         abilities: {
           proficiencies: {
             skills: ['Athletics', 'Acrobatics'],
-            tools: ['Smith\'s Tools', 'Alchemist\'s Supplies']
+            tools: ["Smith's Tools", "Alchemist's Supplies"]
           }
         }
       })
       const proficiencies = character.proficiencies
       expect(proficiencies.skills).toEqual(['Acrobatics', 'Athletics'])
-      expect(proficiencies.tools).toEqual(['Alchemist\'s Supplies', 'Smith\'s Tools'])
+      expect(proficiencies.tools).toEqual(["Alchemist's Supplies", "Smith's Tools"])
     })
   })
 
@@ -112,7 +112,13 @@ describe('Character', () => {
       character.attackAdd('Slash', 5, '1d8+3', 'Slashing')
       let attacks = character.attacks
       expect(Object.keys(attacks)).toContain('Slash')
-      character.attackUpdate('Slash', { name: 'Slash', bonus: 6, damage: '1d8+4', type: 'Slashing', index: 1 })
+      character.attackUpdate('Slash', {
+        name: 'Slash',
+        bonus: 6,
+        damage: '1d8+4',
+        type: 'Slashing',
+        index: 1
+      })
       attacks = character.attacks
       expect(attacks['Slash'].bonus).toBe(6)
       expect(attacks['Slash'].damage).toBe('1d8+4')

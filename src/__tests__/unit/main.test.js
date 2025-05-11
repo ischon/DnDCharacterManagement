@@ -13,7 +13,7 @@ vi.mock('vue3-google-login', () => ({
 }))
 
 // Partial mock van vue-router
-vi.mock('vue-router', async (importOriginal) => {
+vi.mock('vue-router', async importOriginal => {
   const actual = await importOriginal()
   return {
     ...actual,
