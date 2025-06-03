@@ -15,7 +15,7 @@
     "test:ui": "vitest --ui"
   },
   "dependencies": {
-    "@firebase/auth": "^1.9.1",
+    "@firebase/auth": "^1.10.6",
     "@firebase/firestore": "^4.7.16",
     "firebase": "^11.6.0",
     "lodash": "^4.17.21",
