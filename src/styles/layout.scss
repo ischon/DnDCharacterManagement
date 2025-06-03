@@ -1,5 +1,4 @@
-
-@import '@/styles/mixins/space_childeren.scss';
+@use '@/styles/mixins/space_childeren.scss' as *;
 
 .header {
   width: 100%;
@@ -28,12 +27,13 @@
   display: flex;
   align-items: stretch;
 
-
-  &.col { // top to bottom
+  &.col {
+    // top to bottom
     flex-direction: column;
   }
 
-  &.row { // left to right
+  &.row {
+    // left to right
     flex-direction: row;
   }
 }
@@ -45,28 +45,28 @@
 }
 
 .block {
-  padding: .5rem 0.25rem;
-  border: .125rem solid var(--color-border);
+  padding: 0.5rem 0.25rem;
+  border: 0.125rem solid var(--color-border);
   background: var(--color-background-soft);
 
   &.no-border-right {
-    border-right: .125rem solid transparent;
+    border-right: 0.125rem solid transparent;
   }
 
   &.no-border-top {
-    border-top: .125rem solid transparent;
+    border-top: 0.125rem solid transparent;
   }
 
   &.no-border-bottom {
-    border-bottom: .125rem solid transparent;
+    border-bottom: 0.125rem solid transparent;
   }
 
   &.no-border-left {
-    border-left: .125rem solid transparent;
+    border-left: 0.125rem solid transparent;
   }
 
   &.no-border {
-    border: .125rem solid transparent;
+    border: 0.125rem solid transparent;
   }
 }
 
@@ -98,7 +98,6 @@
     p {
       font-size: 70%;
     }
-
   }
 }
 
@@ -118,7 +117,7 @@
     font-size: 70%;
 
     &:empty {
-      padding: .25rem;
+      padding: 0.25rem;
     }
 
     &.align-center {
@@ -139,4 +138,3 @@
     }
   }
 }
-

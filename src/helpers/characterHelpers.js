@@ -1,70 +1,62 @@
-"use strict"
+'use strict'
 
-import {range} from "lodash";
+// import { range } from 'lodash'
 
 export function calculateCoins(coins) {
-    /*
-    Coin	                CP      SP	    EP	    GP	    PP
-    Copper Piece    (cp)    1       1/10    1/50    1/100	1/1,000
-    Silver Piece    (sp)    10      1       1/5	    1/10    1/100
-    Electrum Piece  (ep)    50      5       1       1/2     1/20
-    Gold Piece      (gp)    100     10      2       1       1/10
-    Platinum Piece  (pp)    1,000   100     20      10      1
-     */
-    let cp = coins
-    let pp = Math.floor(cp / 1000)
-    cp -= pp * 1000
-    let gp = Math.floor(cp / 100)
-    cp -= gp * 100
-    // let ep = Math.floor(cp / 50)
-    // cp -= ep * 50
-    let sp = Math.floor(cp / 10)
-    cp -= sp * 10
+  const result = {}
+  const rates = {
+    cp: { cp: 1, sp: 0.1, ep: 0.02, gp: 0.01, pp: 0.001 },
+    sp: { cp: 10, sp: 1, ep: 0.2, gp: 0.1, pp: 0.01 },
+    ep: { cp: 50, sp: 5, ep: 1, gp: 0.5, pp: 0.05 },
+    gp: { cp: 100, sp: 10, ep: 2, gp: 1, pp: 0.1 },
+    pp: { cp: 1000, sp: 100, ep: 20, gp: 10, pp: 1 }
+  }
 
-    return {
-        'Copper Coins': cp,
-        'Silver Coins': sp,
-        'Electrum Coins': ep,
-        'Gold Coins': gp,
-        'Platinum Coins': pp
+  for (const [fromType, amount] of Object.entries(coins)) {
+    if (amount === 0) continue
+    for (const [toType, rate] of Object.entries(rates[fromType])) {
+      result[toType] = (result[toType] || 0) + amount * rate
     }
+  }
+
+  return result
 }
 
 export function toCopperCoins(coins, type) {
-    switch (type) {
-        case "COPPER":
-            return coins
-        case "SILVER":
-            return coins * 10
-        case "ELECTRUM":
-            return coins * 50
-        case "GOLD":
-            return coins * 100
-        case "PLATINUM":
-            return coins * 1000
-    }
-
+  switch (type) {
+    case 'COPPER':
+      return coins
+    case 'SILVER':
+      return coins * 10
+    case 'ELECTRUM':
+      return coins * 50
+    case 'GOLD':
+      return coins * 100
+    case 'PLATINUM':
+      return coins * 1000
+  }
 }
 
 export function calculateAbilityModifier(score) {
-    return Math.floor((score - 10) / 2);
+  return Math.floor((score - 10) / 2)
 }
 
-export function longRest(character) {
-    character.statHitPointsCurrent = character.statHitPointMaximumValue
-    let maxHitDiceRecovery = Math.floor(character.statMaxHitDice / 2)
-    if (maxHitDiceRecovery < 1) {
-        maxHitDiceRecovery = 1
-    }
-    if (character.statCurrentAmountHitDice + maxHitDiceRecovery > character.statMaxHitDice) {
-        character.statCurrentAmountHitDice = character.statMaxHitDice
-    } else {
-        character.statCurrentAmountHitDice += maxHitDiceRecovery
-    }
+export function longRest(character, full = false) {
+  // Reset hit points
+  character.statHitPointsCurrent = character.statHitPointMaximumValue
 
-    for (let lvl = 1; lvl <= 9; lvl++) {
-        if (character.spellcastingSpellSlotsExpanded_get(lvl) > 0) {
-            character.spellcastingSpellSlotsExpanded_set(lvl, 0)
-        }
-    }
+  // Reset hit dice
+  if (full) {
+    character.statCurrentAmountHitDice = character.statMaxHitDice
+  } else {
+    character.statCurrentAmountHitDice = Math.min(
+      character.statMaxHitDice,
+      character.statCurrentAmountHitDice + Math.floor(character.statMaxHitDice / 2)
+    )
+  }
+
+  // Reset spell slots
+  for (const level in character.spellcastingSpells) {
+    character.spellcastingSpells[level].slotsUsed = 0
+  }
 }
