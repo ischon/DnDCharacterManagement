@@ -27,17 +27,17 @@
   "devDependencies": {
     "@testing-library/vue": "^8.0.2",
     "@vitejs/plugin-vue": "^5.0.3",
-    "@vitest/coverage-v8": "^1.2.2",
-    "@vitest/ui": "^1.6.1",
+    "@vitest/coverage-v8": "^3.2.0",
+    "@vitest/ui": "^3.2.0",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/test-utils": "^2.4.4",
     "eslint": "^8.56.0",
     "eslint-plugin-vue": "^9.21.1",
     "flush-promises": "^1.0.2",
-    "happy-dom": "^12.10.3",
+    "happy-dom": "^17.6.1",
     "prettier": "^3.2.5",
     "sass": "^1.89.1",
     "vite": "^6.3.5",
-    "vitest": "^1.2.2"
+    "vitest": "^3.2.0"
   }
 }
