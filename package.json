@@ -31,7 +31,7 @@
     "@vitest/ui": "^3.2.0",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/test-utils": "^2.4.4",
-    "eslint": "^8.56.0",
+    "eslint": "^9.28.0",
     "eslint-plugin-vue": "^9.21.1",
     "flush-promises": "^1.0.2",
     "happy-dom": "^17.6.1",
