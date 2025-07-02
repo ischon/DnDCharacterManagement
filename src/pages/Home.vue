@@ -23,8 +23,8 @@
       loading.value = true
 
       // Wait for authentication state to be determined
-      await new Promise((resolve) => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
+      await new Promise(resolve => {
+        const unsubscribe = onAuthStateChanged(auth, user => {
           unsubscribe()
           resolve(user)
         })
@@ -66,7 +66,9 @@
       const charactersRef = collection(db, charactersPath)
       const charactersSnapshot = await getDocs(charactersRef)
 
-      characterData = reactive(charactersSnapshot.docs.map(doc => new Character(doc.data(), doc.id)))
+      characterData = reactive(
+        charactersSnapshot.docs.map(doc => new Character(doc.data(), doc.id))
+      )
 
       demoCharacter = characterData.find(item => item.id === exampleCharacter.id)
       if (!demoCharacter) {

@@ -12,7 +12,7 @@
 
   // Watch for authentication state changes
   onMounted(() => {
-    onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, async user => {
       console.log('Auth state changed:', user ? 'User signed in' : 'User signed out')
 
       if (user) {
@@ -61,13 +61,11 @@
     </div>
     <div class="nav-right">
       <RouterLink v-if="!isAuthenticated" to="/login">Login</RouterLink>
-      <button v-else @click="handleLogout" class="logout-btn">Logout</button>
+      <button v-else class="logout-btn" @click="handleLogout">Logout</button>
     </div>
   </nav>
   <main>
-    <div v-if="isLoading" class="loading">
-      Loading...
-    </div>
+    <div v-if="isLoading" class="loading">Loading...</div>
     <RouterView v-else />
   </main>
 </template>
@@ -80,7 +78,8 @@
     margin: 1rem 0;
     padding: 0 1rem;
 
-    .nav-left, .nav-right {
+    .nav-left,
+    .nav-right {
       display: flex;
       align-items: center;
       gap: 1rem;

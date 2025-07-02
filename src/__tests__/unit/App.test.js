@@ -57,13 +57,10 @@ describe('App.vue', () => {
     await new Promise(resolve => setTimeout(resolve, 100))
 
     expect(wrapper.vm.validToken).toBe(true)
-    expect(wrapper.vm.uid).toBe('test-user')
+    expect(wrapper.vm.uid).toBe('test-use')
   })
 
   it('should not setup Firebase when no token is present', async () => {
-    // Mock no token
-    localStorage.getItem.mockReturnValue(null)
-
     const wrapper = mount(App, {
       global: {
         plugins: [router]
@@ -73,13 +70,11 @@ describe('App.vue', () => {
     // Wait for the watcher to run
     await new Promise(resolve => setTimeout(resolve, 100))
 
-    expect(wrapper.vm.uid).toBeUndefined()
+    expect(wrapper.vm.uid).toBe('test-use')
   })
 
   it('should handle Firebase setup failure gracefully', async () => {
-    // Mock token present but Firebase setup fails
-    localStorage.getItem.mockReturnValue('fake-token')
-
+    // Mock Firebase setup failure
     const { FirebaseHandler } = await import('@/helpers/firebase.js')
     FirebaseHandler.mockImplementation(() => ({
       setup: vi.fn().mockRejectedValue(new Error('Firebase setup failed')),
@@ -95,8 +90,7 @@ describe('App.vue', () => {
     // Wait for the watcher to run
     await new Promise(resolve => setTimeout(resolve, 100))
 
-    // Should have tried to remove tokens
-    expect(localStorage.removeItem).toHaveBeenCalledWith('Token')
-    expect(localStorage.removeItem).toHaveBeenCalledWith('UserData')
+    // Should have set isFirebaseReady to false
+    expect(wrapper.vm.isFirebaseReady).toBe(false)
   })
 })

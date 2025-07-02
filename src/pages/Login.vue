@@ -45,11 +45,7 @@
     <h1>Welcome to D&D App</h1>
     <p>Please sign in to continue</p>
 
-    <button
-      @click="handleGoogleSignIn"
-      :disabled="isSigningIn"
-      class="google-signin-btn"
-    >
+    <button :disabled="isSigningIn" class="google-signin-btn" @click="handleGoogleSignIn">
       {{ isSigningIn ? 'Signing in...' : 'Sign in with Google' }}
     </button>
 

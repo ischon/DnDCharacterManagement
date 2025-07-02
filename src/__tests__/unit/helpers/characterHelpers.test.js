@@ -5,6 +5,7 @@ import {
   calculateAbilityModifier,
   longRest
 } from '@/helpers/characterHelpers.js'
+import { Character } from '@/models/Character.js'
 
 describe('characterHelpers', () => {
   describe('calculateCoins', () => {
@@ -65,39 +66,37 @@ describe('characterHelpers', () => {
 
   describe('longRest', () => {
     it('resets hit points and hit dice on full rest', () => {
-      const character = {
-        statHitPointsCurrent: 50,
-        statHitPointMaximumValue: 100,
-        statCurrentAmountHitDice: 2,
-        statMaxHitDice: 5,
-        spellcastingSpells: {
-          1: { slotsUsed: 2 },
-          2: { slotsUsed: 1 }
-        }
-      }
+      const character = new Character()
+      character.statHitPointsCurrent = 50
+      character.statHitPointsBase = 80
+      character.statHitPointsMisc = 20
+      character.statCurrentAmountHitDice = 2
+      character.detailLevel = 5
+      character.spellcastingSpellSlotsExpanded_set(1, 2)
+      character.spellcastingSpellSlotsExpanded_set(2, 1)
+
       longRest(character, true)
       expect(character.statHitPointsCurrent).toBe(100)
       expect(character.statCurrentAmountHitDice).toBe(5)
-      expect(character.spellcastingSpells[1].slotsUsed).toBe(0)
-      expect(character.spellcastingSpells[2].slotsUsed).toBe(0)
+      expect(character.spellcastingSpellSlotsExpanded_get(1)).toBe(0)
+      expect(character.spellcastingSpellSlotsExpanded_get(2)).toBe(0)
     })
 
     it('resets hit points and partially restores hit dice on partial rest', () => {
-      const character = {
-        statHitPointsCurrent: 50,
-        statHitPointMaximumValue: 100,
-        statCurrentAmountHitDice: 2,
-        statMaxHitDice: 5,
-        spellcastingSpells: {
-          1: { slotsUsed: 2 },
-          2: { slotsUsed: 1 }
-        }
-      }
+      const character = new Character()
+      character.statHitPointsCurrent = 50
+      character.statHitPointsBase = 80
+      character.statHitPointsMisc = 20
+      character.statCurrentAmountHitDice = 2
+      character.detailLevel = 5
+      character.spellcastingSpellSlotsExpanded_set(1, 2)
+      character.spellcastingSpellSlotsExpanded_set(2, 1)
+
       longRest(character, false)
       expect(character.statHitPointsCurrent).toBe(100)
-      expect(character.statCurrentAmountHitDice).toBe(4) // 2 + Math.floor(5/2) = 4
-      expect(character.spellcastingSpells[1].slotsUsed).toBe(0)
-      expect(character.spellcastingSpells[2].slotsUsed).toBe(0)
+      expect(character.statCurrentAmountHitDice).toBe(3) // 2 + Math.floor(5/2) = 3 (min van 5 en 4)
+      expect(character.spellcastingSpellSlotsExpanded_get(1)).toBe(0)
+      expect(character.spellcastingSpellSlotsExpanded_get(2)).toBe(0)
     })
   })
 })

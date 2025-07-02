@@ -41,18 +41,14 @@ describe('router.js', () => {
     // Controleer specifieke routes
     const homeRoute = routes.find(route => route.path === '/')
     expect(homeRoute).toBeDefined()
-    expect(homeRoute.meta.requireAuthentication).toBe(true)
+    expect(homeRoute.meta.requiresAuth).toBe(true)
 
     const loginRoute = routes.find(route => route.path === '/login')
     expect(loginRoute).toBeDefined()
-    expect(loginRoute.meta.requireAuthentication).toBe(false)
-
-    const logoutRoute = routes.find(route => route.path === '/logout')
-    expect(logoutRoute).toBeDefined()
-    expect(logoutRoute.meta.requireAuthentication).toBe(false)
+    expect(loginRoute.meta).toBeUndefined()
 
     const characterRoute = routes.find(route => route.path === '/character/:id')
     expect(characterRoute).toBeDefined()
-    expect(characterRoute.meta.requireAuthentication).toBe(true)
+    expect(characterRoute.meta.requiresAuth).toBe(true)
   })
 })

@@ -982,7 +982,7 @@ Platinum   1000  100   20    10    1
               </div>
             </div>
           </div>
-          </div>
+        </div>
         <div class="container row flex-1">
           <div class="container col flex-1">
             <div class="container flex-1 block col value-display no-border-left no-border-bottom">
@@ -1004,33 +1004,33 @@ Platinum   1000  100   20    10    1
                     >
                       - {{ language }}
                     </p>
-                                         <p
-                       class="clickable"
-                       @click="
-                         () => {
-                           confirmModelData.confirmFunction = async () => {
-                             character.languageRemove(language)
-                             await saveCharacter()
-                             resetConfirmModelData()
-                           }
-                           confirmModelData.open = true
-                           confirmModelData.item = language
-                           confirmModelData.question =
-                             'Are you sure you want to delete this language?'
-                         }
-                       "
-                       v-html="ICONS.REMOVE.MEDIUM"
-                     ></p>
+                    <p
+                      class="clickable"
+                      @click="
+                        () => {
+                          confirmModelData.confirmFunction = async () => {
+                            character.languageRemove(language)
+                            await saveCharacter()
+                            resetConfirmModelData()
+                          }
+                          confirmModelData.open = true
+                          confirmModelData.item = language
+                          confirmModelData.question =
+                            'Are you sure you want to delete this language?'
+                        }
+                      "
+                      v-html="ICONS.REMOVE.MEDIUM"
+                    ></p>
                   </div>
-                                     <div
-                     class="container row flex-1 clickable"
-                     @click="
-                       async () => {
-                         character.languageAdd('New Language')
-                         await saveCharacter()
-                       }
-                     "
-                   >
+                  <div
+                    class="container row flex-1 clickable"
+                    @click="
+                      async () => {
+                        character.languageAdd('New Language')
+                        await saveCharacter()
+                      }
+                    "
+                  >
                     <p class="flex-1">--add a new language--</p>
                     <p v-html="ICONS.ADD.MEDIUM"></p>
                   </div>
@@ -1059,23 +1059,23 @@ Platinum   1000  100   20    10    1
                         >
                           - {{ proficiency }}
                         </p>
-                                                 <p
-                           class="clickable"
-                           @click="
-                             () => {
-                               confirmModelData.confirmFunction = async () => {
-                                 character.proficiencyRemove(category, proficiency)
-                                 await saveCharacter()
-                                 resetConfirmModelData()
-                               }
-                               confirmModelData.open = true
-                               confirmModelData.item = proficiency
-                               confirmModelData.question =
-                                 'Are you sure you want to delete this proficiency?'
-                             }
-                           "
-                           v-html="ICONS.REMOVE.MEDIUM"
-                         ></p>
+                        <p
+                          class="clickable"
+                          @click="
+                            () => {
+                              confirmModelData.confirmFunction = async () => {
+                                character.proficiencyRemove(category, proficiency)
+                                await saveCharacter()
+                                resetConfirmModelData()
+                              }
+                              confirmModelData.open = true
+                              confirmModelData.item = proficiency
+                              confirmModelData.question =
+                                'Are you sure you want to delete this proficiency?'
+                            }
+                          "
+                          v-html="ICONS.REMOVE.MEDIUM"
+                        ></p>
                       </div>
                       <div
                         class="container row flex-1 clickable"

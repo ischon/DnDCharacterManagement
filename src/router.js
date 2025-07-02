@@ -35,7 +35,7 @@ const router = createRouter({
 let authStateDetermined = false
 
 // Listen for auth state changes
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, user => {
   authStateDetermined = true
   console.log('Auth state determined:', !!user)
 })
@@ -78,4 +78,5 @@ router.beforeEach((to, from, next) => {
   }
 })
 
+export { routes }
 export default router
