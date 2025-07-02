@@ -982,6 +982,124 @@ Platinum   1000  100   20    10    1
               </div>
             </div>
           </div>
+          </div>
+        <div class="container row flex-1">
+          <div class="container col flex-1">
+            <div class="container flex-1 block col value-display no-border-left no-border-bottom">
+              <div class="container col flex-1">
+                <div class="flex-1" style="width: 100%">
+                  <p>Languages</p>
+                  <div
+                    v-for="(language, index) in character.languages"
+                    :key="language"
+                    class="container row flex-1"
+                  >
+                    <p
+                      class="flex-1 clickable"
+                      @click="
+                        editingPopup.atClickEdit(character, [
+                          ['Languages', `_character.languages.${index}`, language, ModelTypes.text]
+                        ])
+                      "
+                    >
+                      - {{ language }}
+                    </p>
+                                         <p
+                       class="clickable"
+                       @click="
+                         () => {
+                           confirmModelData.confirmFunction = async () => {
+                             character.languageRemove(language)
+                             await saveCharacter()
+                             resetConfirmModelData()
+                           }
+                           confirmModelData.open = true
+                           confirmModelData.item = language
+                           confirmModelData.question =
+                             'Are you sure you want to delete this language?'
+                         }
+                       "
+                       v-html="ICONS.REMOVE.MEDIUM"
+                     ></p>
+                  </div>
+                                     <div
+                     class="container row flex-1 clickable"
+                     @click="
+                       async () => {
+                         character.languageAdd('New Language')
+                         await saveCharacter()
+                       }
+                     "
+                   >
+                    <p class="flex-1">--add a new language--</p>
+                    <p v-html="ICONS.ADD.MEDIUM"></p>
+                  </div>
+                  <br />
+                  <p>Proficiencies</p>
+                  <div v-for="(items, category) in character.proficiencies" :key="category">
+                    <p v-if="items.length > 0 || category === 'items'">{{ category }}</p>
+                    <template v-if="category === 'items'">
+                      <div
+                        v-for="(proficiency, idx) in items"
+                        :key="idx"
+                        class="container row flex-1"
+                      >
+                        <p
+                          class="flex-1 clickable"
+                          @click="
+                            editingPopup.atClickEdit(character, [
+                              [
+                                'Proficiencies',
+                                `_character.abilities.proficiencies.${category}.${character._character.abilities.proficiencies[category].indexOf(proficiency)}`,
+                                proficiency,
+                                ModelTypes.text
+                              ]
+                            ])
+                          "
+                        >
+                          - {{ proficiency }}
+                        </p>
+                                                 <p
+                           class="clickable"
+                           @click="
+                             () => {
+                               confirmModelData.confirmFunction = async () => {
+                                 character.proficiencyRemove(category, proficiency)
+                                 await saveCharacter()
+                                 resetConfirmModelData()
+                               }
+                               confirmModelData.open = true
+                               confirmModelData.item = proficiency
+                               confirmModelData.question =
+                                 'Are you sure you want to delete this proficiency?'
+                             }
+                           "
+                           v-html="ICONS.REMOVE.MEDIUM"
+                         ></p>
+                      </div>
+                      <div
+                        class="container row flex-1 clickable"
+                        @click="
+                          async () => {
+                            character.proficiencyAdd('items', 'New Proficiency')
+                            await saveCharacter()
+                          }
+                        "
+                      >
+                        <p class="flex-1">--add a new proficiency--</p>
+                        <p v-html="ICONS.ADD.MEDIUM"></p>
+                      </div>
+                    </template>
+                    <template v-if="items.length > 0 && category !== 'items'">
+                      <p v-for="proficiency in items" :key="proficiency">- {{ proficiency }}</p>
+                    </template>
+                    <br v-if="items.length > 0 || category === 'items'" />
+                  </div>
+                </div>
+                <p class="align-center">Languages & Other Proficiencies</p>
+              </div>
+            </div>
+          </div>
           <div class="container col flex-2">
             <div class="container flex-1 block col value-display no-border-right no-border-bottom">
               <div class="container row flex-1">
