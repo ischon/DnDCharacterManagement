@@ -1,5 +1,5 @@
 <script setup>
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
   import { FirebaseHandler } from '@/helpers/firebase.js'
 
   const validToken = computed(() => {
@@ -10,9 +10,24 @@
 
   const uid = ref(undefined)
   const firebaseHandler = new FirebaseHandler()
-  firebaseHandler.setup().then(() => {
-    uid.value = firebaseHandler.firebaseUser.uid.slice(0, 8)
-  })
+
+  // Only setup Firebase when there's a valid token
+  watch(validToken, async (hasToken) => {
+    if (hasToken) {
+      try {
+        await firebaseHandler.setup()
+        uid.value = firebaseHandler.firebaseUser.uid.slice(0, 8)
+      } catch (error) {
+        console.error('Failed to setup Firebase:', error)
+        // If setup fails, clear the token and redirect to login
+        localStorage.removeItem('Token')
+        localStorage.removeItem('UserData')
+      }
+    } else {
+      // Reset uid when no token
+      uid.value = undefined
+    }
+  }, { immediate: true })
 </script>
 
 <template>

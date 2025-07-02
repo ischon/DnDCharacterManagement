@@ -22,6 +22,7 @@
       }
     } catch (error) {
       console.error('Error loading character image:', error)
+      // Don't redirect here as this is a child component, just log the error
     } finally {
       isLoading.value = false
     }

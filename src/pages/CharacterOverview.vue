@@ -177,28 +177,36 @@ Platinum   1000  100   20    10    1
   }
 
   onBeforeMount(async () => {
-    await firebaseHandler.setup()
-    firebaseHandler
-      .getCharacterData(characterId)
-      .then(data => {
-        character = reactive(data)
-        loading.character = false
-        editingPopup.configure(firebaseHandler, character)
-      })
-      .catch(error => {
-        loading.character = false
-        console.error(error, 'No character found')
-      })
-    firebaseHandler
-      .getCharacterImage(characterId)
-      .then(image => {
-        characterImage.value = image
-        loading.image = false
-      })
-      .catch(error => {
-        loading.image = false
-        console.error(error, 'No image found')
-      })
+    try {
+      await firebaseHandler.setup()
+      firebaseHandler
+        .getCharacterData(characterId)
+        .then(data => {
+          character = reactive(data)
+          loading.character = false
+          editingPopup.configure(firebaseHandler, character)
+        })
+        .catch(error => {
+          loading.character = false
+          console.error(error, 'No character found')
+        })
+      firebaseHandler
+        .getCharacterImage(characterId)
+        .then(image => {
+          characterImage.value = image
+          loading.image = false
+        })
+        .catch(error => {
+          loading.image = false
+          console.error(error, 'No image found')
+        })
+    } catch (error) {
+      console.error('Failed to setup Firebase in CharacterOverview component:', error)
+      // If setup fails, redirect to login
+      localStorage.removeItem('Token')
+      localStorage.removeItem('UserData')
+      window.location.href = '/login'
+    }
   })
 </script>
 

@@ -15,8 +15,16 @@
   const loading = ref(true)
 
   onBeforeMount(async () => {
-    await firebaseHandler.setup()
-    await loadCharacters()
+    try {
+      await firebaseHandler.setup()
+      await loadCharacters()
+    } catch (error) {
+      console.error('Failed to setup Firebase in Home component:', error)
+      // If setup fails, redirect to login
+      localStorage.removeItem('Token')
+      localStorage.removeItem('UserData')
+      window.location.href = '/login'
+    }
   })
 
   async function loadCharacters() {
@@ -44,8 +52,16 @@
 
   async function uploadToFirebase(character) {
     clicked.value = true
-    await firebaseHandler.setup()
-    await firebaseHandler.setCharacterData(character.objectData)
+    try {
+      await firebaseHandler.setup()
+      await firebaseHandler.setCharacterData(character.objectData)
+    } catch (error) {
+      console.error('Failed to upload character to Firebase:', error)
+      // If setup fails, redirect to login
+      localStorage.removeItem('Token')
+      localStorage.removeItem('UserData')
+      window.location.href = '/login'
+    }
   }
 
   function navigateToCharacter(id) {
