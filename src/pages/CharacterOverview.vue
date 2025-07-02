@@ -1,16 +1,21 @@
 <script setup>
   'use strict'
-  import router from '@/router.js'
-
+  import { useRoute, useRouter } from 'vue-router'
   import { onBeforeMount, ref, reactive, watch } from 'vue'
-  import { FirebaseHandler } from '@/helpers/firebase.js'
+  import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
+  import { getStorage, ref as storageRef, getDownloadURL, uploadBytes } from 'firebase/storage'
+  import { auth } from '@/services/firebase/app.js'
   import { range } from 'lodash'
+  import { Character } from '@/models/Character.js'
 
   import { longRest } from '@/helpers/characterHelpers.js'
   import { formatScore, formatLength, formatWeight } from '@/helpers/formatHelpers.js'
   import { ICONS } from '@/helpers/icons.js'
 
   import { ModelTypes, EditPopup } from '@/helpers/editPopupHelper.js'
+
+  const route = useRoute()
+  const router = useRouter()
 
   const SPACE_CHAR = ' ‎'
   const COIN_CALCULATION = `
@@ -50,8 +55,7 @@ Platinum   1000  100   20    10    1
     confirmModelData.question = undefined
   }
 
-  const characterId = router.currentRoute.value.params.id
-  const firebaseHandler = new FirebaseHandler()
+  const characterId = route.params.id
   let character = undefined
 
   const characterImage = ref(undefined)
@@ -59,30 +63,77 @@ Platinum   1000  100   20    10    1
   const editingPopup = new EditPopup()
 
   watch(
-    () => router.currentRoute.value.params.id,
+    () => route.params.id,
     async () => {
       window.location.reload()
     }
   )
 
+  const saveCharacter = async () => {
+    try {
+      const user = auth.currentUser
+      if (!user) {
+        throw new Error('No authenticated user found')
+      }
+
+      const db = getFirestore()
+      const characterPath = `users/${user.uid}/characters/${character.id}`
+      const characterRef = doc(db, characterPath)
+      await setDoc(characterRef, character.objectData)
+    } catch (error) {
+      console.error('Error saving character:', error)
+    }
+  }
+
   const atClickProficiency = (ability_name, skill_name) => {
     character.proficiencyToggle(ability_name, skill_name)
-    firebaseHandler.setCharacterData(character.objectData)
+    saveCharacter()
   }
+
   const atClickPrepared = (spell_lvl, spell_name) => {
     character.spellcastingPreparedToggle(spell_lvl, spell_name)
-    firebaseHandler.setCharacterData(character.objectData)
+    saveCharacter()
   }
 
   const openLongRestModal = () => {
+    console.log('Long rest button clicked')
+    console.log('Character before long rest:', {
+      currentHP: character.statHitPointsCurrent,
+      maxHP: character.statHitPointMaximumValue,
+      currentHitDice: character.statCurrentAmountHitDice,
+      maxHitDice: character.statMaxHitDice
+    })
+
     confirmModelData.open = true
+    confirmModelData.item = 'Long Rest'
     confirmModelData.question = 'Are you sure you want to take a Long rest?'
     confirmModelData.confirmFunction = async () => {
+      console.log('Long rest confirmed, executing...')
       longRest(character, true)
-      await firebaseHandler.setCharacterData(character.objectData)
+      console.log('Character after long rest:', {
+        currentHP: character.statHitPointsCurrent,
+        maxHP: character.statHitPointMaximumValue,
+        currentHitDice: character.statCurrentAmountHitDice,
+        maxHitDice: character.statMaxHitDice
+      })
+      await saveCharacter()
+
+      // Force Vue to re-render by triggering reactivity
+      character.statHitPointsCurrent = character.statHitPointsCurrent
+      character.statCurrentAmountHitDice = character.statCurrentAmountHitDice
+
+      // Force spell slots reactivity by triggering the getter
+      for (const level in character.spellcastingSpells) {
+        // Force reactivity by accessing the spell slots data
+        const spells = character.spellcastingSpells[level]
+        // Trigger reactivity by reassigning the object reference
+        character._character.spellcasting.spells[level] = { ...spells }
+      }
+
       confirmModelData.open = false
     }
   }
+
   const openShortRestModal = () => {
     editingPopup.atClickEdit(character, [
       ['Max hit Dice', '', character.statMaxHitDice, ModelTypes.disabled],
@@ -101,6 +152,7 @@ Platinum   1000  100   20    10    1
       ]
     ])
   }
+
   const openLevelUpModal = () => {
     let items = [
       ['Character level / Max hit Dice', 'detailLevel', character.detailLevel, ModelTypes.number],
@@ -169,7 +221,19 @@ Platinum   1000  100   20    10    1
       characterImage.value = e.target.result
     }
 
-    await firebaseHandler.setCharacterImage(characterId, image)
+    try {
+      const user = auth.currentUser
+      if (!user) {
+        throw new Error('No authenticated user found')
+      }
+
+      const storage = getStorage()
+      const imagePath = `users/${user.uid}/characters/${characterId}`
+      const imageRef = storageRef(storage, imagePath)
+      await uploadBytes(imageRef, image)
+    } catch (error) {
+      console.error('Error uploading image:', error)
+    }
 
     if (showImageModel.value) {
       showImageModel.value = false
@@ -178,34 +242,42 @@ Platinum   1000  100   20    10    1
 
   onBeforeMount(async () => {
     try {
-      await firebaseHandler.setup()
-      firebaseHandler
-        .getCharacterData(characterId)
-        .then(data => {
-          character = reactive(data)
-          loading.character = false
-          editingPopup.configure(firebaseHandler, character)
-        })
-        .catch(error => {
-          loading.character = false
-          console.error(error, 'No character found')
-        })
-      firebaseHandler
-        .getCharacterImage(characterId)
-        .then(image => {
-          characterImage.value = image
-          loading.image = false
-        })
-        .catch(error => {
-          loading.image = false
-          console.error(error, 'No image found')
-        })
+      const user = auth.currentUser
+      if (!user) {
+        throw new Error('No authenticated user found')
+      }
+
+      const db = getFirestore()
+      const characterPath = `users/${user.uid}/characters/${characterId}`
+      const characterRef = doc(db, characterPath)
+      const characterDoc = await getDoc(characterRef)
+
+      if (characterDoc.exists()) {
+        // Create character and make it reactive
+        const characterData = characterDoc.data()
+        character = reactive(new Character(characterData, characterId))
+        loading.character = false
+        editingPopup.configure({ setCharacterData: saveCharacter }, character)
+      } else {
+        throw new Error('Character not found')
+      }
+
+      // Load character image
+      try {
+        const storage = getStorage()
+        const imagePath = `users/${user.uid}/characters/${characterId}`
+        const imageRef = storageRef(storage, imagePath)
+        const imageUrl = await getDownloadURL(imageRef)
+        characterImage.value = imageUrl
+      } catch (error) {
+        console.log('Character image not found, using placeholder')
+      } finally {
+        loading.image = false
+      }
     } catch (error) {
-      console.error('Failed to setup Firebase in CharacterOverview component:', error)
-      // If setup fails, redirect to login
-      localStorage.removeItem('Token')
-      localStorage.removeItem('UserData')
-      window.location.href = '/login'
+      console.error('Error loading character:', error)
+      loading.character = false
+      loading.image = false
     }
   })
 </script>
@@ -291,7 +363,7 @@ Platinum   1000  100   20    10    1
             </div>
             <div class="container block value-display col flex-1 no-border-top no-border-right">
               <p class="flex-1 value medium no-transform">
-                {{ firebaseHandler.firebaseUser.displayName }}
+                {{ auth.currentUser?.displayName || auth.currentUser?.email || 'Unknown Player' }}
               </p>
               <p>Player Name</p>
             </div>
@@ -739,7 +811,7 @@ Platinum   1000  100   20    10    1
                         () => {
                           confirmModelData.confirmFunction = async () => {
                             character.attackRemove(row.name)
-                            await firebaseHandler.setCharacterData(character.objectData)
+                            await saveCharacter()
                             resetConfirmModelData()
                           }
                           confirmModelData.open = true
@@ -756,7 +828,7 @@ Platinum   1000  100   20    10    1
                     @click="
                       async () => {
                         character.attackAdd('Name', 0, 'Damage', 'Type')
-                        await firebaseHandler.setCharacterData(character.objectData)
+                        await saveCharacter()
                       }
                     "
                   >
@@ -791,7 +863,7 @@ Platinum   1000  100   20    10    1
                               lvl,
                               spells.spellSlotsExpanded + 1
                             )
-                            await firebaseHandler.setCharacterData(character.objectData)
+                            await saveCharacter()
                           }
                         "
                         >—</span
@@ -874,7 +946,7 @@ Platinum   1000  100   20    10    1
                         () => {
                           confirmModelData.confirmFunction = async () => {
                             character.equipmentRemove(item.name, item.count)
-                            await firebaseHandler.setCharacterData(character.objectData)
+                            await saveCharacter()
                             resetConfirmModelData()
                           }
                           confirmModelData.open = true
@@ -895,7 +967,7 @@ Platinum   1000  100   20    10    1
                           1,
                           0
                         )
-                        await firebaseHandler.setCharacterData(character.objectData)
+                        await saveCharacter()
                       }
                     "
                   >
@@ -938,7 +1010,7 @@ Platinum   1000  100   20    10    1
                         () => {
                           confirmModelData.confirmFunction = async () => {
                             character.languageRemove(language)
-                            await firebaseHandler.setCharacterData(character.objectData)
+                            await saveCharacter()
                             resetConfirmModelData()
                           }
                           confirmModelData.open = true
@@ -955,7 +1027,7 @@ Platinum   1000  100   20    10    1
                     @click="
                       async () => {
                         character.languageAdd('New Language')
-                        await firebaseHandler.setCharacterData(character.objectData)
+                        await saveCharacter()
                       }
                     "
                   >
@@ -993,7 +1065,7 @@ Platinum   1000  100   20    10    1
                             () => {
                               confirmModelData.confirmFunction = async () => {
                                 character.proficiencyRemove(category, proficiency)
-                                await firebaseHandler.setCharacterData(character.objectData)
+                                await saveCharacter()
                                 resetConfirmModelData()
                               }
                               confirmModelData.open = true
@@ -1004,6 +1076,18 @@ Platinum   1000  100   20    10    1
                           "
                           v-html="ICONS.REMOVE.MEDIUM"
                         ></p>
+                      </div>
+                      <div
+                        class="container row flex-1 clickable"
+                        @click="
+                          async () => {
+                            character.proficiencyAdd('items', 'New Proficiency')
+                            await saveCharacter()
+                          }
+                        "
+                      >
+                        <p class="flex-1">--add a new proficiency--</p>
+                        <p v-html="ICONS.ADD.MEDIUM"></p>
                       </div>
                     </template>
                     <template v-if="items.length > 0 && category !== 'items'">
@@ -1111,7 +1195,7 @@ Platinum   1000  100   20    10    1
                           () => {
                             confirmModelData.confirmFunction = async () => {
                               character.equipmentRemove(equipment.name)
-                              await firebaseHandler.setCharacterData(character.objectData)
+                              await saveCharacter()
                               resetConfirmModelData()
                             }
                             confirmModelData.open = true
@@ -1133,7 +1217,7 @@ Platinum   1000  100   20    10    1
                             1,
                             0
                           )
-                          await firebaseHandler.setCharacterData(character.objectData)
+                          await saveCharacter()
                         }
                       "
                     >
@@ -1574,7 +1658,7 @@ Platinum   1000  100   20    10    1
                       () => {
                         confirmModelData.confirmFunction = async () => {
                           character.spellcastingCantripRemove(cantrip)
-                          await firebaseHandler.setCharacterData(character.objectData)
+                          await saveCharacter()
                           resetConfirmModelData()
                         }
                         confirmModelData.open = true
@@ -1617,7 +1701,7 @@ Platinum   1000  100   20    10    1
                     () => {
                       confirmModelData.confirmFunction = async () => {
                         character.spellcastingRemove(j, spell)
-                        await firebaseHandler.setCharacterData(character.objectData)
+                        await saveCharacter()
                         resetConfirmModelData()
                       }
                       confirmModelData.open = true
@@ -1637,7 +1721,7 @@ Platinum   1000  100   20    10    1
                 @click="
                   () => {
                     character.spellcastingCantripAdd('New cantrip')
-                    firebaseHandler.setCharacterData(character.objectData)
+                    saveCharacter()
                   }
                 "
               >
@@ -1651,7 +1735,7 @@ Platinum   1000  100   20    10    1
                 @click="
                   () => {
                     character.spellcastingAdd(j, 'New Spell')
-                    firebaseHandler.setCharacterData(character.objectData)
+                    saveCharacter()
                   }
                 "
               >

@@ -1,13 +1,21 @@
 'use strict'
-import { initializeApp } from 'firebase/app'
-import { collection, doc, setDoc, getDoc, getDocs, getFirestore } from 'firebase/firestore'
-import { getAuth, GoogleAuthProvider, signInWithCredential } from 'firebase/auth'
-import { getAnalytics } from 'firebase/analytics'
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  getDoc,
+  getDocs,
+  deleteDoc,
+  updateDoc,
+  query,
+  where,
+  orderBy,
+  limit
+} from 'firebase/firestore'
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
+import { auth } from '@/services/firebase/app.js'
 import { Character } from '@/models/Character.js'
-import { firebaseConfig } from '@/services/firebase/config.js'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
 
 export class FirebaseHandler {
   constructor() {
@@ -16,46 +24,36 @@ export class FirebaseHandler {
       characters: 'users/{uid}/characters',
       character: 'users/{uid}/characters/{characterId}'
     }
-    this.app = null
-    this.auth = null
-    this.credential = null
-    this.firebaseUser = null
-    this.analytics = null
     this.db = null
     this.storage = null
+    this.auth = auth
   }
 
   async setup() {
     try {
-      // Initialize Firebase
-      this.app = initializeApp(firebaseConfig)
-      this.auth = getAuth(this.app)
-      this.auth.useDeviceLanguage()
-
-      // Get stored token
-      const token = localStorage.getItem('Token')
-      if (!token) {
-        throw new Error('No authentication token found')
-      }
-
-      // Initialize credential and sign in
-      this.credential = GoogleAuthProvider.credential(token)
-      await signInWithCredential(this.auth, this.credential)
-      this.firebaseUser = this.auth.currentUser
-
-      if (!this.firebaseUser) {
-        throw new Error('Failed to get current user after sign in')
-      }
-
-      // Initialize other Firebase services
-      this.analytics = getAnalytics(this.app)
-      this.db = getFirestore(this.app)
-      this.storage = getStorage(this.app)
-
-      return true
+      this.db = getFirestore()
+      this.storage = getStorage()
+      console.log('Firebase services initialized successfully')
     } catch (error) {
-      console.error('Error in Firebase setup:', error)
+      console.error('Error initializing Firebase services:', error)
       throw error
+    }
+  }
+
+  // Method to check if user is authenticated
+  isAuthenticated() {
+    return this.auth && this.auth.currentUser !== null
+  }
+
+  // Method to get current user
+  getCurrentUser() {
+    return this.auth?.currentUser || null
+  }
+
+  // Method to sign out
+  async signOut() {
+    if (this.auth) {
+      await this.auth.signOut()
     }
   }
 
@@ -87,7 +85,12 @@ export class FirebaseHandler {
 
   async getCharactersData() {
     try {
-      const path = this.paths.characters.replace('{uid}', this.firebaseUser.uid)
+      const currentUser = this.getCurrentUser()
+      if (!currentUser) {
+        throw new Error('No authenticated user found')
+      }
+
+      const path = this.paths.characters.replace('{uid}', currentUser.uid)
       const collectionRef = collection(this.db, path)
       const charactersData = await getDocs(collectionRef)
 
@@ -100,8 +103,13 @@ export class FirebaseHandler {
 
   async setCharacterData(character) {
     try {
+      const currentUser = this.getCurrentUser()
+      if (!currentUser) {
+        throw new Error('No authenticated user found')
+      }
+
       const path = this.paths.character
-        .replace('{uid}', this.firebaseUser.uid)
+        .replace('{uid}', currentUser.uid)
         .replace('{characterId}', character.id)
         .split('/')
       await this.setData(character, ...path)
@@ -113,8 +121,13 @@ export class FirebaseHandler {
 
   async getCharacterData(characterId) {
     try {
+      const currentUser = this.getCurrentUser()
+      if (!currentUser) {
+        throw new Error('No authenticated user found')
+      }
+
       const path = this.paths.character
-        .replace('{uid}', this.firebaseUser.uid)
+        .replace('{uid}', currentUser.uid)
         .replace('{characterId}', characterId)
         .split('/')
       const data = await this.getData(...path)
@@ -127,8 +140,13 @@ export class FirebaseHandler {
 
   async getCharacterImage(characterId) {
     try {
+      const currentUser = this.getCurrentUser()
+      if (!currentUser) {
+        throw new Error('No authenticated user found')
+      }
+
       const path = this.paths.character
-        .replace('{uid}', this.firebaseUser.uid)
+        .replace('{uid}', currentUser.uid)
         .replace('{characterId}', characterId)
       const storageRef = ref(this.storage, path)
       return await getDownloadURL(storageRef)
@@ -153,8 +171,13 @@ export class FirebaseHandler {
 
   async setCharacterImage(characterId, file) {
     try {
+      const currentUser = this.getCurrentUser()
+      if (!currentUser) {
+        throw new Error('No authenticated user found')
+      }
+
       const path = this.paths.character
-        .replace('{uid}', this.firebaseUser.uid)
+        .replace('{uid}', currentUser.uid)
         .replace('{characterId}', characterId)
       const storageRef = ref(this.storage, path)
       const snapshot = await uploadBytes(storageRef, file)

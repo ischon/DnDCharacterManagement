@@ -1,6 +1,7 @@
 <script setup>
-  import { defineProps, ref, onMounted } from 'vue'
-  import { FirebaseHandler } from '@/helpers/firebase.js'
+  import { ref, onMounted } from 'vue'
+  import { getStorage, ref as storageRef, getDownloadURL } from 'firebase/storage'
+  import { auth } from '@/services/firebase/app.js'
 
   const props = defineProps({
     character: {
@@ -9,20 +10,34 @@
     }
   })
 
-  const firebaseHandler = new FirebaseHandler()
   const profileImage = ref(null)
   const isLoading = ref(true)
 
   onMounted(async () => {
     try {
-      await firebaseHandler.setup()
-      const imageUrl = await firebaseHandler.getCharacterImage(props.character.id)
+      const user = auth.currentUser
+      if (!user) {
+        console.log('No authenticated user for character image')
+        isLoading.value = false
+        return
+      }
+
+      const storage = getStorage()
+      const imagePath = `users/${user.uid}/characters/${props.character.id}`
+      const imageRef = storageRef(storage, imagePath)
+
+      const imageUrl = await getDownloadURL(imageRef)
       if (imageUrl) {
         profileImage.value = imageUrl
       }
     } catch (error) {
       console.error('Error loading character image:', error)
-      // Don't redirect here as this is a child component, just log the error
+      // Handle specific storage errors
+      if (error.code === 'storage/object-not-found') {
+        console.log('Character image not found, using placeholder')
+      } else {
+        console.error('Storage error:', error.code)
+      }
     } finally {
       isLoading.value = false
     }

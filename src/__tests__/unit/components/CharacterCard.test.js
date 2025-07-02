@@ -1,13 +1,25 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 
-// Mock FirebaseHandler module bovenaan zodat deze vóór de import van CharacterCard actief is
-let getCharacterImageMock = vi.fn().mockResolvedValue(null)
-vi.mock('@/helpers/firebase', () => ({
-  FirebaseHandler: vi.fn().mockImplementation(() => ({
-    setup: vi.fn().mockResolvedValue(undefined),
-    getCharacterImage: (...args) => getCharacterImageMock(...args)
-  }))
+// Mock Firebase auth
+vi.mock('@/services/firebase/app.js', () => ({
+  auth: {
+    currentUser: {
+      uid: 'test-user-id'
+    }
+  }
+}))
+
+// Mock Firebase storage
+vi.mock('firebase/storage', () => ({
+  getStorage: vi.fn(() => ({})),
+  ref: vi.fn(() => ({})),
+  getDownloadURL: vi.fn().mockImplementation(() => {
+    // Throw error to trigger placeholder image
+    const error = new Error('Object not found')
+    error.code = 'storage/object-not-found'
+    throw error
+  })
 }))
 
 import CharacterCard from '@/components/CharacterCard.vue'
@@ -39,8 +51,10 @@ describe('CharacterCard Component', () => {
     expect(paragraphs[1].text()).toBe('Human')
   })
 
-  it('shows placeholder image with first letter of name', () => {
+  it('shows placeholder image with first letter of name', async () => {
+    await wrapper.vm.$nextTick()
     const placeholder = wrapper.find('.placeholder-image')
+    expect(placeholder.exists()).toBe(true)
     expect(placeholder.text()).toBe('T')
   })
 
@@ -50,8 +64,9 @@ describe('CharacterCard Component', () => {
   }
 
   it('shows profile image when available', async () => {
-    const mockImageUrl = 'https://example.com/image.jpg'
-    getCharacterImageMock = vi.fn().mockResolvedValueOnce(mockImageUrl)
+    // Temporarily mock getDownloadURL to return a URL
+    const { getDownloadURL } = await import('firebase/storage')
+    vi.mocked(getDownloadURL).mockResolvedValueOnce('https://example.com/image.jpg')
 
     const wrapperWithImage = mount(CharacterCard, {
       props: {
@@ -64,7 +79,7 @@ describe('CharacterCard Component', () => {
 
     const image = wrapperWithImage.find('img')
     expect(image.exists()).toBe(true)
-    expect(image.attributes('src')).toBe(mockImageUrl)
+    expect(image.attributes('src')).toBe('https://example.com/image.jpg')
   })
 
   it('handles missing character details gracefully', () => {

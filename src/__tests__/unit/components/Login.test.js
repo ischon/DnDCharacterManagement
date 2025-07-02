@@ -14,23 +14,20 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock
 })
 
-// Mock vue3-google-login
-vi.mock('vue3-google-login', () => ({
-  GoogleLogin: defineComponent({
-    name: 'GoogleLogin',
-    props: ['callback'],
-    methods: {
-      async onClick() {
-        console.log('Button clicked')
-        await this.callback({ credential: 'mock-jwt-token' })
-      }
-    },
-    template: '<button @click="onClick">Login with Google</button>'
-  }),
-  decodeCredential: vi.fn().mockReturnValue({
-    email: 'test@example.com',
-    name: 'Test User'
+// Mock Firebase auth
+vi.mock('firebase/auth', () => ({
+  GoogleAuthProvider: vi.fn(),
+  signInWithPopup: vi.fn().mockResolvedValue({
+    user: {
+      email: 'test@example.com',
+      displayName: 'Test User'
+    }
   })
+}))
+
+// Mock Firebase app
+vi.mock('@/services/firebase/app.js', () => ({
+  auth: {}
 }))
 
 // Mock the router import using a relative path
@@ -67,10 +64,15 @@ describe('Login Component', () => {
   it('renders login button', async () => {
     const wrapper = mount(Login)
     expect(wrapper.find('button').exists()).toBe(true)
-    expect(wrapper.find('button').text()).toBe('Login with Google')
+    expect(wrapper.find('button').text()).toBe('Sign in with Google')
   })
 
   it('handles successful login', async () => {
+    // Mock window.location.href
+    const originalLocation = window.location
+    delete window.location
+    window.location = { href: '' }
+
     const wrapper = mount(Login)
 
     // Click the login button
@@ -78,17 +80,10 @@ describe('Login Component', () => {
     await wrapper.vm.$nextTick()
     await flushPromises()
 
-    // Verify that localStorage.setItem was called with the correct values
-    expect(localStorageMock.setItem).toHaveBeenCalledWith('Token', 'mock-jwt-token')
-    expect(localStorageMock.setItem).toHaveBeenCalledWith(
-      'UserData',
-      JSON.stringify({
-        email: 'test@example.com',
-        name: 'Test User'
-      })
-    )
+    // Verify that window.location.href was set
+    expect(window.location.href).toBe('/')
 
-    // Verify that router.push was called with the correct path
-    expect(router.push).toHaveBeenCalledWith({ path: '/', replace: true })
+    // Restore original location
+    window.location = originalLocation
   })
 })

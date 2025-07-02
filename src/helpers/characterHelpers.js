@@ -55,8 +55,9 @@ export function longRest(character, full = false) {
     )
   }
 
-  // Reset spell slots
+  // Reset spell slots - use the correct property that the UI expects
   for (const level in character.spellcastingSpells) {
-    character.spellcastingSpells[level].slotsUsed = 0
+    // Reset spellSlotsExpanded to 0 to restore all spell slots
+    character.spellcastingSpellSlotsExpanded_set(level, 0)
   }
 }
