@@ -19,13 +19,13 @@ vi.mock('vue3-google-login', () => ({
   GoogleLogin: defineComponent({
     name: 'GoogleLogin',
     props: ['callback'],
-    template: '<button @click="onClick">Login with Google</button>',
     methods: {
       async onClick() {
         console.log('Button clicked')
         await this.callback({ credential: 'mock-jwt-token' })
       }
-    }
+    },
+    template: '<button @click="onClick">Login with Google</button>'
   }),
   decodeCredential: vi.fn().mockReturnValue({
     email: 'test@example.com',
