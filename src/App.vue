@@ -1,56 +1,98 @@
 <script setup>
-  import { computed, ref, watch } from 'vue'
+  import { computed, ref, onMounted } from 'vue'
   import { FirebaseHandler } from '@/helpers/firebase.js'
-
-  const validToken = computed(() => {
-    let token = localStorage.getItem('Token')
-
-    return !!token
-  })
+  import { onAuthStateChanged } from 'firebase/auth'
+  import { auth } from '@/services/firebase/app.js'
 
   const uid = ref(undefined)
   const firebaseHandler = new FirebaseHandler()
+  const isAuthenticated = ref(false)
+  const isLoading = ref(true)
+  const isFirebaseReady = ref(false)
 
-  // Only setup Firebase when there's a valid token
-  watch(validToken, async (hasToken) => {
-    if (hasToken) {
-      try {
-        await firebaseHandler.setup()
-        uid.value = firebaseHandler.firebaseUser.uid.slice(0, 8)
-      } catch (error) {
-        console.error('Failed to setup Firebase:', error)
-        // If setup fails, clear the token and redirect to login
-        localStorage.removeItem('Token')
-        localStorage.removeItem('UserData')
+  // Watch for authentication state changes
+  onMounted(() => {
+    onAuthStateChanged(auth, async (user) => {
+      console.log('Auth state changed:', user ? 'User signed in' : 'User signed out')
+
+      if (user) {
+        // User is signed in
+        isAuthenticated.value = true
+        uid.value = user.uid.slice(0, 8)
+
+        // Setup Firebase services
+        try {
+          await firebaseHandler.setup()
+          isFirebaseReady.value = true
+          console.log('Firebase setup completed successfully')
+        } catch (error) {
+          console.error('Failed to setup Firebase services:', error)
+          isFirebaseReady.value = false
+        }
+      } else {
+        // User is signed out
+        isAuthenticated.value = false
+        uid.value = undefined
+        isFirebaseReady.value = false
+        console.log('User signed out')
       }
-    } else {
-      // Reset uid when no token
-      uid.value = undefined
+      isLoading.value = false
+    })
+  })
+
+  // Computed property for navigation
+  const validToken = computed(() => isAuthenticated.value && isFirebaseReady.value)
+
+  const handleLogout = async () => {
+    try {
+      await firebaseHandler.signOut()
+      // Redirect to login page
+      window.location.href = '/login'
+    } catch (error) {
+      console.error('Error signing out:', error)
     }
-  }, { immediate: true })
+  }
 </script>
 
 <template>
   <nav>
-    <RouterLink v-if="validToken" to="/">Go to Home</RouterLink>
-    <RouterLink v-if="!validToken" to="/login">Go to login</RouterLink>
-    <RouterLink v-else to="/logout">logout</RouterLink>
+    <div class="nav-left">
+      <RouterLink v-if="isAuthenticated" to="/">Home</RouterLink>
+    </div>
+    <div class="nav-right">
+      <RouterLink v-if="!isAuthenticated" to="/login">Login</RouterLink>
+      <button v-else @click="handleLogout" class="logout-btn">Logout</button>
+    </div>
   </nav>
   <main>
-    <RouterView />
+    <div v-if="isLoading" class="loading">
+      Loading...
+    </div>
+    <RouterView v-else />
   </main>
 </template>
 
 <style scoped>
   nav {
     display: flex;
-    justify-content: left;
+    justify-content: space-between;
+    align-items: center;
     margin: 1rem 0;
+    padding: 0 1rem;
 
-    * {
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    a {
       padding: 1rem;
-      margin: 0 1rem;
       background-color: var(--color-background-soft);
+      border-radius: 0.5rem;
+      text-decoration: none;
+      color: var(--color-text);
+      transition: background-color 0.2s;
 
       &:hover {
         background-color: var(--color-background-mute);
@@ -60,15 +102,35 @@
         background-color: var(--color-background-mute);
         color: var(--color-text);
       }
+    }
 
-      &:last-child {
-        margin-right: 0;
-        margin-left: auto;
+    .logout-btn {
+      border: none;
+      cursor: pointer;
+      color: var(--color-text);
+      font-size: inherit;
+      font-family: inherit;
+      border-radius: 0.5rem;
+      background-color: var(--color-background-soft);
+      transition: background-color 0.2s;
+      padding: 1rem;
+      text-decoration: none;
+
+      &:hover {
+        background-color: var(--color-background-mute);
       }
 
-      &:first-child {
-        margin-left: 0;
+      &:active {
+        background-color: var(--color-background);
       }
     }
+  }
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    font-size: 1.2rem;
   }
 </style>

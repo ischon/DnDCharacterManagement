@@ -1,63 +1,81 @@
 'use strict'
-import { createWebHistory, createRouter } from 'vue-router'
-
-import LoginView from '@/pages/Login.vue'
-import HomeView from '@/pages/Home.vue'
-import { decodeCredential } from 'vue3-google-login'
-import LogoutView from '@/pages/Logout.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '@/services/firebase/app.js'
+import Home from '@/pages/Home.vue'
+import Login from '@/pages/Login.vue'
 import CharacterOverview from '@/pages/CharacterOverview.vue'
 
 const routes = [
-  { path: '/login', component: LoginView, meta: { requireAuthentication: false } },
-  { path: '/logout', component: LogoutView, meta: { requireAuthentication: false } },
-  { path: '/', component: HomeView, meta: { requireAuthentication: true } },
-  { path: '/character/:id', component: CharacterOverview, meta: { requireAuthentication: true } }
+  {
+    path: '/',
+    name: 'Home',
+    component: Home,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '/character/:id',
+    name: 'CharacterOverview',
+    component: CharacterOverview,
+    meta: { requiresAuth: true }
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  // linkActiveClass: 'active',
-  linkExactActiveClass: 'exact-active',
   routes
 })
 
-async function logout(path = '/logout') {
-  localStorage.removeItem('Token')
-  localStorage.removeItem('UserData')
-  await router.push({ path: path, replace: true })
-  window.location.reload()
-}
+// Track if auth state has been determined
+let authStateDetermined = false
 
-router.beforeEach(async (to, from, next) => {
-  const token = localStorage.getItem('Token')
-  if (to.path === '/logout') {
-    if (token) {
-      await logout()
-    }
+// Listen for auth state changes
+onAuthStateChanged(auth, (user) => {
+  authStateDetermined = true
+  console.log('Auth state determined:', !!user)
+})
+
+// Navigation guard
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const user = auth.currentUser
+
+  console.log('Router guard:', { to: to.path, requiresAuth, user: !!user, authStateDetermined })
+
+  // If auth state hasn't been determined yet, wait a bit
+  if (!authStateDetermined) {
+    console.log('Auth state not determined yet, waiting...')
+    setTimeout(() => {
+      router.push(to.path)
+    }, 100)
+    return
   }
 
-  if (to.meta.requireAuthentication) {
-    if (token) {
-      // User is authenticated, proceed to the route
-      let userData = decodeCredential(token)
-      // validate expire time in userdata
-      if (userData['exp'] < Math.floor(Date.now() / 1000)) {
-        await logout('/login')
-        next('/login')
-      }
-      next()
-    } else {
-      // User is not authenticated, redirect to login
+  if (requiresAuth) {
+    // Check if user is authenticated
+    if (!user) {
+      console.log('Route requires auth but user not authenticated, redirecting to login')
       next('/login')
+    } else {
+      console.log('User authenticated, proceeding to protected route')
+      next()
     }
   } else {
-    // Non-protected route, allow access
-    if (token && to.path === '/login') {
+    // Non-protected route
+    if (to.path === '/login' && user) {
+      // User is already logged in, redirect to home
+      console.log('User already authenticated, redirecting to home')
       next('/')
+    } else {
+      console.log('Non-protected route, proceeding')
+      next()
     }
-    next()
   }
 })
 
-export { routes }
 export default router

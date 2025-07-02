@@ -6,9 +6,14 @@ vi.mock('firebase/app', () => ({
   initializeApp: vi.fn(() => 'app')
 }))
 vi.mock('firebase/auth', () => ({
-  getAuth: vi.fn(() => ({ useDeviceLanguage: vi.fn(), currentUser: { uid: 'uid' } })),
-  GoogleAuthProvider: { credential: vi.fn(() => 'credential') },
-  signInWithCredential: vi.fn(() => Promise.resolve())
+  getAuth: vi.fn(() => ({
+    useDeviceLanguage: vi.fn(),
+    currentUser: { uid: 'uid' }
+  })),
+  GoogleAuthProvider: vi.fn().mockImplementation(() => ({})),
+  signInWithCredential: vi.fn(() => Promise.resolve()),
+  signInWithPopup: vi.fn(() => Promise.resolve({ user: { uid: 'uid' } })),
+  onAuthStateChanged: vi.fn()
 }))
 vi.mock('firebase/analytics', () => ({
   getAnalytics: vi.fn(() => 'analytics')
@@ -32,6 +37,19 @@ vi.mock('firebase/storage', () => ({
   ref: vi.fn(),
   uploadBytes: vi.fn(),
   getDownloadURL: vi.fn()
+}))
+
+// Mock Firebase
+vi.mock('@/helpers/firebase.js', () => ({
+  FirebaseHandler: vi.fn().mockImplementation(() => ({
+    setup: vi.fn().mockResolvedValue(true),
+    firebaseUser: {
+      uid: 'uid'
+    },
+    getCurrentUser: vi.fn(() => ({ uid: 'uid' })),
+    isAuthenticated: vi.fn(() => true),
+    signOut: vi.fn(() => Promise.resolve())
+  }))
 }))
 
 // Voeg localStorage mock toe
@@ -60,19 +78,17 @@ describe('FirebaseHandler', () => {
   let handler
   beforeEach(() => {
     handler = new FirebaseHandler()
-    localStorage.clear()
-    localStorage.setItem('Token', 'token')
   })
 
   it('should construct with default properties', () => {
     expect(handler.paths).toBeDefined()
     expect(handler.app).toBeNull()
     expect(handler.auth).toBeNull()
-    expect(handler.credential).toBeNull()
     expect(handler.firebaseUser).toBeNull()
     expect(handler.analytics).toBeNull()
     expect(handler.db).toBeNull()
     expect(handler.storage).toBeNull()
+    expect(handler.isInitialized).toBe(false)
   })
 
   it('should setup firebase and sign in', async () => {
@@ -84,9 +100,27 @@ describe('FirebaseHandler', () => {
     expect(handler.storage).toBe('storage')
   })
 
-  it('should throw if no token in setup', async () => {
-    localStorage.removeItem('Token')
-    await expect(handler.setup()).rejects.toThrow('No authentication token found')
+  it('should handle authentication when user is already signed in', async () => {
+    // Mock that user is already signed in
+    const { getAuth } = await import('firebase/auth')
+    getAuth.mockReturnValueOnce({
+      useDeviceLanguage: vi.fn(),
+      currentUser: { uid: 'uid' }
+    })
+
+    await expect(handler.setup()).resolves.toBe(true)
+  })
+
+  it('should handle authentication when user needs to sign in', async () => {
+    // Mock that user needs to sign in
+    const { getAuth } = await import('firebase/auth')
+    getAuth.mockReturnValueOnce({
+      useDeviceLanguage: vi.fn(),
+      currentUser: null
+    })
+
+    // Should throw error when user is not authenticated
+    await expect(handler.setup()).rejects.toThrow('User not authenticated')
   })
 
   it('should call setData', async () => {

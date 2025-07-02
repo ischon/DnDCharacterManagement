@@ -13,6 +13,25 @@ vi.mock('@/helpers/firebase.js', () => ({
   }))
 }))
 
+vi.mock('firebase/auth', () => ({
+  getAuth: vi.fn(() => ({
+    currentUser: null
+  })),
+  onAuthStateChanged: vi.fn((auth, callback) => {
+    // Simulate auth state change
+    callback({ uid: 'test-user-id-12345678' })
+    return vi.fn() // Return unsubscribe function
+  })
+}))
+
+vi.mock('firebase/app', () => ({
+  initializeApp: vi.fn(() => ({}))
+}))
+
+vi.mock('@/services/firebase/config.js', () => ({
+  firebaseConfig: {}
+}))
+
 // Mock localStorage
 const localStorageMock = {
   getItem: vi.fn(),
@@ -27,20 +46,18 @@ describe('App.vue', () => {
     vi.clearAllMocks()
   })
 
-  it('should setup Firebase when token is present', async () => {
-    // Mock token present
-    localStorage.getItem.mockReturnValue('fake-token')
-
+  it('should handle authentication state changes', async () => {
     const wrapper = mount(App, {
       global: {
         plugins: [router]
       }
     })
 
-    // Wait for the watcher to run
+    // Wait for the auth state change
     await new Promise(resolve => setTimeout(resolve, 100))
 
-    expect(wrapper.vm.uid).toBe('test-use')
+    expect(wrapper.vm.validToken).toBe(true)
+    expect(wrapper.vm.uid).toBe('test-user')
   })
 
   it('should not setup Firebase when no token is present', async () => {

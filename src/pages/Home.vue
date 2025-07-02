@@ -1,13 +1,17 @@
 <script setup>
-  import { FirebaseHandler } from '@/helpers/firebase.js'
   import { exampleCharacter } from '@/models/Examples.js'
   import { onBeforeMount, reactive, ref } from 'vue'
   import { newCharacterId } from '@/models/CharacterHelperClasses.js'
   import { ICONS } from '../helpers/icons.js'
   import CharacterCard from '@/components/CharacterCard.vue'
+  import { onAuthStateChanged } from 'firebase/auth'
+  import { getFirestore, collection, getDocs, doc, setDoc } from 'firebase/firestore'
+  import { auth } from '@/services/firebase/app.js'
+  import { Character } from '@/models/Character.js'
+  import { useRouter } from 'vue-router'
 
+  const router = useRouter()
   let clicked = ref(false)
-  const firebaseHandler = new FirebaseHandler()
   let characterData = undefined
   let characters = ref([])
   let demoCharacter = undefined
@@ -16,20 +20,54 @@
 
   onBeforeMount(async () => {
     try {
-      await firebaseHandler.setup()
+      loading.value = true
+
+      // Wait for authentication state to be determined
+      await new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          unsubscribe()
+          resolve(user)
+        })
+
+        // Timeout after 3 seconds
+        setTimeout(() => {
+          unsubscribe()
+          resolve(null)
+        }, 3000)
+      })
+
+      // Check if user is authenticated
+      const user = auth.currentUser
+      if (!user) {
+        console.log('No authenticated user found in Home component')
+        loading.value = false
+        return
+      }
+
+      console.log('User authenticated in Home component, loading characters')
       await loadCharacters()
     } catch (error) {
-      console.error('Failed to setup Firebase in Home component:', error)
-      // If setup fails, redirect to login
-      localStorage.removeItem('Token')
-      localStorage.removeItem('UserData')
-      window.location.href = '/login'
+      console.error('Failed to load characters:', error)
+      characters.value = []
+    } finally {
+      loading.value = false
     }
   })
 
   async function loadCharacters() {
     try {
-      characterData = reactive(await firebaseHandler.getCharactersData())
+      const user = auth.currentUser
+      if (!user) {
+        throw new Error('No authenticated user found')
+      }
+
+      const db = getFirestore()
+      const charactersPath = `users/${user.uid}/characters`
+      const charactersRef = collection(db, charactersPath)
+      const charactersSnapshot = await getDocs(charactersRef)
+
+      characterData = reactive(charactersSnapshot.docs.map(doc => new Character(doc.data(), doc.id)))
+
       demoCharacter = characterData.find(item => item.id === exampleCharacter.id)
       if (!demoCharacter) {
         demoCharacter = exampleCharacter
@@ -53,19 +91,22 @@
   async function uploadToFirebase(character) {
     clicked.value = true
     try {
-      await firebaseHandler.setup()
-      await firebaseHandler.setCharacterData(character.objectData)
+      const user = auth.currentUser
+      if (!user) {
+        throw new Error('No authenticated user found')
+      }
+
+      const db = getFirestore()
+      const characterPath = `users/${user.uid}/characters/${character.id}`
+      const characterRef = doc(db, characterPath)
+      await setDoc(characterRef, character.objectData)
     } catch (error) {
       console.error('Failed to upload character to Firebase:', error)
-      // If setup fails, redirect to login
-      localStorage.removeItem('Token')
-      localStorage.removeItem('UserData')
-      window.location.href = '/login'
     }
   }
 
   function navigateToCharacter(id) {
-    window.location.href = `/character/${id}`
+    router.push(`/character/${id}`)
   }
 </script>
 
@@ -98,7 +139,7 @@
 
     <hr />
 
-    <router-link class="item" :to="{ path: '/character/' + newCharacter }">
+    <router-link class="item" :to="`/character/${newCharacter}`">
       <span v-html="ICONS.ADD.XXLARGE"></span> Add new character
     </router-link>
   </div>
