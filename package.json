@@ -33,7 +33,7 @@
     "eslint": "^9.30.0",
     "eslint-plugin-vue": "^9.21.1",
     "flush-promises": "^1.0.2",
-    "happy-dom": "^17.6.1",
+    "happy-dom": "^18.0.1",
     "prettier": "^3.2.5",
     "sass": "^1.89.1",
     "vite": "^6.3.5",
