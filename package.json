@@ -17,7 +17,7 @@
   "dependencies": {
     "@firebase/auth": "^1.11.0",
     "@firebase/firestore": "^4.9.0",
-    "firebase": "^12.1.0",
+    "firebase": "^12.3.0",
     "globals": "^16.3.0",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
