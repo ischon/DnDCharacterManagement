@@ -14,15 +14,19 @@ jobs:
       matrix:
         node-version: [22.x]
 
+    defaults:
+      run:
+        working-directory: V1
+
     steps:
     - uses: actions/checkout@v4
-    - run: cd V1
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: V1/package-lock.json
 
     - name: Install dependencies
       run: npm ci
@@ -37,5 +41,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: coverage-report
-        path: coverage/
+        path: V1/coverage/
         retention-days: 14
