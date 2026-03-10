@@ -19,7 +19,7 @@
     "@firebase/firestore": "^4.9.0",
     "firebase": "^12.4.0",
     "globals": "^16.3.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "pinia": "^3.0.4",
     "vue": "^3.5.22",
     "vue-router": "^4.2.5",
