@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Character Sheet - Elowen Thistlebrook</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Crimson+Pro:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9c4fba",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#1b151d",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Crimson Pro", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .header-font {
+            font-family: 'Crimson Pro', serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<div class="flex-1 overflow-y-auto pb-24">
+<!-- Header Section -->
+<header class="p-6 bg-primary/5 border-b border-primary/10">
+<div class="flex items-center gap-5">
+<div class="relative">
+<div class="size-20 rounded-xl bg-primary/20 border-2 border-primary overflow-hidden shadow-lg shadow-primary/20">
+<img alt="Character Portrait" class="w-full h-full object-cover" data-alt="Ethereal wood elf druid portrait with green accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVBZDFkfJnQN3JzhB0PX7BSDLfED4npN7-B1GwcYBTXwKjDHYId-k68EFj05IRlJQv2WOI_TsS9niI9iSP9prQ9bxSw4v1Nq21Ht_0FCgI2VQrpmS0ylWSG9VqSJDjqEpdYDe90wt_KytVyPafU25K_HO1Y_D4XRn6oBXV3O_jonC8Fj-Eyth7kbrThhqu2nvzCy9FoQ8tfMGxdjKazwKIX5wCBRJE4fxdrlyCmNdn37lW2snZubr0Mjgw0z6MX9SDXQQbk8E-sgg"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        Level 5
+                    </div>
+</div>
+<div class="flex-1">
+<h1 class="header-font text-3xl font-bold leading-none mb-1">Elowen Thistlebrook</h1>
+<p class="text-slate-500 dark:text-slate-400 font-medium">Wood Elf Druid • Circle of Dreams</p>
+</div>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<!-- Health Bar Section -->
+<div class="mt-8 bg-slate-100 dark:bg-primary/10 border border-slate-200 dark:border-primary/20 p-4 rounded-xl">
+<div class="flex justify-between items-end mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">favorite</span>
+<span class="font-bold uppercase text-xs tracking-widest text-slate-500 dark:text-slate-400">Health Points</span>
+</div>
+<div class="text-2xl font-bold header-font">68 <span class="text-slate-400 font-normal">/ 84</span></div>
+</div>
+<div class="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mb-4">
+<div class="h-full bg-primary w-[81%] shadow-[0_0_10px_rgba(156,79,186,0.5)]"></div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 h-12 flex items-center justify-center gap-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 rounded-lg font-bold transition-all">
+<span class="material-symbols-outlined text-sm">remove</span> Damage
+                    </button>
+<button class="flex-1 h-12 flex items-center justify-center gap-2 bg-primary text-white hover:bg-primary/90 rounded-lg font-bold shadow-lg shadow-primary/20 transition-all">
+<span class="material-symbols-outlined text-sm">add</span> Heal
+                    </button>
+</div>
+</div>
+</header>
+<main class="p-4 space-y-6">
+<!-- Core Stats Grid -->
+<section>
+<h2 class="header-font text-xl mb-4 flex items-center gap-2">
+<span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                    Ability Scores
+                </h2>
+<div class="grid grid-cols-3 gap-3">
+<!-- STR -->
+<div class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-3 rounded-xl text-center group">
+<p class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 mb-1">STR</p>
+<div class="text-2xl font-bold header-font">10</div>
+<div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-primary/10 rounded-full border border-primary/20 border-dotted cursor-pointer">
+<span class="text-primary font-bold text-sm">+0</span>
+</div>
+</div>
+<!-- DEX -->
+<div class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-3 rounded-xl text-center">
+<p class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 mb-1">DEX</p>
+<div class="text-2xl font-bold header-font">14</div>
+<div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-primary/10 rounded-full border border-primary/20 border-dotted cursor-pointer">
+<span class="text-primary font-bold text-sm">+2</span>
+</div>
+</div>
+<!-- CON -->
+<div class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-3 rounded-xl text-center">
+<p class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 mb-1">CON</p>
+<div class="text-2xl font-bold header-font">14</div>
+<div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-primary/10 rounded-full border border-primary/20 border-dotted cursor-pointer">
+<span class="text-primary font-bold text-sm">+2</span>
+</div>
+</div>
+<!-- INT -->
+<div class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-3 rounded-xl text-center">
+<p class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 mb-1">INT</p>
+<div class="text-2xl font-bold header-font">12</div>
+<div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-primary/10 rounded-full border border-primary/20 border-dotted cursor-pointer">
+<span class="text-primary font-bold text-sm">+1</span>
+</div>
+</div>
+<!-- WIS -->
+<div class="bg-white dark:bg-slate-900/50 border border-primary/40 p-3 rounded-xl text-center ring-1 ring-primary/20 shadow-lg shadow-primary/5">
+<p class="text-[10px] font-bold uppercase tracking-tighter text-primary mb-1">WIS</p>
+<div class="text-2xl font-bold header-font">18</div>
+<div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-primary text-white rounded-full cursor-pointer">
+<span class="font-bold text-sm">+4</span>
+</div>
+</div>
+<!-- CHA -->
+<div class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-3 rounded-xl text-center">
+<p class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 mb-1">CHA</p>
+<div class="text-2xl font-bold header-font">11</div>
+<div class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-primary/10 rounded-full border border-primary/20 border-dotted cursor-pointer">
+<span class="text-primary font-bold text-sm">+0</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Skills List -->
+<section>
+<div class="flex justify-between items-center mb-4">
+<h2 class="header-font text-xl flex items-center gap-2">
+<span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                        Skills
+                    </h2>
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Prof | Exp | Mod</span>
+</div>
+<div class="space-y-1 bg-white dark:bg-slate-900/30 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+<!-- Skill Row -->
+<div class="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium">Acrobatics</span>
+<span class="text-[10px] text-slate-400 uppercase">DEX</span>
+</div>
+<div class="flex items-center gap-4">
+<input class="rounded-full text-primary focus:ring-primary bg-slate-200 dark:bg-slate-700 border-none size-4" type="checkbox"/>
+<input class="rounded-full text-primary focus:ring-primary bg-slate-200 dark:bg-slate-700 border-none size-4" type="checkbox"/>
+<span class="w-8 text-right font-bold text-slate-400">+2</span>
+</div>
+</div>
+<!-- Skill Row (Proficient) -->
+<div class="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium">Insight</span>
+<span class="text-[10px] text-slate-400 uppercase">WIS</span>
+</div>
+<div class="flex items-center gap-4">
+<input checked="" class="rounded-full text-primary focus:ring-primary bg-slate-200 dark:bg-slate-700 border-none size-4" type="checkbox"/>
+<input class="rounded-full text-primary focus:ring-primary bg-slate-200 dark:bg-slate-700 border-none size-4" type="checkbox"/>
+<span class="w-8 text-right font-bold text-primary">+7</span>
+</div>
+</div>
+<!-- Skill Row (Expertise) -->
+<div class="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium">Nature</span>
+<span class="text-[10px] text-slate-400 uppercase">INT</span>
+</div>
+<div class="flex items-center gap-4">
+<input checked="" class="rounded-full text-primary focus:ring-primary bg-slate-200 dark:bg-slate-700 border-none size-4" type="checkbox"/>
+<input checked="" class="rounded-full text-primary focus:ring-primary bg-slate-200 dark:bg-slate-700 border-none size-4" type="checkbox"/>
+<span class="w-8 text-right font-bold text-primary">+7</span>
+</div>
+</div>
+<!-- Skill Row -->
+<div class="flex items-center justify-between p-3 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<div class="flex items-center gap-3">
+<span class="text-sm font-medium">Stealth</span>
+<span class="text-[10px] text-slate-400 uppercase">DEX</span>
+</div>
+<div class="flex items-center gap-4">
+<input class="rounded-full text-primary focus:ring-primary bg-slate-200 dark:bg-slate-700 border-none size-4" type="checkbox"/>
+<input class="rounded-full text-primary focus:ring-primary bg-slate-200 dark:bg-slate-700 border-none size-4" type="checkbox"/>
+<span class="w-8 text-right font-bold text-slate-400">+2</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Resources & Spells -->
+<section>
+<h2 class="header-font text-xl mb-4 flex items-center gap-2">
+<span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                    Spell Slots
+                </h2>
+<div class="space-y-3">
+<!-- Level 1 Slots -->
+<div class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex items-center justify-between">
+<div>
+<p class="font-bold">Level 1</p>
+<div class="flex gap-1.5 mt-2">
+<div class="size-4 rounded-sm bg-primary border border-primary/40"></div>
+<div class="size-4 rounded-sm bg-primary border border-primary/40"></div>
+<div class="size-4 rounded-sm bg-primary border border-primary/40"></div>
+<div class="size-4 rounded-sm bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-lg font-bold header-font text-slate-400">3/4</span>
+<button class="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary font-bold rounded-lg text-sm border border-primary/20 transition-all">USE</button>
+</div>
+</div>
+<!-- Level 2 Slots -->
+<div class="bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 p-4 rounded-xl flex items-center justify-between">
+<div>
+<p class="font-bold">Level 2</p>
+<div class="flex gap-1.5 mt-2">
+<div class="size-4 rounded-sm bg-primary border border-primary/40"></div>
+<div class="size-4 rounded-sm bg-primary border border-primary/40"></div>
+<div class="size-4 rounded-sm bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700"></div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-lg font-bold header-font text-slate-400">2/3</span>
+<button class="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary font-bold rounded-lg text-sm border border-primary/20 transition-all">USE</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Navigation Footer (BottomNavBar Component Modified) -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 px-4 pb-6 pt-2">
+<div class="flex gap-2 max-w-md mx-auto">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary" href="#">
+<span class="material-symbols-outlined fill-1">person</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Stats</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">auto_fix_high</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Spells</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Bag</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">description</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Notes</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">history</span>
+<p class="text-[10px] font-bold uppercase tracking-widest">Log</p>
+</a>
+</div>
+</nav>
+</body></html>

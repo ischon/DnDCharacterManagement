@@ -1,4 +1,4 @@
-name: Test
+name: Test V1
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  test-V1:
     runs-on: ubuntu-latest
 
     strategy:
@@ -16,6 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - run: cd V1
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4

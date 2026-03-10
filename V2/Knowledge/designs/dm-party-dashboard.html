@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Lora:ital,wght@0,400..700;1,400..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9c4fba",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#1b151d",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Lora", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .font-serif-header { font-family: 'Lora', serif; }
+        .font-sans-ui { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-sans-ui">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Navigation Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/20 bg-background-light dark:bg-background-dark px-6 md:px-10 py-3">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-6">
+<span class="material-symbols-outlined text-3xl">castle</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-serif-header font-bold leading-tight tracking-[-0.015em]">DM Dashboard</h2>
+</div>
+<nav class="hidden md:flex items-center gap-9">
+<a class="text-primary text-sm font-medium leading-normal border-b-2 border-primary pb-1" href="#">Party</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">NPCs</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Combat</a>
+<a class="text-slate-600 dark:text-slate-400 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Notes</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-4 md:gap-8">
+<label class="hidden sm:flex flex-col min-w-40 !h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-slate-400 flex border-none bg-primary/10 items-center justify-center pl-4 rounded-l-lg" data-icon="search">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-primary/10 text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-primary h-full placeholder:text-slate-400 px-4 rounded-r-lg pl-2 text-sm font-normal" placeholder="Search compendium..." value=""/>
+</div>
+</label>
+<div class="flex gap-2">
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-lg bg-primary/10 text-slate-600 dark:text-slate-300 hover:bg-primary/20">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="flex size-10 cursor-pointer items-center justify-center rounded-lg bg-primary/10 text-slate-600 dark:text-slate-300 hover:bg-primary/20">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary" data-alt="Avatar of the Dungeon Master" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBJWRNVdmBL3za2KHAfgq6m9x2M1IIXioHCSfFJgYE4zfP68MKVxDAl717mn-c7celcm3BxPzjxBEqHXhAWOUpGU7EcR1NnO0POCMWF8M1myroVZaO919eHpa4SuNSXkDtpIdEdkQydyZPq6QfsSzf1J88bAtFQ4AvULPkDFgt7luMCkum6STDW9ZYA5hrIXltRqHFLI2jlCigJraQn6fBcLkuNPygfLcs9zezUZk_4lmz9w726VRA6igmvCJGu4Tw4-Q_mmdIQ7OI");'></div>
+</div>
+</header>
+<main class="flex-1 px-6 md:px-10 py-8 max-w-[1400px] mx-auto w-full">
+<!-- Session Header -->
+<div class="flex flex-wrap justify-between items-end gap-4 mb-8">
+<div class="flex flex-col gap-1">
+<h1 class="text-slate-900 dark:text-slate-100 text-4xl font-serif-header font-bold tracking-tight">Party Overview</h1>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal">Session 24: The Shadow Over Waterdeep</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-bold text-sm hover:brightness-110 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-lg">bedtime</span>
+<span>Long Rest</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary border border-primary/20 rounded-lg font-bold text-sm hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined text-lg">history</span>
+<span>Log</span>
+</button>
+</div>
+</div>
+<!-- Party Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+<!-- Elowen Card -->
+<div class="flex flex-col bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 rounded-xl overflow-hidden shadow-sm">
+<div class="h-40 w-full bg-center bg-no-repeat bg-cover relative" data-alt="Elowen character portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuASYIIe2gxIKTVJQ9uR0vU3IEk5U0qhlHUOnLqD2xlQOzvSrFd7-XXS-DtPpXj9zS6rMRJx_KOlvEiBjcNebLycYzVGD6MT3HimATWHJYlLg8x5srobVcovbJZfXEIEeTvw-Ybnltr3sjTl6-rj2qCj3s74uPlTcsmuK-ED-DsdKIozkQERU31HojFx5TuPBJ1E-YRjV-4RYK2PV--X2yARPLw5T0LgdbBwMuyRcPb8IrSzQ10kQPa7l9yNqGqrH1bZHZhe2b3QIRg");'>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<p class="text-white text-xl font-serif-header font-bold">Elowen</p>
+<p class="text-slate-300 text-xs font-medium uppercase tracking-wider">Level 5 Druid</p>
+</div>
+</div>
+<div class="p-5 space-y-4">
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-500 dark:text-slate-400 font-medium">Hit Points</span>
+<span class="text-slate-900 dark:text-slate-100 font-bold">42/50</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-green-500 rounded-full" style="width: 84%;"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg text-center border border-primary/5">
+<p class="text-[10px] uppercase text-primary font-bold mb-1">Armor Class</p>
+<p class="text-lg font-bold text-slate-900 dark:text-slate-100 leading-none">16</p>
+</div>
+<div class="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg text-center border border-primary/5">
+<p class="text-[10px] uppercase text-primary font-bold mb-1">Passive Perc.</p>
+<p class="text-lg font-bold text-slate-900 dark:text-slate-100 leading-none">18</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Korg Card (Editable State) -->
+<div class="flex flex-col bg-white dark:bg-background-dark border-2 border-primary rounded-xl overflow-hidden shadow-xl shadow-primary/10 ring-4 ring-primary/5">
+<div class="h-40 w-full bg-center bg-no-repeat bg-cover relative" data-alt="Korg character portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAvUs6RV_8cWN4I_qDhrqgE7JpzDXzrID3948NwuUmXBwBVggFsfjXV18B0i4Y4cXQ5WZ8zO0QbcHKY5iunWY7_b7P2y3vRzB0zhDIJbJW1v0r-wsw3E7AcMFmEI18ly6wllIhd28mNwyasOHMvx-fU1Ai5zLbF-M0N08UmPFU7vcxoxDkNL1LYtY7xR30h_z7MVrxIdNwdGCGRJ_Jz8nOn-NrbCyHURW1-DBKhqUi8firQtRzTcVbJi5PQCb5vERiBiOeEg1X9AI");'>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+<div class="absolute top-3 right-3">
+<span class="flex items-center justify-center size-8 bg-primary rounded-full text-white">
+<span class="material-symbols-outlined text-lg">edit</span>
+</span>
+</div>
+<div class="absolute bottom-3 left-4">
+<p class="text-white text-xl font-serif-header font-bold">Korg</p>
+<p class="text-slate-300 text-xs font-medium uppercase tracking-wider">Level 5 Barbarian</p>
+</div>
+</div>
+<div class="p-5 space-y-4">
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm">
+<span class="text-primary font-bold">Hit Points</span>
+<div class="flex items-center gap-1">
+<input class="w-12 h-7 bg-primary/10 border border-primary text-center text-xs font-bold rounded text-slate-900 dark:text-slate-100 focus:ring-1 focus:ring-primary" type="number" value="38"/>
+<span class="text-slate-500">/ 65</span>
+</div>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-orange-500 rounded-full" style="width: 58%;"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg text-center border border-primary/5">
+<p class="text-[10px] uppercase text-primary font-bold mb-1">Armor Class</p>
+<p class="text-lg font-bold text-slate-900 dark:text-slate-100 leading-none">14</p>
+</div>
+<div class="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg text-center border border-primary/5">
+<p class="text-[10px] uppercase text-primary font-bold mb-1">Passive Perc.</p>
+<p class="text-lg font-bold text-slate-900 dark:text-slate-100 leading-none">10</p>
+</div>
+</div>
+<button class="w-full py-2 bg-primary text-white text-xs font-bold rounded-lg uppercase tracking-widest">Save Changes</button>
+</div>
+</div>
+<!-- Silas Card -->
+<div class="flex flex-col bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 rounded-xl overflow-hidden shadow-sm">
+<div class="h-40 w-full bg-center bg-no-repeat bg-cover relative" data-alt="Silas character portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAvhhbe9hHkFpALIBKDDp2fC11Jx7n8ScUBymyR5MUUYWwaGNFGALAAvjOxn788AHET957IIA4LbWAVbRz5cwSwUCIT6kP-lUMn5v4QOYjjL7MHO1bfjByTmi1XfynGVJGImmuS0dwo4xsGixParTaX_kMT2kOLboM6pzwJBTZIy0Lnmx53l_f5ditnzGDh8G8xxbNkK2d5fAO7DZFnoz1bCmlYk0q8bLlm0BmT9TxdEuqAIv_tcc6xWw8ESLzC6mjIgpccqlkdh3k");'>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<p class="text-white text-xl font-serif-header font-bold">Silas</p>
+<p class="text-slate-300 text-xs font-medium uppercase tracking-wider">Level 5 Rogue</p>
+</div>
+</div>
+<div class="p-5 space-y-4">
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-500 dark:text-slate-400 font-medium">Hit Points</span>
+<span class="text-slate-900 dark:text-slate-100 font-bold">45/45</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-green-500 rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg text-center border border-primary/5">
+<p class="text-[10px] uppercase text-primary font-bold mb-1">Armor Class</p>
+<p class="text-lg font-bold text-slate-900 dark:text-slate-100 leading-none">17</p>
+</div>
+<div class="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg text-center border border-primary/5">
+<p class="text-[10px] uppercase text-primary font-bold mb-1">Passive Perc.</p>
+<p class="text-lg font-bold text-slate-900 dark:text-slate-100 leading-none">15</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Aria Card -->
+<div class="flex flex-col bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 rounded-xl overflow-hidden shadow-sm">
+<div class="h-40 w-full bg-center bg-no-repeat bg-cover relative" data-alt="Aria character portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDrkzwETDpmQ9jGobxy7R2YG1DAMiDFbAZB2nkBmrXY6lG6b-ut79xuqMIVBpeb-jSmHf4OQ1h322RY2jaqjXXxWDPBAaDnGowYN3pkG_rqbAieqF75nELrHzbOwTg1PKG1-1wI5C4U-eV3czU_swUXyQBzDAv4Uw3yp0kZKFr4096uFgLK2ID3Dlmh3jHWI6XWroW2pyW_Ka-KGoSxoENBFldjK1CYPHdVmCERq-qUsyWepmit0icjvThQ7pIYRWgg63QYOptjK9Y");'>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+<div class="absolute bottom-3 left-4">
+<p class="text-white text-xl font-serif-header font-bold">Aria</p>
+<p class="text-slate-300 text-xs font-medium uppercase tracking-wider">Level 5 Bard</p>
+</div>
+</div>
+<div class="p-5 space-y-4">
+<div class="space-y-2">
+<div class="flex justify-between items-center text-sm">
+<span class="text-slate-500 dark:text-slate-400 font-medium">Hit Points</span>
+<span class="text-slate-900 dark:text-slate-100 font-bold">12/38</span>
+</div>
+<div class="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-red-500 rounded-full" style="width: 32%;"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg text-center border border-primary/5">
+<p class="text-[10px] uppercase text-primary font-bold mb-1">Armor Class</p>
+<p class="text-lg font-bold text-slate-900 dark:text-slate-100 leading-none">15</p>
+</div>
+<div class="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg text-center border border-primary/5">
+<p class="text-[10px] uppercase text-primary font-bold mb-1">Passive Perc.</p>
+<p class="text-lg font-bold text-slate-900 dark:text-slate-100 leading-none">14</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- NPC Section -->
+<div class="space-y-6">
+<div class="flex items-center justify-between border-b border-primary/20 pb-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">groups_3</span>
+<h3 class="text-2xl font-serif-header font-bold text-slate-900 dark:text-slate-100">Temporary NPCs</h3>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 border border-dashed border-primary text-primary rounded-lg font-bold text-sm hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined text-lg">add_circle</span>
+<span>Add NPC</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- NPC Card 1 -->
+<div class="flex items-center p-4 bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 rounded-xl gap-4 hover:border-primary/40 transition-colors">
+<div class="size-12 rounded-lg bg-slate-100 dark:bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400 dark:text-primary">swords</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-slate-100 font-bold leading-none mb-1">Goblin Scout</p>
+<div class="flex gap-3 text-xs text-slate-500 dark:text-slate-400">
+<span>HP: 7/7</span>
+<span>AC: 13</span>
+</div>
+</div>
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+<!-- NPC Card 2 -->
+<div class="flex items-center p-4 bg-white dark:bg-background-dark border border-slate-200 dark:border-primary/20 rounded-xl gap-4 hover:border-primary/40 transition-colors">
+<div class="size-12 rounded-lg bg-slate-100 dark:bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-400 dark:text-primary">elderly</span>
+</div>
+<div class="flex-1">
+<p class="text-slate-900 dark:text-slate-100 font-bold leading-none mb-1">Village Elder</p>
+<div class="flex gap-3 text-xs text-slate-500 dark:text-slate-400">
+<span>HP: 4/4</span>
+<span>AC: 10</span>
+</div>
+</div>
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-lg">close</span>
+</button>
+</div>
+<!-- Empty Placeholder for styling -->
+<div class="hidden lg:flex items-center justify-center p-4 border-2 border-dashed border-slate-200 dark:border-primary/10 rounded-xl bg-slate-50/50 dark:bg-primary/5">
+<p class="text-slate-400 dark:text-slate-600 text-xs font-medium uppercase">Slot Available</p>
+</div>
+<div class="hidden lg:flex items-center justify-center p-4 border-2 border-dashed border-slate-200 dark:border-primary/10 rounded-xl bg-slate-50/50 dark:bg-primary/5">
+<p class="text-slate-400 dark:text-slate-600 text-xs font-medium uppercase">Slot Available</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Control Bar -->
+<footer class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-t border-slate-200 dark:border-primary/20 px-6 py-4">
+<div class="max-w-[1400px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">menu_book</span>
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Compendium</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">map</span>
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">World Map</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+<span class="size-2 rounded-full bg-green-500 animate-pulse"></span>
+<span class="text-[10px] font-bold text-primary uppercase">4 Players Online</span>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>
