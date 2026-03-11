@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Player Character Sheet - V2 Play Mode</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Crimson+Pro:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9c4fba",
+                        "accent-gold": "#d4af37",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#0f0b12",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "serif": ["Crimson Pro", "serif"]
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                font-family: 'Inter', sans-serif;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .header-font {
+                font-family: 'Crimson Pro', serif;
+            }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(156, 79, 186, 0.2);
+        }
+        .hp-gradient {
+            background: linear-gradient(90deg, #9c4fba 0%, #d4af37 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<div class="flex-1 overflow-y-auto pb-32">
+<header class="p-6 bg-gradient-to-b from-primary/10 to-transparent border-b border-primary/10">
+<div class="flex items-center gap-5 mb-6">
+<div class="relative">
+<div class="size-20 rounded-2xl bg-primary/20 border-2 border-primary/50 overflow-hidden shadow-2xl shadow-primary/20">
+<img alt="Character Portrait" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVBZDFkfJnQN3JzhB0PX7BSDLfED4npN7-B1GwcYBTXwKjDHYId-k68EFj05IRlJQv2WOI_TsS9niI9iSP9prQ9bxSw4v1Nq21Ht_0FCgI2VQrpmS0ylWSG9VqSJDjqEpdYDe90wt_KytVyPafU25K_HO1Y_D4XRn6oBXV3O_jonC8Fj-Eyth7kbrThhqu2nvzCy9FoQ8tfMGxdjKazwKIX5wCBRJE4fxdrlyCmNdn37lW2snZubr0Mjgw0z6MX9SDXQQbk8E-sgg"/>
+</div>
+<div class="absolute -bottom-2 -right-2 bg-accent-gold text-black text-[10px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter">
+                        LVL 5
+                    </div>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h1 class="header-font text-3xl font-bold leading-none">Elowen</h1>
+<span class="material-symbols-outlined text-xs text-slate-500">lock</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 font-medium text-sm">Circle of Dreams Druid</p>
+<button class="mt-2 flex items-center gap-1.5 px-3 py-1 bg-primary/20 border border-primary/30 rounded-full text-[10px] font-bold uppercase tracking-widest text-primary hover:bg-primary/30 transition-all">
+<span class="material-symbols-outlined text-sm">edit</span>
+                        Edit Statistics
+                    </button>
+</div>
+</div>
+<div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+<div class="flex-shrink-0 flex items-center gap-1.5 px-3 py-1 bg-primary/10 border border-primary/30 rounded-lg text-xs font-semibold text-primary">
+<span class="size-2 rounded-full bg-primary animate-pulse"></span>
+                    Blessed
+                </div>
+<div class="flex-shrink-0 flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-lg text-xs font-semibold text-amber-500">
+<span class="material-symbols-outlined text-sm">skull</span>
+                    Poisoned
+                </div>
+<button class="flex-shrink-0 size-8 flex items-center justify-center rounded-lg border border-dashed border-slate-700 text-slate-500">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<div class="mt-6 glass-card p-5 rounded-2xl shadow-xl">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary fill-1 text-xl">favorite</span>
+<span class="font-bold uppercase text-[10px] tracking-[0.2em] text-slate-400">Current Health</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-4xl font-bold header-font">68</span>
+<div class="flex items-center gap-1 text-slate-500 text-sm">
+<span>/ 84</span>
+<span class="material-symbols-outlined text-xs">info</span>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Temp HP</p>
+<input class="w-14 text-center bg-slate-800/50 border-none rounded-lg font-bold text-accent-gold focus:ring-accent-gold p-1" type="text" value="+12"/>
+</div>
+</div>
+<div class="h-2.5 w-full bg-slate-800 rounded-full overflow-hidden mb-6">
+<div class="h-full hp-gradient w-[81%] shadow-[0_0_15px_rgba(156,79,186,0.4)]"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<button class="h-14 flex flex-col items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-xl transition-all border border-slate-700">
+<span class="material-symbols-outlined text-red-500">remove</span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Damage</span>
+</button>
+<button class="h-14 flex flex-col items-center justify-center bg-primary text-white hover:bg-primary/90 rounded-xl shadow-lg shadow-primary/20 transition-all">
+<span class="material-symbols-outlined">add</span>
+<span class="text-[10px] font-bold uppercase tracking-widest opacity-80">Heal</span>
+</button>
+</div>
+</div>
+</header>
+<main class="p-4 space-y-6">
+<div class="grid grid-cols-3 gap-3">
+<div class="glass-card p-3 rounded-xl text-center relative group">
+<span class="absolute top-2 right-2 material-symbols-outlined text-[10px] text-slate-600">lock</span>
+<p class="text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">Armor Class</p>
+<div class="text-xl font-bold header-font">16</div>
+</div>
+<div class="glass-card p-3 rounded-xl text-center relative">
+<span class="absolute top-2 right-2 material-symbols-outlined text-[10px] text-slate-600">lock</span>
+<p class="text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">Initiative</p>
+<div class="text-xl font-bold header-font text-accent-gold">+2</div>
+</div>
+<div class="glass-card p-3 rounded-xl text-center relative">
+<span class="absolute top-2 right-2 material-symbols-outlined text-[10px] text-slate-600">lock</span>
+<p class="text-[9px] font-bold uppercase tracking-widest text-slate-500 mb-1">Speed</p>
+<div class="text-xl font-bold header-font">35ft</div>
+</div>
+</div>
+<section>
+<div class="flex justify-between items-center mb-4">
+<h2 class="header-font text-lg flex items-center gap-2">
+<span class="w-1 h-5 bg-accent-gold rounded-full"></span>
+                        Ability Scores
+                    </h2>
+<span class="material-symbols-outlined text-sm text-slate-600">lock_outline</span>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="glass-card p-3 rounded-xl text-center">
+<p class="text-[10px] font-black uppercase tracking-tighter text-slate-500 mb-1">STR</p>
+<div class="text-xl font-bold header-font text-slate-400">10</div>
+<div class="mt-1 text-sm font-bold text-slate-500">+0</div>
+</div>
+<div class="glass-card p-3 rounded-xl text-center">
+<p class="text-[10px] font-black uppercase tracking-tighter text-slate-500 mb-1">DEX</p>
+<div class="text-xl font-bold header-font text-slate-400">14</div>
+<div class="mt-1 text-sm font-bold text-slate-500">+2</div>
+</div>
+<div class="glass-card p-3 rounded-xl text-center">
+<p class="text-[10px] font-black uppercase tracking-tighter text-slate-500 mb-1">CON</p>
+<div class="text-xl font-bold header-font text-slate-400">14</div>
+<div class="mt-1 text-sm font-bold text-slate-500">+2</div>
+</div>
+<div class="glass-card p-3 rounded-xl text-center">
+<p class="text-[10px] font-black uppercase tracking-tighter text-slate-500 mb-1">INT</p>
+<div class="text-xl font-bold header-font text-slate-400">12</div>
+<div class="mt-1 text-sm font-bold text-slate-500">+1</div>
+</div>
+<div class="bg-primary/20 border-2 border-primary p-3 rounded-xl text-center shadow-lg shadow-primary/10">
+<p class="text-[10px] font-black uppercase tracking-tighter text-primary mb-1">WIS</p>
+<div class="text-xl font-bold header-font text-white">18</div>
+<div class="mt-1 text-sm font-bold text-primary">+4</div>
+</div>
+<div class="glass-card p-3 rounded-xl text-center">
+<p class="text-[10px] font-black uppercase tracking-tighter text-slate-500 mb-1">CHA</p>
+<div class="text-xl font-bold header-font text-slate-400">11</div>
+<div class="mt-1 text-sm font-bold text-slate-500">+0</div>
+</div>
+</div>
+</section>
+<section>
+<div class="flex justify-between items-center mb-4">
+<h2 class="header-font text-lg flex items-center gap-2">
+<span class="w-1 h-5 bg-primary rounded-full"></span>
+                        Prepared Spells &amp; Slots
+                    </h2>
+</div>
+<div class="space-y-4">
+<div class="glass-card p-4 rounded-2xl">
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest w-8">L1</span>
+<div class="flex gap-1.5">
+<div class="size-3.5 rounded-full bg-primary border border-primary/50 shadow-[0_0_8px_rgba(156,79,186,0.6)]"></div>
+<div class="size-3.5 rounded-full bg-primary border border-primary/50 shadow-[0_0_8px_rgba(156,79,186,0.6)]"></div>
+<div class="size-3.5 rounded-full bg-slate-800 border border-slate-700"></div>
+<div class="size-3.5 rounded-full bg-slate-800 border border-slate-700"></div>
+</div>
+</div>
+<span class="text-[10px] font-bold text-slate-500">2 / 4 USED</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="text-xs font-bold text-slate-400 uppercase tracking-widest w-8">L2</span>
+<div class="flex gap-1.5">
+<div class="size-3.5 rounded-full bg-primary border border-primary/50 shadow-[0_0_8px_rgba(156,79,186,0.6)]"></div>
+<div class="size-3.5 rounded-full bg-slate-800 border border-slate-700"></div>
+<div class="size-3.5 rounded-full bg-slate-800 border border-slate-700"></div>
+</div>
+</div>
+<span class="text-[10px] font-bold text-slate-500">1 / 3 USED</span>
+</div>
+</div>
+</div>
+<div class="space-y-1 bg-slate-900/40 rounded-xl border border-slate-800 overflow-hidden">
+<div class="flex items-center justify-between p-3 border-b border-slate-800 bg-slate-800/20">
+<div class="flex items-center gap-3">
+<input checked="" class="rounded text-primary focus:ring-primary bg-slate-800 border-slate-700 size-4" type="checkbox"/>
+<div>
+<p class="text-sm font-semibold">Healing Word</p>
+<p class="text-[9px] uppercase text-slate-500">Bonus Action • 1st Level</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-600 text-sm">info</span>
+</div>
+<div class="flex items-center justify-between p-3 border-b border-slate-800 bg-slate-800/20">
+<div class="flex items-center gap-3">
+<input checked="" class="rounded text-primary focus:ring-primary bg-slate-800 border-slate-700 size-4" type="checkbox"/>
+<div>
+<p class="text-sm font-semibold">Moonbeam</p>
+<p class="text-[9px] uppercase text-slate-500">Action • 2nd Level</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-600 text-sm">info</span>
+</div>
+<div class="flex items-center justify-between p-3 opacity-50">
+<div class="flex items-center gap-3">
+<input class="rounded text-primary focus:ring-primary bg-slate-800 border-slate-700 size-4" type="checkbox"/>
+<div>
+<p class="text-sm font-semibold">Faerie Fire</p>
+<p class="text-[9px] uppercase text-slate-500 text-slate-600">Action • 1st Level</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-700 text-sm">info</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-dark/90 backdrop-blur-xl border-t border-primary/20 px-4 pb-8 pt-3">
+<div class="flex items-center justify-around max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">person</span>
+<p class="text-[9px] font-bold uppercase tracking-[0.2em]">Sheet</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">auto_fix_high</span>
+<p class="text-[9px] font-bold uppercase tracking-[0.2em]">Spells</p>
+</a>
+<div class="relative -mt-10">
+<button class="size-14 bg-gradient-to-tr from-primary to-accent-gold rounded-full flex items-center justify-center text-white shadow-lg shadow-primary/30 border-4 border-background-dark">
+<span class="material-symbols-outlined text-3xl">casino</span>
+</button>
+</div>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<p class="text-[9px] font-bold uppercase tracking-[0.2em]">Items</p>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<p class="text-[9px] font-bold uppercase tracking-[0.2em]">Rules</p>
+</a>
+</div>
+</nav>
+
+</body></html>

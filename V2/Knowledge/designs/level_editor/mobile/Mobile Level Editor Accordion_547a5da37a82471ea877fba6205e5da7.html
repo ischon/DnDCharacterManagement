@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#8c25f4",
+                        "background-light": "#f7f5f8",
+                        "background-dark": "#191022",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Mobile Level Editor</title>
+<style>
+        .glass-card {
+            background: rgba(140, 37, 244, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(140, 37, 244, 0.2);
+        }
+        .active-glow {
+            box-shadow: 0 0 20px rgba(140, 37, 244, 0.3);
+            border: 1px solid rgba(140, 37, 244, 0.5);
+        }
+        summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex h-screen w-full flex-col overflow-hidden max-w-md mx-auto border-x border-primary/10 bg-background-light dark:bg-background-dark">
+<header class="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 pb-3 justify-between border-b border-primary/10">
+<div class="flex items-center gap-3">
+<div class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center rounded-full hover:bg-primary/10 cursor-pointer transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<div class="flex flex-col">
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Kaelen Swiftwind</h2>
+<p class="text-xs text-primary font-medium uppercase tracking-wider">Leveling Up</p>
+</div>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">lock</span>
+                Save
+            </button>
+</header>
+<main class="flex-1 overflow-y-auto custom-scrollbar">
+<div class="px-4 py-6 bg-gradient-to-b from-primary/5 to-transparent">
+<div class="flex items-center justify-between mb-2">
+<label class="text-slate-400 text-xs font-bold uppercase tracking-widest">Target Level</label>
+<span class="text-primary text-xs font-semibold">XP: 14,500 / 23,000</span>
+</div>
+<div class="relative group">
+<select class="appearance-none w-full bg-white dark:bg-primary/10 border border-primary/20 dark:border-primary/30 rounded-xl px-4 py-4 text-slate-900 dark:text-slate-100 font-bold focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all cursor-pointer">
+<option value="5">Level 5 (Paladin)</option>
+<option selected="" value="6">Level 6 (Paladin)</option>
+<option value="7">Level 7 (Paladin)</option>
+</select>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-primary">
+<span class="material-symbols-outlined">unfold_more</span>
+</div>
+</div>
+</div>
+<div class="px-4 pb-20 space-y-4">
+<details class="group glass-card rounded-xl overflow-hidden transition-all duration-300" open="">
+<summary class="flex cursor-pointer items-center justify-between p-4 list-none group-open:bg-primary/10 group-open:active-glow">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">fitness_center</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Stats Improvement</h3>
+<p class="text-xs text-primary font-medium">+2 Str, +1 Dex</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="p-4 pt-2 border-t border-primary/10 bg-white/5">
+<div class="grid grid-cols-2 gap-3 mb-4">
+<div class="p-3 rounded-lg bg-primary/5 border border-primary/10">
+<p class="text-xs text-slate-500 mb-1">Strength</p>
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold">20</span>
+<span class="text-xs font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded">+2</span>
+</div>
+</div>
+<div class="p-3 rounded-lg bg-primary/5 border border-primary/10">
+<p class="text-xs text-slate-500 mb-1">Dexterity</p>
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold">15</span>
+<span class="text-xs font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded">+1</span>
+</div>
+</div>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed italic">"Your muscles swell with divine strength as your training intensifies."</p>
+</div>
+</details>
+<details class="group glass-card rounded-xl overflow-hidden transition-all duration-300">
+<summary class="flex cursor-pointer items-center justify-between p-4 list-none group-open:bg-primary/10 group-open:active-glow">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">favorite</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Hit Points</h3>
+<p class="text-xs text-primary font-medium">+8 HP Gained</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="p-4 pt-2 border-t border-primary/10 bg-white/5">
+<div class="flex items-center justify-between p-4 bg-primary/10 rounded-xl border border-primary/20">
+<div>
+<p class="text-xs text-slate-500 uppercase font-bold tracking-tighter">Current HP</p>
+<p class="text-2xl font-bold text-slate-900 dark:text-slate-100">54 <span class="text-primary">/ 54</span></p>
+</div>
+<div class="text-right">
+<p class="text-xs text-emerald-500 font-bold">LEVEL UP BONUS</p>
+<p class="text-xl font-bold text-emerald-500">+8</p>
+</div>
+</div>
+</div>
+</details>
+<details class="group glass-card rounded-xl overflow-hidden transition-all duration-300">
+<summary class="flex cursor-pointer items-center justify-between p-4 list-none group-open:bg-primary/10 group-open:active-glow">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">auto_fix_high</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Spells &amp; Slots</h3>
+<p class="text-xs text-primary font-medium">2 New 2nd Level Slots</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="p-4 pt-2 border-t border-primary/10 bg-white/5 space-y-3">
+<div class="flex items-center gap-3 p-3 rounded-lg border border-primary/10 bg-primary/5">
+<span class="material-symbols-outlined text-primary">counter_2</span>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Lvl 2 Spell Slots</p>
+<p class="text-xs text-slate-500">Increased from 0 to 2 slots</p>
+</div>
+</div>
+<button class="w-full py-3 rounded-xl border-2 border-dashed border-primary/30 text-primary font-bold text-sm hover:bg-primary/5 transition-colors">
+                            + Select New Prepared Spells
+                        </button>
+</div>
+</details>
+<details class="group glass-card rounded-xl overflow-hidden transition-all duration-300">
+<summary class="flex cursor-pointer items-center justify-between p-4 list-none group-open:bg-primary/10 group-open:active-glow">
+<div class="flex items-center gap-4">
+<div class="size-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">military_tech</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Class Features</h3>
+<p class="text-xs text-primary font-medium">Aura of Protection</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary transition-transform group-open:rotate-180">expand_more</span>
+</summary>
+<div class="p-4 pt-2 border-t border-primary/10 bg-white/5">
+<div class="space-y-4">
+<div class="relative pl-6 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-1 before:bg-primary before:rounded-full">
+<h4 class="font-bold text-sm mb-1 text-slate-900 dark:text-slate-100">Aura of Protection</h4>
+<p class="text-xs text-slate-500 leading-relaxed">Starting at 6th level, whenever you or a friendly creature within 10 feet of you must make a saving throw, the creature gains a bonus to the saving throw equal to your Charisma modifier.</p>
+</div>
+</div>
+</div>
+</details>
+</div>
+<div class="p-6 bg-primary/5 border-t border-primary/10">
+<h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Summary of Changes</h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between bg-white/5 p-3 rounded-lg border border-primary/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-emerald-500">trending_up</span>
+<span class="text-sm font-medium">Strength Score</span>
+</div>
+<span class="text-emerald-500 font-bold text-sm">+2 (20)</span>
+</div>
+<div class="flex items-center justify-between bg-white/5 p-3 rounded-lg border border-primary/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-emerald-500">add_moderator</span>
+<span class="text-sm font-medium">New Class Feature</span>
+</div>
+<span class="text-primary font-bold text-xs uppercase">Aura of Protection</span>
+</div>
+<div class="flex items-center justify-between bg-white/5 p-3 rounded-lg border border-primary/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-emerald-500">auto_fix_normal</span>
+<span class="text-sm font-medium">Spell Slots</span>
+</div>
+<span class="text-emerald-500 font-bold text-sm">+2 (Level 2)</span>
+</div>
+</div>
+</div>
+</main>
+<nav class="absolute bottom-0 left-0 right-0 h-16 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-xl border-t border-primary/10 flex items-center justify-around px-6">
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold uppercase">Stats</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] font-bold uppercase">Bag</span>
+</div>
+<div class="relative -mt-8 flex size-14 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/40 text-white">
+<span class="material-symbols-outlined text-3xl">upgrade</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold uppercase">Spells</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold uppercase">Menu</span>
+</div>
+</nav>
+</div>
+</body></html>

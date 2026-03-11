@@ -1,0 +1,236 @@
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#b72bee",
+                        "accent-gold": "#d4af37",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#0f0814",
+                        "card-dark": "#1d1022",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(29, 16, 34, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(183, 43, 238, 0.15);
+        }
+        .hp-gradient {
+            background: linear-gradient(90deg, #b72bee 0%, #d4af37 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header Section -->
+<header class="sticky top-0 z-50 bg-background-dark/80 backdrop-blur-md border-b border-primary/20 px-4 py-3">
+<div class="flex items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="size-12 rounded-full border-2 border-accent-gold p-0.5 overflow-hidden">
+<div class="w-full h-full rounded-full bg-cover bg-center" data-alt="Dark elf wizard portrait with glowing eyes" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBVffSxhbH8fC1KuDluaPRTKW9jotJjn0Wpe8G1YxycDlHCelfHi_QNodL-NfH7Eo7zH-e7Q3YxGNqY5mBZd0Q2RfOTN7QnXonrlXkqaWFJ6Cy5v5WRij5ggs54rG2FTh4j5vGlqIeiLSn4woScOEBvpEINUSDAmHJMeSFj6TpBHPuzUQeX0dINN5DYObrPboGqYsTwll4aEImHpIft7f6lv8wpcy4fntqCv1YpV-Tg7revppSDUOgPcETwcfp-mpIuAyF_zNLre4c");'></div>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-tight text-slate-100">Tharivol Moonwhisper</h1>
+<p class="text-xs text-primary font-medium">LVL 12 • EVOCATION WIZARD</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="flex gap-2">
+<div class="bg-primary/20 border border-primary/30 rounded px-2 py-0.5 text-[10px] font-bold text-primary">AC 18</div>
+<div class="bg-accent-gold/20 border border-accent-gold/30 rounded px-2 py-0.5 text-[10px] font-bold text-accent-gold">PROF +4</div>
+</div>
+<div class="w-24 h-1.5 bg-primary/10 rounded-full overflow-hidden mt-1 border border-primary/5">
+<div class="h-full hp-gradient" style="width: 75%;"></div>
+</div>
+<p class="text-[10px] text-slate-400">45 / 60 HP</p>
+</div>
+</div>
+</header>
+<!-- Tabs Navigation -->
+<nav class="flex border-b border-primary/10 px-2 bg-card-dark/40">
+<a class="flex-1 text-center py-3 border-b-2 border-primary text-primary font-bold text-sm" href="#">ACTIVE</a>
+<a class="flex-1 text-center py-3 border-b-2 border-transparent text-slate-400 font-medium text-sm" href="#">SPELLS</a>
+<a class="flex-1 text-center py-3 border-b-2 border-transparent text-slate-400 font-medium text-sm" href="#">ITEMS</a>
+<a class="flex-1 text-center py-3 border-b-2 border-transparent text-slate-400 font-medium text-sm" href="#">BIO</a>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-4 space-y-4 pb-24">
+<!-- Quick HP Card -->
+<section class="glass-card rounded-xl p-4 flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Quick HP Management</h2>
+<div class="flex items-center gap-1 text-accent-gold">
+<span class="material-symbols-outlined text-sm">verified</span>
+<span class="text-[10px] font-bold uppercase">Inspiration</span>
+</div>
+</div>
+<div class="flex items-center justify-between gap-4">
+<div class="flex-1 text-center">
+<p class="text-[10px] text-slate-400 mb-1 uppercase font-bold">Current HP</p>
+<div class="flex items-center justify-center gap-4 bg-background-dark/50 rounded-lg py-2 border border-primary/20">
+<button class="size-8 rounded-full bg-primary/20 text-primary flex items-center justify-center active:scale-95">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<span class="text-3xl font-bold text-slate-100">45</span>
+<button class="size-8 rounded-full bg-primary/20 text-primary flex items-center justify-center active:scale-95">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<div class="w-24 text-center">
+<p class="text-[10px] text-slate-400 mb-1 uppercase font-bold">Temp HP</p>
+<div class="bg-accent-gold/10 border border-accent-gold/30 rounded-lg py-3">
+<span class="text-xl font-bold text-accent-gold">+12</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Conditions Section -->
+<section class="flex flex-wrap gap-2">
+<div class="flex items-center gap-1.5 bg-primary/20 border border-primary/40 rounded-full px-3 py-1">
+<span class="material-symbols-outlined text-xs text-primary">visibility_off</span>
+<span class="text-xs font-bold text-primary">Invisibility</span>
+</div>
+<div class="flex items-center gap-1.5 bg-slate-800/50 border border-slate-700 rounded-full px-3 py-1 opacity-50">
+<span class="material-symbols-outlined text-xs">add_circle</span>
+<span class="text-xs font-bold">Add Condition</span>
+</div>
+</section>
+<!-- Main Actions (Weapons) -->
+<section class="space-y-2">
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-400 px-1">Combat Actions</h2>
+<!-- Weapon Row -->
+<div class="glass-card rounded-lg p-3 flex items-center justify-between border-l-4 border-l-primary">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">swords</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-100">Staff of Power</h3>
+<p class="text-[10px] text-slate-400 uppercase font-medium">Melee Weapon Attack</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="text-center">
+<p class="text-[10px] text-slate-500 uppercase font-bold">Atk</p>
+<p class="text-sm font-bold text-primary">+9</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] text-slate-500 uppercase font-bold">Dmg</p>
+<p class="text-sm font-bold text-slate-100">1d6+5</p>
+</div>
+</div>
+</div>
+<!-- Weapon Row -->
+<div class="glass-card rounded-lg p-3 flex items-center justify-between border-l-4 border-l-slate-600">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded bg-slate-800 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined">architecture</span>
+</div>
+<div>
+<h3 class="font-bold text-sm text-slate-100">Dagger, Silvered</h3>
+<p class="text-[10px] text-slate-400 uppercase font-medium">Melee or Ranged</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="text-center">
+<p class="text-[10px] text-slate-500 uppercase font-bold">Atk</p>
+<p class="text-sm font-bold text-primary">+8</p>
+</div>
+<div class="text-center">
+<p class="text-[10px] text-slate-500 uppercase font-bold">Dmg</p>
+<p class="text-sm font-bold text-slate-100">1d4+4</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Active Spells Section -->
+<section class="space-y-2">
+<div class="flex justify-between items-center px-1">
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Active Spells</h2>
+<p class="text-[10px] font-bold text-primary">Save DC 18</p>
+</div>
+<div class="space-y-2">
+<!-- Spell Item -->
+<div class="glass-card rounded-lg p-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-2 rounded-full bg-accent-gold shadow-[0_0_8px_rgba(212,175,55,0.6)]"></div>
+<div>
+<h3 class="font-bold text-sm text-slate-100">Fireball</h3>
+<p class="text-[10px] text-slate-400">3rd Level • 8d6 Fire</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-right">
+<p class="text-[10px] text-slate-500 uppercase font-bold">Range</p>
+<p class="text-[10px] text-slate-200">150 ft</p>
+</div>
+</div>
+</div>
+<!-- Spell Item -->
+<div class="glass-card rounded-lg p-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-2 rounded-full bg-primary shadow-[0_0_8px_rgba(183,43,238,0.6)]"></div>
+<div>
+<h3 class="font-bold text-sm text-slate-100">Misty Step</h3>
+<p class="text-[10px] text-slate-400">2nd Level • Bonus Action</p>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-slate-500 uppercase font-bold">Usage</p>
+<p class="text-[10px] text-slate-200">3/3 Slots</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<footer class="fixed bottom-0 left-0 right-0 bg-background-dark/95 border-t border-primary/30 pb-6 pt-2 px-6 backdrop-blur-xl">
+<div class="flex justify-between items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-white shadow-[0_0_15px_rgba(183,43,238,0.4)]">
+<span class="material-symbols-outlined text-[24px] fill-1">swords</span>
+</div>
+<span class="text-[10px] font-bold text-primary uppercase">Active</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="size-10 flex items-center justify-center text-slate-500 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">auto_stories</span>
+</div>
+<span class="text-[10px] font-medium text-slate-500 uppercase">Spells</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="size-10 flex items-center justify-center text-slate-500 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">backpack</span>
+</div>
+<span class="text-[10px] font-medium text-slate-500 uppercase">Items</span>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<div class="size-10 flex items-center justify-center text-slate-500 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">person_book</span>
+</div>
+<span class="text-[10px] font-medium text-slate-500 uppercase">Hero</span>
+</a>
+</div>
+</footer>
+</body></html>

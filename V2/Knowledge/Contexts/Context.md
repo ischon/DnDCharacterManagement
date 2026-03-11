@@ -29,8 +29,9 @@
 
 ## 4. Datamodel (Cloud Firestore)
 
-* **Collection `users`** -> `doc {uid}`: `{ email, displayName }`
-* **Collection `parties`** -> `doc {partyId}`: `{ dmUid, name, createdAt }`
+*   **Root Structure:** `{appId}/...` (where `appId` acts as the environment/instance identifier, e.g., `1:12345:web:abcde/...`)
+*   **Collection `users`** -> `doc {uid}`: `{ email, displayName }`
+*   **Collection `parties`** -> `doc {partyId}`: `{ dmUid, name, createdAt }`
     * **Subcollection `npcs`** -> `doc {npcId}`: `{ name, hp, ac, notes }`
 * **Collection `characters`** -> `doc {charId}`:
     ```json

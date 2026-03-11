@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#8c25f4",
+                        "background-light": "#f7f5f8",
+                        "background-dark": "#0a0510",
+                        "surface-dark": "#191022",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(140, 37, 244, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(140, 37, 244, 0.1);
+        }
+        .glow-subtle {
+            box-shadow: 0 0 20px rgba(140, 37, 244, 0.15);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Top Navigation Header -->
+<header class="sticky top-0 z-20 glass px-4 py-4 flex items-center justify-between border-b border-primary/10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary border border-primary/30">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<div>
+<h1 class="text-sm font-bold tracking-tight text-slate-900 dark:text-slate-100">DM Dashboard</h1>
+<p class="text-[10px] uppercase tracking-widest text-primary font-bold">The Shattered Isles</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200/50 dark:bg-primary/10 text-slate-700 dark:text-primary">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200/50 dark:bg-primary/10 text-slate-700 dark:text-primary">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto px-4 py-4 space-y-6 pb-24">
+<!-- Quick Stats Grid -->
+<div class="grid grid-cols-3 gap-3">
+<div class="glass p-3 rounded-lg flex flex-col items-center justify-center text-center glow-subtle">
+<span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Session</span>
+<span class="text-lg font-bold text-primary">#14</span>
+</div>
+<div class="glass p-3 rounded-lg flex flex-col items-center justify-center text-center glow-subtle">
+<span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">In-Game</span>
+<span class="text-lg font-bold text-primary">14:30</span>
+</div>
+<div class="glass p-3 rounded-lg flex flex-col items-center justify-center text-center glow-subtle">
+<span class="text-[10px] text-slate-500 dark:text-slate-400 font-medium">Party XP</span>
+<span class="text-lg font-bold text-primary">Lv 8</span>
+</div>
+</div>
+<!-- Party List View -->
+<div class="space-y-3">
+<div class="flex items-center justify-between px-1">
+<h2 class="text-sm font-bold uppercase tracking-widest text-slate-500">Party Members (5)</h2>
+<span class="material-symbols-outlined text-primary text-xl">group</span>
+</div>
+<!-- Player Card 1 -->
+<div class="glass rounded-xl p-3 flex items-center gap-4 border-l-4 border-l-primary glow-subtle">
+<div class="relative flex-shrink-0">
+<svg class="w-14 h-14 transform -rotate-90">
+<circle class="text-primary/10" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-width="3"></circle>
+<circle class="text-primary" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-dasharray="150.7" stroke-dashoffset="15" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-10 h-10 rounded-full bg-cover bg-center" data-alt="Portrait of Valerius Thorne human wizard" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAvjgczhYvI648QNZNvW4BTNDOJSXt7zJqyiCtpqFrlm52DSNeEI8U_TGoP080_Gw5IF5gMijLDe7qygl9SVJz_vY3zdGq-Zw4ylAaaO2PU3CLdl8CddglekprsQNG-lN9l0d4-mXlLUOyDBh_tJAWRVWrz_48QBw_pmiB8y4EA4sXYwPnLpczLG4jndJX9Nu0_xvSRYk0qfhBv2rdGZisIpFN4CvXSqli7WJKabABDzhHBlY2XAi4QqNX_lyVuuPFB7NG3ZLIx_9s')"></div>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Valerius Thorne</h3>
+<p class="text-[10px] text-primary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">auto_fix_high</span> Concentrating: Haste
+                            </p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold text-slate-900 dark:text-slate-100">85/92 HP</span>
+</div>
+</div>
+<div class="mt-2 flex gap-4 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">shield</span> AC 18</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">visibility</span> PP 16</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">bolt</span> Init +4</div>
+</div>
+</div>
+</div>
+<!-- Player Card 2 -->
+<div class="glass rounded-xl p-3 flex items-center gap-4 glow-subtle">
+<div class="relative flex-shrink-0">
+<svg class="w-14 h-14 transform -rotate-90">
+<circle class="text-primary/10" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-width="3"></circle>
+<circle class="text-red-500" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-dasharray="150.7" stroke-dashoffset="60" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-10 h-10 rounded-full bg-cover bg-center" data-alt="Portrait of Elara Swift shadow rogue" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuASMX-Lp_6yfmhGGAphLIiZq9XzNIrURzHpXuQjAMmGnKKGFDC0k-JaIOwXC9sL8wXZ2z1VBGMGTlzfwOYi5YdY5ERigJcfrXQh6djIOcYlvazYKEOZkvQzIzvpxmBAeCFtqSKZYHrH7adyeTlPtrYrp0rvE-yW6IFVcnEUbASoa4rm5t9QLPMYZvBC4IDolItrW1ibO3JdJBU6MvlpApskU26uV6fVt0tlOzpWTs0R4QxBJflOy0AIF9OOpncRWN_991CuuPmGYEE')"></div>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Elara Swift</h3>
+<p class="text-[10px] text-red-500 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">skull</span> Poisoned
+                            </p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold text-slate-900 dark:text-slate-100">42/70 HP</span>
+</div>
+</div>
+<div class="mt-2 flex gap-4 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">shield</span> AC 16</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">visibility</span> PP 19</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">bolt</span> Init +6</div>
+</div>
+</div>
+</div>
+<!-- Player Card 3 -->
+<div class="glass rounded-xl p-3 flex items-center gap-4 glow-subtle">
+<div class="relative flex-shrink-0">
+<svg class="w-14 h-14 transform -rotate-90">
+<circle class="text-primary/10" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-width="3"></circle>
+<circle class="text-green-500" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-dasharray="150.7" stroke-dashoffset="0" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-10 h-10 rounded-full bg-cover bg-center" data-alt="Portrait of Korg Ironfoot dwarf fighter" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuADy1I-3f_YMi_0KKd2uoaWFCkzCBaY1cCQ98NJvNw-mHXakAqWtoswWh6BjRCn0fUzWPF7x-3rg7VJp1LMK8Z_m3KGaCiyrF6rRQtTITkxsIcDxKUr64q1tPvaECJEz2YIPz7QLUqHwg2MdmqfN4eAw5raBSiKUM0dAe7TxcfZmqXzVML2i-oD6wqtOKkau4AEilxiEo1w-UwhARGNVxpm9ZhZyPqg9cIfJ-epV4goXrTAf0UPK_y1qVFDra2Jh6Wwf0WZ1zkXkHs')"></div>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Korg Ironfoot</h3>
+<p class="text-[10px] text-green-500 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">security</span> Raging
+                            </p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold text-slate-900 dark:text-slate-100">110/110 HP</span>
+</div>
+</div>
+<div class="mt-2 flex gap-4 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">shield</span> AC 21</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">visibility</span> PP 12</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">bolt</span> Init +1</div>
+</div>
+</div>
+</div>
+<!-- Player Card 4 -->
+<div class="glass rounded-xl p-3 flex items-center gap-4 glow-subtle">
+<div class="relative flex-shrink-0">
+<svg class="w-14 h-14 transform -rotate-90">
+<circle class="text-primary/10" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-width="3"></circle>
+<circle class="text-primary" cx="28" cy="28" fill="transparent" r="24" stroke="currentColor" stroke-dasharray="150.7" stroke-dashoffset="40" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-10 h-10 rounded-full bg-cover bg-center" data-alt="Portrait of Lyra the Starbound elf druid" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCPx-nI9yG4DgoczZMK7eAG0df_eAdRbH9aFZEE0VosPTvyM1v0-3GGQdrF_GEvSBW6nTnQoibQXM82-x3XMnGy-d8BAFjvgo93oiNtwkptoCX7LZ8ieziaQUPxTHSsMJm3-gbDu45Iud8mk32CmxcY4GRP3yRYkxIcsGs56nrGw3QAV_2_EG42eL05FAgNahPnhpQlcm_UTHrorXWTQUecL4JGHh0AI-lWPHBx3P88iQ_FJqpfrMGSBMcIfG4OGbreh2uQI1R7y5k')"></div>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-bold text-slate-900 dark:text-slate-100">Lyra Starbound</h3>
+<p class="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">circle</span> Neutral
+                            </p>
+</div>
+<div class="text-right">
+<span class="text-xs font-bold text-slate-900 dark:text-slate-100">58/82 HP</span>
+</div>
+</div>
+<div class="mt-2 flex gap-4 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">shield</span> AC 14</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">visibility</span> PP 20</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">bolt</span> Init +2</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Events / Logs -->
+<div class="glass rounded-xl p-4 glow-subtle">
+<h2 class="text-xs font-bold uppercase tracking-widest text-primary mb-3">Live Feed</h2>
+<div class="space-y-3">
+<div class="flex gap-3 text-xs">
+<span class="text-slate-500">14:28</span>
+<p><span class="font-bold text-primary">Elara</span> failed Save vs Poison (DC 15)</p>
+</div>
+<div class="flex gap-3 text-xs">
+<span class="text-slate-500">14:25</span>
+<p><span class="font-bold text-primary">Korg</span> defeated Skeletal Knight</p>
+</div>
+<div class="flex gap-3 text-xs">
+<span class="text-slate-500">14:22</span>
+<p><span class="font-bold text-primary">Valerius</span> cast Haste on self</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-primary/40 z-30">
+<span class="material-symbols-outlined text-3xl">play_arrow</span>
+</button>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 glass border-t border-primary/10 z-40">
+<div class="flex justify-around items-center px-2 py-3">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[10px] font-bold">Party</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">swords</span>
+<span class="text-[10px] font-medium">Combat</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="text-[10px] font-medium">Map</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] font-medium">Loot</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="text-[10px] font-medium">Notes</span>
+</a>
+</div>
+<!-- iOS Home Indicator Spacing -->
+<div class="h-6"></div>
+</nav>
+</body></html>
