@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global pathing strategy: {appId}/{collection}/{document}
+    match /{appId}/{collectionName}/{documentId} {
+      
+      // Verification logic: user MUST be authenticated.
+      // App Check validation (appId check) is deferred to Issue #162.
+      allow read, write: if request.auth != null;
+
+      // Collection-specific overrides can be added below
+      match /characters/{charId} {
+        allow write: if 
+          request.auth.uid == request.resource.data.ownerUid || 
+          (resource != null && request.auth.uid == resource.data.ownerUid);
+          
+        allow read: if 
+          request.auth.uid == resource.data.ownerUid || 
+          resource.data.dmEditable == true ||
+          request.auth.uid == get(/databases/$(database)/documents/$(appId)/parties/$(resource.data.partyId)).data.dmUid;
+      }
+    }
+  }
+}
