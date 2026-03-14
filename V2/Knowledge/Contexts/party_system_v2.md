@@ -18,6 +18,9 @@ NPCs and Monsters are managed via a robust **Template & Instance** pattern:
 - **Templates**: Reside in `{appId}/templates/{templateId}`. These are the blueprints owned by the DM (`dmUid`).
 - **Instances**: When a DM adds an entity to a party, a hard *copy* of the template is placed into the party's `members` array as a `PartyEntity`. Local damage/HP mutates the instance, ensuring the base template is never modified by gameplay events.
 
+> [!IMPORTANT]
+> **Data Protection**: Security rules enforce that `templates` are strictly private to the DM. `Party` members can only be modified by the DM of that party, ensuring game integrity.
+
 ## Pathing
 Adheres to the V2 Global Pathing Strategy:
 `{appId}/parties/{partyCode}`

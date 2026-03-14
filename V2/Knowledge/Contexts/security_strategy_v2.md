@@ -4,11 +4,15 @@
 V2 employs a defense-in-depth strategy combining code-level pathing with database-level enforcement.
 
 ### 1. App ID Isolation
-The pathing strategy uses an `{appId}` root for data organization. Strict enforcement via App Check is currently **deferred** to Issue #162. During this intermediate phase, the rules require only a valid Firebase Auth token.
+The pathing strategy uses an `{appId}` root for data organization. Strict enforcement via App Check is currently **deferred** to Issue #162. 
 
-```plaintext
+V2 uses a **"Deny by Default"** strategy. No collection is accessible unless explicitly permitted by ownership-based rules.
+
+```javascript
 match /{appId}/{collectionName}/{documentId} {
-  allow read, write: if request.auth != null;
+  allow read, write: if false; // Universal baseline
+  
+  // Specific collection allow-lists follow here...
 }
 ```
 
