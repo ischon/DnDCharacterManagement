@@ -74,13 +74,53 @@ export interface Party {
   name: string;
   createdAt: number;
   appId: string;
-  npcs: NPC[];
+  members: PartyEntity[];
 }
 
-export interface NPC {
+// ==========================================
+// TEMPLATE & INSTANCE SYSTEM (DM Level -> Party Level)
+// ==========================================
+
+export interface EntityTemplate {
   id: string;
+  dmUid: string;
+  type: 'monster' | 'npc';
+  name: string;
+  maxHp: number;
+  ac: number;
+  notes: string;
+}
+
+export interface PartyEntity {
+  id: string;
+  templateOriginId: string | null;
+  type: 'monster' | 'npc';
   name: string;
   hp: Resource;
   ac: number;
   notes: string;
+}
+
+// ==========================================
+// INITIATIVE TRACKER TYPES
+// ==========================================
+
+export type InitiativeEntityType = 'player' | 'monster' | 'npc';
+
+export interface InitiativeEntity {
+  id: string; // Unique identifier in the tracker
+  sourceId?: string | null; // ID to a Party member or Monster Repo entity (nullable for quick-adds)
+  type: InitiativeEntityType;
+  name: string;
+  initiative: number;
+  hp: number;
+  maxHp: number;
+  conditions: string[]; // e.g., ["poisoned", "prone"]
+  isSurprised?: boolean;
+}
+
+export interface InitiativeState {
+  entities: InitiativeEntity[];
+  activeTurnIndex: number;
+  round: number;
 }

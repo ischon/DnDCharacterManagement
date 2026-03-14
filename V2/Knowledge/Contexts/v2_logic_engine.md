@@ -17,6 +17,13 @@ Handles the reduction of the **Delta Model** into effective scores.
 2. **Effective Modifier**: Calculated from Effective Score **UNLESS** an `overrideMod` exists in the character state.
 3. **Skill Value**: Effective Modifier + Proficiency/Expertise bonus **UNLESS** an `overrideValue` exists.
 
+## Initiative Tracking (InitiativeEngine.ts)
+A standalone, UI-less, pure functional logic engine built driven by 100% TDD test-coverage.
+- Operates on generic `InitiativeEntity` components (Players, Monsters, NPCs).
+- Automatically sorts turns based on Initiative roll (descending).
+- Handles mid-combat dynamic insertions without losing the `activeTurnIndex` pointer.
+- Wraps rounds recursively (`nextTurn`, `previousTurn`).
+
 ## Future Extensions
 - Automated save calculations.
 - Spell DC and Attack bonus integration.
