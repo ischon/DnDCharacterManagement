@@ -1,7 +1,6 @@
 import { firestoreService } from './FirestoreService';
-import type { Party, NPC } from '../types/dnd_types';
-import { collection, onSnapshot } from 'firebase/firestore';
-import { db } from './firebase';
+import type { Party, PartyEntity, EntityTemplate } from '../types/dnd_types';
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * PartyService
@@ -29,7 +28,7 @@ export class PartyService {
       name,
       createdAt: Date.now(),
       appId: import.meta.env.VITE_FIREBASE_APP_ID,
-      npcs: []
+      members: [] // V2: Uses unified members array for NPCs/Monsters
     };
 
     await firestoreService.createDocument('parties', partyId, party);
@@ -48,15 +47,59 @@ export class PartyService {
     });
   }
 
-  async updateNpcs(partyId: string, npcs: NPC[]) {
-    await firestoreService.updateDocument('parties', partyId, { npcs });
+  /**
+   * Adds a new instance (snapshot) of a template to the party
+   */
+  async addMemberInstance(partyId: string, template: EntityTemplate): Promise<PartyEntity> {
+    const party = await firestoreService.getDocument<Party>('parties', partyId);
+    if (!party) throw new Error('Party not found');
+
+    const newInstance: PartyEntity = {
+      id: uuidv4(),
+      templateOriginId: template.id,
+      type: template.type,
+      name: template.name,
+      hp: { current: template.maxHp, max: template.maxHp },
+      ac: template.ac,
+      notes: template.notes
+    };
+
+    const updatedMembers = [...(party.members || []), newInstance];
+    await firestoreService.updateDocument('parties', partyId, { members: updatedMembers });
+    
+    return newInstance;
+  }
+
+  /**
+   * Removes a member instance from the party
+   */
+  async removeMemberInstance(partyId: string, entityId: string): Promise<void> {
+    const party = await firestoreService.getDocument<Party>('parties', partyId);
+    if (!party) throw new Error('Party not found');
+
+    const updatedMembers = (party.members || []).filter(m => m.id !== entityId);
+    await firestoreService.updateDocument('parties', partyId, { members: updatedMembers });
+  }
+
+  /**
+   * Updates a specific member instance within the party members array
+   */
+  async updateMemberInstance(partyId: string, entityId: string, updates: Partial<PartyEntity>): Promise<void> {
+    const party = await firestoreService.getDocument<Party>('parties', partyId);
+    if (!party) throw new Error('Party not found');
+
+    const updatedMembers = (party.members || []).map(m => 
+      m.id === entityId ? { ...m, ...updates } : m
+    );
+
+    await firestoreService.updateDocument('parties', partyId, { members: updatedMembers });
   }
 
   /**
    * Realtime Listener for a specific party
    */
   listenToParty() {
-    // Placeholder
+    // Handled by partyStore
   }
 }
 

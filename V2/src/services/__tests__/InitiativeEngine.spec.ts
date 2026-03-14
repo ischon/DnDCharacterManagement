@@ -248,4 +248,61 @@ describe('InitiativeEngine', () => {
       expect(state.activeTurnIndex).toBe(1); // Active entity stays M1, which moved to idx 1
     });
   });
+
+  describe('Edge Cases', () => {
+    it('handles empty constructor', () => {
+      const engine = new InitiativeEngine();
+      expect(engine.getState().entities).toHaveLength(0);
+    });
+
+    it('handles constructor with state but missing entities', () => {
+      const engine = new InitiativeEngine({} as any);
+      expect(engine.getState().entities).toHaveLength(0);
+    });
+
+    it('handles nextTurn on empty engine', () => {
+      const engine = new InitiativeEngine();
+      engine.nextTurn();
+      expect(engine.getState().activeTurnIndex).toBe(0);
+    });
+
+    it('handles previousTurn on empty engine', () => {
+      const engine = new InitiativeEngine();
+      engine.previousTurn();
+      expect(engine.getState().activeTurnIndex).toBe(0);
+    });
+
+    it('handles removeEntity with non-existent ID', () => {
+      const entities: InitiativeEntity[] = [
+        { id: '1', name: 'A', initiative: 10, type: 'player', hp: { current: 10, max: 10 }, ac: 10 }
+      ];
+      const engine = new InitiativeEngine({ entities, activeTurnIndex: 0, round: 1 });
+      engine.removeEntity('99');
+      expect(engine.getState().entities).toHaveLength(1);
+    });
+
+    it('returns null if activeTurnIndex is out of bounds (getActiveEntity fallback)', () => {
+      const entities: InitiativeEntity[] = [
+        { id: '1', name: 'A', initiative: 10, type: 'player', hp: { current: 10, max: 10 }, ac: 10 }
+      ];
+      const engine = new InitiativeEngine({ entities, activeTurnIndex: 5 });
+      expect(engine.getActiveEntity()).toBeNull();
+    });
+
+    it('returns early when updating non-existent entity', () => {
+      const engine = new InitiativeEngine({ entities: [mockPlayer] });
+      engine.updateEntity('non-existent', { name: 'Fail' });
+      expect(engine.getState().entities[0].name).toBe('Grog');
+    });
+
+    it('does not update turn index if active entity is not found in restoreActiveTurn', () => {
+      const engine = new InitiativeEngine({ 
+        entities: [mockPlayer],
+        activeTurnIndex: 0 
+      });
+      // @ts-ignore - reaching into private method for coverage
+      engine.restoreActiveTurn('missing-id');
+      expect(engine.getState().activeTurnIndex).toBe(0);
+    });
+  });
 });

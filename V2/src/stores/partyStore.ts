@@ -3,46 +3,53 @@ import type { Party, Character } from '../types/dnd_types';
 import { partyService } from '../services/PartyService';
 import { query, where, collection, onSnapshot, doc } from 'firebase/firestore';
 import { db } from '../services/firebase';
+import { useAuthStore } from './auth'; // Assuming auth store is available for isDM getter
 
 export const usePartyStore = defineStore('party', {
   state: () => ({
     currentParty: null as Party | null,
-    members: [] as Character[],
-    isLoading: false,
+    players: [] as Character[], // V2: Renamed from 'members' to avoid confusion with PartyEntity[]
+    loading: false,
     error: null as string | null
   }),
 
-  actions: {
-    async createParty(dmUid: string, name: string) {
-      this.isLoading = true;
-      try {
-        const party = await partyService.createParty(dmUid, name);
-        this.currentParty = party;
-        this.startPartyListener(party.id);
-      } catch (e: any) {
-        this.error = e.message;
-      } finally {
-        this.isLoading = false;
-      }
+  getters: {
+    isDM: (state) => {
+      const authStore = useAuthStore();
+      return state.currentParty?.dmUid === authStore.user?.uid;
     },
+    // The party's NPC/Monster instances
+    partyNPCs: (state) => state.currentParty?.members || []
+  },
 
-    startPartyListener(partyId: string) {
-      const appId = import.meta.env.VITE_FIREBASE_APP_ID;
-      
-      // Listen to Party Document
-      onSnapshot(doc(db, `${appId}/parties/${partyId}`), (snapshot) => {
-        if (snapshot.exists()) {
-          this.currentParty = snapshot.data() as Party;
-        }
-      });
+  actions: {
+    async fetchParty(partyId: string) {
+      this.loading = true;
+      try {
+        // Setup Realtime Listener for the Party Document
+        const partyRef = doc(db, `${import.meta.env.VITE_FIREBASE_APP_ID}/parties/${partyId}`);
+        onSnapshot(partyRef, (docSnap) => {
+          if (docSnap.exists()) {
+            this.currentParty = { id: docSnap.id, ...docSnap.data() } as Party;
+          }
+        });
 
-      // Listen to Characters in this party
-      const charactersRef = collection(db, `${appId}/characters`);
-      const q = query(charactersRef, where('partyId', '==', partyId));
-      
-      onSnapshot(q, (snapshot) => {
-        this.members = snapshot.docs.map(doc => doc.data() as Character);
-      });
+        // Setup Realtime Listener for Player Characters in this party
+        const charactersRef = collection(db, `${import.meta.env.VITE_FIREBASE_APP_ID}/characters`);
+        const q = query(charactersRef, where('partyId', '==', partyId));
+        
+        onSnapshot(q, (querySnapshot) => {
+          this.players = querySnapshot.docs.map(doc => ({ 
+            id: doc.id, 
+            ...doc.data() 
+          } as Character));
+        });
+
+      } catch (err: any) {
+        this.error = err.message;
+      } finally {
+        this.loading = false;
+      }
     }
   }
 });

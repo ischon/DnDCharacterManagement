@@ -11,20 +11,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { auth } from './services/firebase';
-import { onAuthStateChanged } from 'firebase/auth';
+import { useAuthStore } from './stores/auth';
 
 const debugMode = true; // Temporary flag for development
-const isLoggedIn = ref(false);
+const authStore = useAuthStore();
 const router = useRouter();
 
 onMounted(() => {
-  onAuthStateChanged(auth, (user) => {
-    isLoggedIn.value = !!user;
-  });
+  authStore.initialize();
 });
+
+const isLoggedIn = computed(() => !!authStore.user);
 
 const handleLogout = async () => {
   try {

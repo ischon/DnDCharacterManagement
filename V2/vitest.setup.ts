@@ -34,6 +34,9 @@ vi.mock('firebase/firestore', () => ({
   addDoc: vi.fn(),
   updateDoc: vi.fn(),
   deleteDoc: vi.fn(),
+  query: vi.fn((...args) => ({ type: 'query', args })),
+  where: vi.fn((...args) => ({ type: 'where', args })),
+  getDocs: vi.fn(),
 }));
 
 // Global mock for firebase/storage

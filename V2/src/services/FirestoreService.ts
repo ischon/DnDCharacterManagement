@@ -34,17 +34,17 @@ export class FirestoreService {
     return documentId ? `${this.appId}/${collectionName}/${documentId}` : `${this.appId}/${collectionName}`;
   }
 
-  async getDocument(collectionName: string, documentId: string) {
+  async getDocument<T = DocumentData>(collectionName: string, documentId: string): Promise<T | null> {
     const docRef = doc(db, this.getPath(collectionName, documentId));
     const docSnap = await getDoc(docRef);
-    return docSnap.exists() ? docSnap.data() : null;
+    return docSnap.exists() ? (docSnap.data() as T) : null;
   }
 
-  async getCollection(collectionName: string, ...queryConstraints: QueryConstraint[]) {
+  async getCollection<T = DocumentData>(collectionName: string, ...queryConstraints: QueryConstraint[]): Promise<T[]> {
     const colRef = collection(db, this.getPath(collectionName));
     const q = query(colRef, ...queryConstraints);
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...(doc.data() as any) } as T));
   }
 
   async createDocument(collectionName: string, documentId: string, data: DocumentData) {
