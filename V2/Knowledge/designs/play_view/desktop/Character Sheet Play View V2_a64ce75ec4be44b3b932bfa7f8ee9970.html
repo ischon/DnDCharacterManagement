@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Character Sheet Play View - Physical Play</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#b72bee",
+                "accent-gold": "#d4af37",
+                "background-light": "#f7f6f8",
+                "background-dark": "#1d1022",
+                "card-bg": "rgba(52, 40, 57, 0.6)",
+              },
+              fontFamily: {
+                "display": ["Space Grotesk", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .glass-panel {
+            background: rgba(52, 40, 57, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(183, 43, 238, 0.1);
+        }
+        .status-gradient {
+            background: linear-gradient(135deg, rgba(183, 43, 238, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between border-b border-primary/20 px-10 py-4 glass-panel sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-primary">
+<div class="size-8">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-slate-100 text-xl font-bold leading-tight tracking-tight">Character Nexus</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="#">Campaigns</a>
+<a class="text-slate-100 border-b-2 border-primary pb-1 text-sm font-medium" href="#">Characters</a>
+<a class="text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="#">Compendium</a>
+<a class="text-slate-400 hover:text-primary text-sm font-medium transition-colors" href="#">Reference</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="bg-primary/10 border-primary/20 rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-primary focus:border-primary w-64 text-slate-200 placeholder:text-slate-500" placeholder="Search reference..." type="text"/>
+</div>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">person</span>
+                    Grog Strongjaw
+                </button>
+</div>
+</header>
+<main class="max-w-7xl mx-auto w-full px-4 sm:px-10 py-8">
+<section class="flex flex-col @container mb-8">
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 glass-panel p-6 rounded-xl border-l-4 border-l-primary status-gradient">
+<div class="flex gap-6 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-xl size-24 border-2 border-accent-gold/30" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAn2ognGuag7kRtzDS1PuKAMSpVSyB6dw7XxbxMCwMXA1cmtgYAYxRJCKwqzkxFQSwUJKuQa16nYoO8UMMFS-siqd_BFEf_qIwaOniCegBleug68b0H6dY2XQYVExWFLCqoXXeYSsIdwnV3NBXBIIm4T2c9kzZOUBiXVd_75f3gOmiLkx-bOW1dTx_NQu1N-E__wLX5D3nMdjnbTfduJsicXqGx9jUrUR2D6o1vURo6jrdF5TRrAbgIZ2VejPV3vZLMVZe2DGs8Bzs");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-100 text-3xl font-bold tracking-tight">Grog Strongjaw</h1>
+<p class="text-primary font-medium">Level 5 Goliath Barbarian | Path of the Totem Warrior</p>
+<div class="flex gap-4 mt-2">
+<span class="text-slate-400 text-xs uppercase tracking-widest font-bold">Str 20 <span class="text-accent-gold">(+5)</span></span>
+<span class="text-slate-400 text-xs uppercase tracking-widest font-bold">Dex 12 <span class="text-accent-gold">(+1)</span></span>
+<span class="text-slate-400 text-xs uppercase tracking-widest font-bold">Con 18 <span class="text-accent-gold">(+4)</span></span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-3 w-full lg:w-auto">
+<div class="flex flex-col items-center justify-center px-6 py-3 glass-panel rounded-lg border border-primary/20 min-w-[100px]">
+<p class="text-slate-400 text-xs font-bold uppercase">Health</p>
+<p class="text-2xl font-bold text-slate-100">45 <span class="text-slate-500">/ 68</span></p>
+<div class="w-full bg-slate-800 h-1 rounded-full mt-2 overflow-hidden">
+<div class="bg-green-500 h-full w-[66%] shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center px-6 py-3 glass-panel rounded-lg border border-accent-gold/20 min-w-[80px]">
+<p class="text-slate-400 text-xs font-bold uppercase">AC</p>
+<p class="text-2xl font-bold text-accent-gold">17</p>
+</div>
+<div class="flex flex-col items-center justify-center px-6 py-3 glass-panel rounded-lg border border-primary/20 min-w-[80px]">
+<p class="text-slate-400 text-xs font-bold uppercase">Init</p>
+<p class="text-2xl font-bold text-slate-100">+1</p>
+</div>
+<div class="flex flex-col items-center justify-center px-6 py-3 glass-panel rounded-lg border border-primary/20 min-w-[80px]">
+<p class="text-slate-400 text-xs font-bold uppercase">Speed</p>
+<p class="text-2xl font-bold text-slate-100">40ft</p>
+</div>
+</div>
+</div>
+</section>
+<div class="flex border-b border-primary/10 mb-8 overflow-x-auto">
+<a class="px-8 py-4 border-b-2 border-primary text-primary font-bold flex items-center gap-2 transition-all" href="#">
+<span class="material-symbols-outlined text-sm">bolt</span> Active View
+                </a>
+<a class="px-8 py-4 border-b-2 border-transparent text-slate-400 hover:text-slate-100 font-bold flex items-center gap-2 transition-all" href="#">
+<span class="material-symbols-outlined text-sm">auto_stories</span> Spells
+                </a>
+<a class="px-8 py-4 border-b-2 border-transparent text-slate-400 hover:text-slate-100 font-bold flex items-center gap-2 transition-all" href="#">
+<span class="material-symbols-outlined text-sm">backpack</span> Items
+                </a>
+<a class="px-8 py-4 border-b-2 border-transparent text-slate-400 hover:text-slate-100 font-bold flex items-center gap-2 transition-all" href="#">
+<span class="material-symbols-outlined text-sm">description</span> Character
+                </a>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<div class="lg:col-span-8 flex flex-col gap-8">
+<div class="glass-panel rounded-xl overflow-hidden border border-primary/10">
+<div class="bg-primary/10 px-6 py-4 flex justify-between items-center border-b border-primary/10">
+<h3 class="font-bold flex items-center gap-2 text-slate-100">
+<span class="material-symbols-outlined text-primary">swords</span> Weapons &amp; Attacks
+                            </h3>
+<span class="text-xs text-slate-400 uppercase font-bold tracking-widest">Reference View</span>
+</div>
+<div class="p-6 flex flex-col gap-4">
+<div class="flex items-center justify-between p-4 bg-primary/5 rounded-lg border border-primary/10 transition-all">
+<div class="flex items-center gap-4">
+<div class="p-2 bg-primary/20 rounded text-primary">
+<span class="material-symbols-outlined">gavel</span>
+</div>
+<div>
+<p class="font-bold text-slate-100">Bloodaxe (Greataxe)</p>
+<p class="text-xs text-slate-400">Action | Melee | Reach: 5ft</p>
+</div>
+</div>
+<div class="flex gap-6 items-center">
+<div class="text-center px-4 border-r border-primary/10">
+<p class="text-xs text-slate-400 uppercase font-bold">To Hit</p>
+<p class="text-xl font-bold text-accent-gold">+8</p>
+</div>
+<div class="text-center px-4">
+<p class="text-xs text-slate-400 uppercase font-bold">Damage</p>
+<p class="text-xl font-bold text-slate-100">1d12+5 <span class="text-primary text-xs block font-medium">+1d6 Necrotic</span></p>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-primary/5 rounded-lg border border-primary/10 transition-all">
+<div class="flex items-center gap-4">
+<div class="p-2 bg-slate-800 rounded text-slate-400">
+<span class="material-symbols-outlined">flare</span>
+</div>
+<div>
+<p class="font-bold text-slate-100">Javelin</p>
+<p class="text-xs text-slate-400">Action | Thrown | Range: 30/120ft</p>
+</div>
+</div>
+<div class="flex gap-6 items-center">
+<div class="text-center px-4 border-r border-primary/10">
+<p class="text-xs text-slate-400 uppercase font-bold">To Hit</p>
+<p class="text-xl font-bold text-accent-gold">+8</p>
+</div>
+<div class="text-center px-4">
+<p class="text-xs text-slate-400 uppercase font-bold">Damage</p>
+<p class="text-xl font-bold text-slate-100">1d6+5</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="glass-panel rounded-xl overflow-hidden border border-primary/10">
+<div class="bg-primary/10 px-6 py-4 flex justify-between items-center border-b border-primary/10">
+<h3 class="font-bold flex items-center gap-2 text-slate-100">
+<span class="material-symbols-outlined text-primary">auto_fix_high</span> Prepared Spells
+                            </h3>
+<span class="text-xs text-slate-400 uppercase font-bold tracking-widest">Physical Reference</span>
+</div>
+<div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="p-4 bg-primary/5 rounded-lg border border-primary/10 flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-bold text-slate-100">Speak with Animals</p>
+<p class="text-xs text-slate-400">1st Level | Casting: 1 min</p>
+</div>
+<span class="text-[10px] px-2 py-0.5 bg-accent-gold/20 text-accent-gold rounded uppercase font-bold">Ritual</span>
+</div>
+<div class="mt-2 pt-2 border-t border-primary/10">
+<p class="text-[11px] text-slate-300 leading-relaxed italic">You gain the ability to comprehend and verbally communicate with beasts for the duration.</p>
+</div>
+</div>
+<div class="p-4 bg-primary/5 rounded-lg border border-primary/10 flex flex-col gap-2">
+<div class="flex justify-between items-start">
+<div>
+<p class="font-bold text-slate-100">Beast Sense</p>
+<p class="text-xs text-slate-400">2nd Level | Concentration</p>
+</div>
+<span class="text-[10px] px-2 py-0.5 bg-primary/20 text-primary rounded uppercase font-bold">Lvl 2</span>
+</div>
+<div class="mt-2 pt-2 border-t border-primary/10">
+<p class="text-[11px] text-slate-300 leading-relaxed italic">You touch a willing beast. For the duration, you can use your action to see through the beast's eyes.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-4 flex flex-col gap-8">
+<div class="glass-panel rounded-xl overflow-hidden border border-accent-gold/10">
+<div class="bg-accent-gold/10 px-6 py-4 border-b border-accent-gold/10">
+<h3 class="font-bold flex items-center gap-2 text-slate-100">
+<span class="material-symbols-outlined text-accent-gold">rebase_edit</span> Status Tracker
+                            </h3>
+</div>
+<div class="p-6 flex flex-col gap-3">
+<div class="flex items-start gap-4 p-3 bg-red-500/10 rounded-lg border border-red-500/20">
+<span class="material-symbols-outlined text-red-500">skull</span>
+<div>
+<p class="text-sm font-bold text-red-500">Rage</p>
+<p class="text-xs text-slate-400 mt-1">Advantage on STR checks/saves. +2 damage. Resistance to physical damage.</p>
+<p class="text-[10px] text-red-400 mt-1 font-bold">Track rounds on paper: (1 min duration)</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
+<span class="material-symbols-outlined text-blue-500">shield</span>
+<div>
+<p class="text-sm font-bold text-blue-500">Bear Totem Spirit</p>
+<p class="text-xs text-slate-400 mt-1">Resistance to all damage except psychic while raging.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="glass-panel rounded-xl overflow-hidden border border-primary/10">
+<div class="bg-primary/10 px-6 py-4 border-b border-primary/10">
+<h3 class="font-bold flex items-center gap-2 text-slate-100">
+<span class="material-symbols-outlined text-primary">featured_play_list</span> Class Features
+                            </h3>
+</div>
+<div class="p-6">
+<div class="space-y-4">
+<div class="border-l-2 border-primary pl-4">
+<p class="text-xs font-bold text-slate-100 uppercase tracking-wide">Reckless Attack</p>
+<p class="text-xs text-slate-400 mt-1">First attack on your turn can have advantage; attacks against you have advantage until next turn.</p>
+</div>
+<div class="border-l-2 border-accent-gold pl-4">
+<p class="text-xs font-bold text-slate-100 uppercase tracking-wide">Danger Sense</p>
+<p class="text-xs text-slate-400 mt-1">Advantage on Dex saves against seen effects while not blinded/deafened/incapacitated.</p>
+</div>
+<div class="border-l-2 border-primary pl-4">
+<p class="text-xs font-bold text-slate-100 uppercase tracking-wide">Extra Attack</p>
+<p class="text-xs text-slate-400 mt-1">You can attack twice, instead of once, whenever you take the Attack action on your turn.</p>
+</div>
+<div class="border-l-2 border-slate-600 pl-4 opacity-75">
+<p class="text-xs font-bold text-slate-100 uppercase tracking-wide">Fast Movement</p>
+<p class="text-xs text-slate-400 mt-1">Speed increases by 10 feet while not wearing heavy armor (reflected in stats).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-auto py-8 px-10 border-t border-primary/10 glass-panel">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-4 text-slate-400">
+<span class="material-symbols-outlined text-primary">diamond</span>
+<p class="text-sm">Physical Play Mode • <strong>Reference Only</strong></p>
+</div>
+<div class="flex gap-8">
+<a class="text-slate-400 hover:text-primary text-xs font-bold uppercase tracking-widest transition-colors" href="#">Quick Rules</a>
+<a class="text-slate-400 hover:text-primary text-xs font-bold uppercase tracking-widest transition-colors" href="#">Sheet Settings</a>
+<a class="text-slate-400 hover:text-primary text-xs font-bold uppercase tracking-widest transition-colors" href="#">Export PDF</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+
+</body></html>

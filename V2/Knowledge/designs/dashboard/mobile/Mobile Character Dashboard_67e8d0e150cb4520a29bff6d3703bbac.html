@@ -1,0 +1,221 @@
+<html class="dark"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#b72bee",
+                        "accent-gold": "#d4af37",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#0f0814",
+                        "glass-bg": "rgba(36, 28, 39, 0.7)",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(183, 43, 238, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(183, 43, 238, 0.2);
+        }
+        .gold-glow {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<nav class="flex items-center justify-between p-4 pt-6">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full border-2 border-primary/50 p-0.5 overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover rounded-full" data-alt="Close up of a fantasy character profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARPkyvMqCTqYEKVKraeIpCk1uWpzYLLks-NbNgVv5VEj5bbtioYVySywFarUVato_W_HE6J3ACSH6yVejpne2y7AKdiOybS6f3Gtw5mof-F85JhgPe9TTjcv0eU5aaqH8a9IPipIScjrlmC0TPoMy6AS-RFUm2ZzyAHoB-pucnzIClmrTZklkXlcF055frFpPHUdzURmlVb_RPespeD2c_kbI9wIFTKUmzy88hmnRmxt9-3IA3ZYQBiuNFVHrMgvtTVgRyyXZxPM0"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-primary font-bold">Dungeon Master</span>
+<span class="text-sm font-semibold">Alex Rivers</span>
+</div>
+</div>
+<button class="size-10 flex items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</nav>
+<!-- Header Section -->
+<header class="px-6 py-4">
+<h1 class="text-4xl font-bold tracking-tight text-slate-100">My Characters</h1>
+<p class="text-slate-400 text-sm mt-1">Manage your active campaign roster</p>
+</header>
+<!-- Main Content Scroll Area -->
+<main class="flex-1 px-4 space-y-6 pb-24 overflow-y-auto">
+<!-- Create New Character Button (Glass Card) -->
+<button class="w-full glass-card rounded-xl p-6 flex items-center justify-between group active:scale-[0.98] transition-transform">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-accent-gold/20 flex items-center justify-center border border-accent-gold/40 gold-glow">
+<span class="material-symbols-outlined text-accent-gold text-3xl font-bold">add</span>
+</div>
+<div class="text-left">
+<h2 class="text-lg font-bold text-white">Create New</h2>
+<p class="text-slate-400 text-xs">Begin a new legendary journey</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary/60 group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<!-- Vertical Roster List -->
+<div class="space-y-4">
+<div class="flex items-center justify-between px-2">
+<h3 class="text-xs uppercase tracking-widest text-slate-500 font-bold">Active Roster (3)</h3>
+<span class="material-symbols-outlined text-slate-500 text-sm">filter_list</span>
+</div>
+<!-- Character Card 1: Grog -->
+<div class="glass-card rounded-xl p-4 border-l-4 border-l-primary relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+<div class="flex gap-4">
+<div class="size-20 rounded-lg overflow-hidden shrink-0 border border-white/10">
+<img alt="Grog" class="w-full h-full object-cover" data-alt="Illustration of a powerful goliath barbarian warrior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBeqqUVftx4nVseUj_SKPUguZkJfWR9TPJi5RuBr4mBiDbUtku65YXWsikjC0HAU2oQblOZakOcoAxei2aw0-GsnZnvfgvHXmNOIp4WIMWZiw4sRMcf5KqgdYKAXwvyte2_4RHO-_3ENIdPFp3JmodLM01iGcG7gYjJcFhiqDT9SZHVDpHVrkIzRrYY6Et_n1BWiTUi8wA7fjUrpi8qwNuibgQJS0uuaCizAKljKkxvdz9-cIm60ez671e2M-tVaxNB7OmFhNw1_fA"/>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<div class="flex justify-between items-start">
+<h4 class="text-xl font-bold text-white leading-tight">Grog Strongjaw</h4>
+<span class="text-[10px] px-2 py-0.5 rounded bg-primary text-white font-bold">LVL 17</span>
+</div>
+<p class="text-primary text-sm font-medium">Goliath Barbarian</p>
+</div>
+<!-- Health Bar -->
+<div class="mt-3">
+<div class="flex justify-between text-[10px] mb-1 font-bold text-slate-400 uppercase">
+<span>Health Points</span>
+<span class="text-slate-200">182 / 210</span>
+</div>
+<div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 86%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mt-4">
+<button class="flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined fill-1">play_arrow</span>
+                        Play
+                    </button>
+<button class="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 rounded-lg border border-white/10 flex items-center justify-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined">edit</span>
+                        Edit
+                    </button>
+</div>
+</div>
+<!-- Character Card 2: Vex'ahlia -->
+<div class="glass-card rounded-xl p-4 border-l-4 border-l-accent-gold relative overflow-hidden">
+<div class="flex gap-4">
+<div class="size-20 rounded-lg overflow-hidden shrink-0 border border-white/10">
+<img alt="Vex'ahlia" class="w-full h-full object-cover" data-alt="Portrait of an elegant half-elf ranger with a bow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfZ66deh6lGJUhm2yffr_ag2k192Llf2VI9ZEvajxc5jqkOHBvranDeqJ0lL45OEWAi1x9uDKW9VmR-fxtBGflEe9avtrDBG2v_rZ2W0SjNotuWJUaVQlI2u90BdGRh0xp2O6fCSCBTsfF7dyBwjO0uyNFRpal6DM5aPkk2U10lWVN3BnOl5SfniqoYN9aOq_TX-e8etdHS_XIPWmeNcEP495C6z0qen9iJPuxveAzqirJHtmI_f_yH2LYuLzgGtPZkHU5CqAIpeo"/>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<div class="flex justify-between items-start">
+<h4 class="text-xl font-bold text-white leading-tight">Vex'ahlia</h4>
+<span class="text-[10px] px-2 py-0.5 rounded bg-accent-gold text-slate-900 font-bold">LVL 17</span>
+</div>
+<p class="text-accent-gold text-sm font-medium">Half-Elf Ranger</p>
+</div>
+<div class="mt-3">
+<div class="flex justify-between text-[10px] mb-1 font-bold text-slate-400 uppercase">
+<span>Health Points</span>
+<span class="text-slate-200">114 / 114</span>
+</div>
+<div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-accent-gold rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mt-4">
+<button class="flex-1 bg-primary text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined fill-1">play_arrow</span>
+                        Play
+                    </button>
+<button class="flex-1 bg-white/5 text-white font-bold py-3 rounded-lg border border-white/10 flex items-center justify-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined">edit</span>
+                        Edit
+                    </button>
+</div>
+</div>
+<!-- Character Card 3: Keyleth -->
+<div class="glass-card rounded-xl p-4 border-l-4 border-l-slate-500 relative opacity-80">
+<div class="flex gap-4">
+<div class="size-20 rounded-lg overflow-hidden shrink-0 border border-white/10 grayscale">
+<img alt="Keyleth" class="w-full h-full object-cover" data-alt="Illustration of a druid character with flower crown" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAnvt0kJkdTnbkBpJ3F85j3EEz7BnrIHvtF5-ARvCPqLDVQG6o1wNy9StkVhhpRaVWKwDwPkTed8OVmemm4n_U28U7VejVVabnaoYuookgTFy8OwsjdE86HoqFqLHm9OCGFPsNFwBCoCqXmigXqLSxtqiQen-zgBgCvdjTsaIeD7eqEwkEsN5INte8nuhons0OyZcom-O7fXOnbkYb86eD8DHijmkr1anakPBDu0oeCIG6QbBsu4FHSLDQ6BggjOgRNAKD6zHv8rE"/>
+</div>
+<div class="flex-1 flex flex-col justify-between py-1">
+<div>
+<div class="flex justify-between items-start">
+<h4 class="text-xl font-bold text-white leading-tight">Keyleth</h4>
+<span class="text-[10px] px-2 py-0.5 rounded bg-slate-700 text-white font-bold">LVL 17</span>
+</div>
+<p class="text-slate-400 text-sm font-medium">Half-Elf Druid</p>
+</div>
+<div class="mt-3">
+<div class="flex justify-between text-[10px] mb-1 font-bold text-slate-400 uppercase">
+<span>Health Points</span>
+<span class="text-slate-200">82 / 140</span>
+</div>
+<div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-red-500 rounded-full" style="width: 58%;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex gap-3 mt-4">
+<button class="flex-1 bg-primary text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined fill-1">play_arrow</span>
+                        Play
+                    </button>
+<button class="flex-1 bg-white/5 text-white font-bold py-3 rounded-lg border border-white/10 flex items-center justify-center gap-2 active:scale-95 transition-all">
+<span class="material-symbols-outlined">edit</span>
+                        Edit
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<div class="fixed bottom-0 left-0 right-0 bg-background-dark/80 backdrop-blur-xl border-t border-white/5 px-6 pb-8 pt-2">
+<div class="flex justify-between items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-2xl fill-1">person</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Characters</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined text-2xl">auto_fix_high</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Spells</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined text-2xl">inventory_2</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Inventory</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined text-2xl">map</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Campaign</span>
+</a>
+</div>
+</div>
+
+```</body></html>

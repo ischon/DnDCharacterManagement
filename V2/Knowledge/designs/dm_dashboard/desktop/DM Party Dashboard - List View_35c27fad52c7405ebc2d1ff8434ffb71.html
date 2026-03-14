@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DM Party Dashboard - List View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#8c25f4",
+                        "accent-gold": "#f4c525",
+                        "background-light": "#f7f5f8",
+                        "background-dark": "#0f0814",
+                        "card-dark": "#1d1429",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(29, 20, 41, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(140, 37, 244, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #473b54;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-slate-200 dark:border-primary/20 px-8 py-4 glass sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary rounded-lg text-white">
+<span class="material-symbols-outlined block">auto_fix_high</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">DM Party Dashboard</h2>
+</div>
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">Campaign</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">Players</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">Encounter</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">World Map</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="w-64 bg-slate-100 dark:bg-primary/10 border-none rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Search spells, NPCs, items..." type="text"/>
+</div>
+<button class="bg-primary hover:bg-primary/80 text-white px-6 py-2 rounded-xl text-sm font-bold transition-all shadow-lg shadow-primary/20">
+                    End Session
+                </button>
+<div class="flex gap-2">
+<button class="p-2 rounded-xl bg-slate-100 dark:bg-primary/10 hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 rounded-xl bg-slate-100 dark:bg-primary/10 hover:bg-primary/20 transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+</button>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary/40 overflow-hidden">
+<img alt="DM" class="w-full h-full object-cover" data-alt="Dungeon Master profile avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBr3xc1rHmdKeYZSu3e_uID1eoM0K83CBg7z6IjDfqGxkdYH97895jGcdEPIEXIVnKlTL-1JbCCCKKtfDKoX4-yYuIYXRtHza2K3Ujd8AN-v7k-oyXjWioYps5Nee6ECV-4XkLpsJiuui0rcJfkUp6iwGfrvSsUnpftCQB8Qizz7ORdK63XnipFGmhi_Wb03DrBGA3ZbxKKUgYms8gyJnOCbJ7guXISn35NdY3Tw-WRdVCJeSVk-xSHCX_DtGYle5yTdCKMyCMvWA"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex flex-1 gap-6 p-6 max-w-[1600px] mx-auto w-full">
+<!-- Left Sidebar: Session Log -->
+<aside class="w-80 flex-shrink-0 flex flex-col gap-4">
+<div class="flex flex-col gap-2">
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary">Current Session</h3>
+<h1 class="text-2xl font-bold">#42: The Whispering Woods</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Deep within the Cursed Glade...</p>
+</div>
+<div class="flex-1 glass rounded-xl p-4 flex flex-col gap-4 overflow-hidden border-slate-200 dark:border-primary/10">
+<div class="flex items-center justify-between">
+<span class="text-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">history</span> Session Log
+                        </span>
+<button class="text-xs text-primary font-bold hover:underline">Clear</button>
+</div>
+<div class="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-4 pr-2">
+<div class="border-l-2 border-primary/30 pl-3 py-1">
+<p class="text-[11px] text-slate-500 uppercase font-bold">14:22</p>
+<p class="text-sm">Aelor cast <span class="text-primary font-medium">Bless</span> on the party.</p>
+</div>
+<div class="border-l-2 border-slate-600 pl-3 py-1 opacity-80">
+<p class="text-[11px] text-slate-500 uppercase font-bold">14:18</p>
+<p class="text-sm">Initiative started: Giant Spider x4</p>
+</div>
+<div class="border-l-2 border-primary/30 pl-3 py-1">
+<p class="text-[11px] text-slate-500 uppercase font-bold">14:05</p>
+<p class="text-sm">Keth found a <span class="text-accent-gold font-medium">Hidden Cache</span>.</p>
+</div>
+<div class="border-l-2 border-primary/30 pl-3 py-1">
+<p class="text-[11px] text-slate-500 uppercase font-bold">13:58</p>
+<p class="text-sm">Party arrived at the Monolith.</p>
+</div>
+<div class="border-l-2 border-red-500/50 pl-3 py-1">
+<p class="text-[11px] text-slate-500 uppercase font-bold">13:45</p>
+<p class="text-sm">Thrain triggered a <span class="text-red-400 font-medium">Poison Trap</span>.</p>
+</div>
+<div class="border-l-2 border-primary/30 pl-3 py-1">
+<p class="text-[11px] text-slate-500 uppercase font-bold">13:30</p>
+<p class="text-sm">Short rest completed.</p>
+</div>
+</div>
+<div class="pt-2 mt-auto">
+<button class="w-full bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 py-3 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-base">add_circle</span> New Log Entry
+                        </button>
+</div>
+</div>
+</aside>
+<!-- Center Content: Main Party List -->
+<section class="flex-1 flex flex-col gap-6">
+<!-- DM Tools Bar -->
+<div class="glass rounded-xl p-3 flex items-center justify-between border-slate-200 dark:border-primary/10">
+<div class="flex items-center gap-1">
+<button class="p-2.5 rounded-lg hover:bg-primary/20 text-primary transition-all flex items-center gap-2" title="Dice Roller">
+<span class="material-symbols-outlined">casino</span>
+</button>
+<div class="w-px h-6 bg-slate-300 dark:bg-primary/20 mx-1"></div>
+<button class="p-2.5 rounded-lg hover:bg-primary/20 text-slate-400 transition-all" title="Combat Tracker">
+<span class="material-symbols-outlined">swords</span>
+</button>
+<button class="p-2.5 rounded-lg hover:bg-primary/20 text-slate-400 transition-all" title="Armor Class Filter">
+<span class="material-symbols-outlined">shield</span>
+</button>
+<button class="p-2.5 rounded-lg hover:bg-primary/20 text-slate-400 transition-all" title="Spells &amp; Magic">
+<span class="material-symbols-outlined">magic_button</span>
+</button>
+<button class="p-2.5 rounded-lg hover:bg-primary/20 text-slate-400 transition-all" title="Map Overlays">
+<span class="material-symbols-outlined">map</span>
+</button>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-primary/10 border border-transparent hover:border-primary/30 rounded-lg text-sm font-medium transition-all">
+<span class="material-symbols-outlined text-lg">group_add</span>
+<span>Add Player</span>
+</button>
+<div class="flex items-center gap-1 bg-slate-100 dark:bg-primary/10 rounded-lg p-1">
+<button class="px-3 py-1 rounded bg-white dark:bg-primary text-xs font-bold shadow-sm">List</button>
+<button class="px-3 py-1 rounded text-xs font-medium text-slate-500">Grid</button>
+</div>
+</div>
+</div>
+<!-- Party List Container -->
+<div class="flex-1 flex flex-col gap-4">
+<div class="flex items-baseline justify-between">
+<h2 class="text-3xl font-black tracking-tight flex items-center gap-3">
+                            Party Overview
+                            <span class="text-sm font-normal text-slate-500 dark:text-slate-400">6 Players Active</span>
+</h2>
+</div>
+<div class="glass rounded-xl overflow-hidden border-slate-200 dark:border-primary/10">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-primary/5">
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Player Character</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Health Points</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-center">AC</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-center">PP</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-center">DC</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500">Status &amp; Buffs</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-primary/10">
+<!-- Player 1 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-purple-800 flex items-center justify-center text-white font-bold">A</div>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-slate-100">Aelor Silverbane</div>
+<div class="text-[11px] font-medium text-slate-500 uppercase">Level 8 Paladin</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3 min-w-[140px]">
+<div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-green-500" style="width: 95%"></div>
+</div>
+<span class="text-sm font-bold">82<span class="text-slate-500 font-normal">/85</span></span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent-gold/10 border border-accent-gold/30 text-accent-gold font-bold text-lg">20</span>
+</td>
+<td class="px-6 py-5 text-center text-sm font-medium">14</td>
+<td class="px-6 py-5 text-center text-sm font-medium">16</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[10px] font-bold uppercase">Blessed</span>
+<span class="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 text-[10px] font-bold uppercase">Inspired</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-200 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-lg">edit_note</span>
+</button>
+</td>
+</tr>
+<!-- Player 2 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-700 to-black flex items-center justify-center text-white font-bold">K</div>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-slate-100">Keth Shadowstep</div>
+<div class="text-[11px] font-medium text-slate-500 uppercase">Level 8 Rogue</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3 min-w-[140px]">
+<div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-yellow-500" style="width: 45%"></div>
+</div>
+<span class="text-sm font-bold">24<span class="text-slate-500 font-normal">/52</span></span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent-gold/10 border border-accent-gold/30 text-accent-gold font-bold text-lg">17</span>
+</td>
+<td class="px-6 py-5 text-center text-sm font-medium">18</td>
+<td class="px-6 py-5 text-center text-sm font-medium">12</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full bg-slate-500/20 text-slate-400 text-[10px] font-bold uppercase">Hidden</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-200 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-lg">edit_note</span>
+</button>
+</td>
+</tr>
+<!-- Player 3 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-900 flex items-center justify-center text-white font-bold">M</div>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-slate-100">Mira Spellweaver</div>
+<div class="text-[11px] font-medium text-slate-500 uppercase">Level 8 Wizard</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3 min-w-[140px]">
+<div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-red-500" style="width: 25%"></div>
+</div>
+<span class="text-sm font-bold">12<span class="text-slate-500 font-normal">/48</span></span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent-gold/10 border border-accent-gold/30 text-accent-gold font-bold text-lg">13</span>
+</td>
+<td class="px-6 py-5 text-center text-sm font-medium">12</td>
+<td class="px-6 py-5 text-center text-sm font-medium">18</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 text-[10px] font-bold uppercase">Concentrating</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[10px] font-bold uppercase">Blessed</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-200 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-lg">edit_note</span>
+</button>
+</td>
+</tr>
+<!-- Player 4 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-600 to-red-900 flex items-center justify-center text-white font-bold">T</div>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-slate-100">Thrain Ironfoot</div>
+<div class="text-[11px] font-medium text-slate-500 uppercase">Level 8 Cleric</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3 min-w-[140px]">
+<div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-green-500" style="width: 70%"></div>
+</div>
+<span class="text-sm font-bold">48<span class="text-slate-500 font-normal">/68</span></span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent-gold/10 border border-accent-gold/30 text-accent-gold font-bold text-lg">18</span>
+</td>
+<td class="px-6 py-5 text-center text-sm font-medium">15</td>
+<td class="px-6 py-5 text-center text-sm font-medium">15</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 text-[10px] font-bold uppercase">Poisoned</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-200 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-lg">edit_note</span>
+</button>
+</td>
+</tr>
+<!-- Player 5 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-green-600 to-teal-900 flex items-center justify-center text-white font-bold">Z</div>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-slate-100">Zorion the Dark</div>
+<div class="text-[11px] font-medium text-slate-500 uppercase">Level 8 Warlock</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3 min-w-[140px]">
+<div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-yellow-500" style="width: 55%"></div>
+</div>
+<span class="text-sm font-bold">32<span class="text-slate-500 font-normal">/58</span></span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent-gold/10 border border-accent-gold/30 text-accent-gold font-bold text-lg">15</span>
+</td>
+<td class="px-6 py-5 text-center text-sm font-medium">13</td>
+<td class="px-6 py-5 text-center text-sm font-medium">17</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-2">
+<span class="text-slate-500 text-[10px] italic">No active effects</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-200 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-lg">edit_note</span>
+</button>
+</td>
+</tr>
+<!-- Player 6 -->
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-500 to-rose-900 flex items-center justify-center text-white font-bold">L</div>
+<div>
+<div class="text-sm font-bold text-slate-900 dark:text-slate-100">Lirael Starcaller</div>
+<div class="text-[11px] font-medium text-slate-500 uppercase">Level 8 Bard</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-3 min-w-[140px]">
+<div class="flex-1 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-green-500" style="width: 85%"></div>
+</div>
+<span class="text-sm font-bold">46<span class="text-slate-500 font-normal">/54</span></span>
+</div>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent-gold/10 border border-accent-gold/30 text-accent-gold font-bold text-lg">14</span>
+</td>
+<td class="px-6 py-5 text-center text-sm font-medium">16</td>
+<td class="px-6 py-5 text-center text-sm font-medium">16</td>
+<td class="px-6 py-5">
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-[10px] font-bold uppercase">Blessed</span>
+</div>
+</td>
+<td class="px-6 py-5 text-right">
+<button class="p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity hover:bg-slate-200 dark:hover:bg-primary/20">
+<span class="material-symbols-outlined text-lg">edit_note</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Bottom Quick Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="glass p-4 rounded-xl border-slate-200 dark:border-primary/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-slate-500 uppercase">Average AC</span>
+<span class="material-symbols-outlined text-primary text-lg">shield</span>
+</div>
+<p class="text-2xl font-bold">16.2</p>
+</div>
+<div class="glass p-4 rounded-xl border-slate-200 dark:border-primary/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-slate-500 uppercase">Party Health</span>
+<span class="material-symbols-outlined text-green-500 text-lg">favorite</span>
+</div>
+<div class="flex items-end gap-2">
+<p class="text-2xl font-bold">65%</p>
+<span class="text-xs text-slate-400 mb-1">244 / 375 HP</span>
+</div>
+</div>
+<div class="glass p-4 rounded-xl border-slate-200 dark:border-primary/10">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-slate-500 uppercase">Passive Perception</span>
+<span class="material-symbols-outlined text-accent-gold text-lg">visibility</span>
+</div>
+<p class="text-2xl font-bold">14.7 <span class="text-xs font-normal text-slate-500">Avg</span></p>
+</div>
+</div>
+</section>
+<!-- Right Sidebar: Quick Reference -->
+<aside class="w-64 flex-shrink-0 flex flex-col gap-6">
+<div class="glass rounded-xl p-4 border-slate-200 dark:border-primary/10">
+<h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 flex items-center justify-between">
+                        World Map
+                        <span class="material-symbols-outlined text-base">map</span>
+</h3>
+<div class="aspect-square rounded-lg bg-slate-200 dark:bg-primary/20 relative overflow-hidden group cursor-pointer border border-primary/20">
+<img alt="Location Map" class="w-full h-full object-cover" data-alt="Stylized fantasy map of Whispering Woods" data-location="Whispering Woods" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6N74nZLWR2SK2t0la_3xA0Zf4-GTMYC78vZmXQsQLPT2u3qphLZDrS3YMrEEMnKPspXC4KWYpVGK3cFlVDHQHnTJR_x-ALfeppCf9ZDvlE9pyEXQ-ERy72WaDX8GKLaLvnut1-bpXxSOnH1T7j6vzRI-61XpMJAr11R-OWCq4uZLSRIBIQSk5uoZc5OFABURsHR0pcb6pD_ggUdqEr4bYrhoUp5ud0bN9uKOTUUmSdYsEEtneHEsQQ2E58AVt9cVwGzo1oGUi9mM"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent flex items-end p-3">
+<p class="text-xs font-bold">Cursed Glade</p>
+</div>
+</div>
+</div>
+<div class="glass rounded-xl p-4 flex-1 border-slate-200 dark:border-primary/10 flex flex-col">
+<h3 class="text-xs font-bold uppercase tracking-widest text-primary mb-4 flex items-center justify-between">
+                        Notes &amp; NPCs
+                        <span class="material-symbols-outlined text-base">book</span>
+</h3>
+<div class="flex-1 space-y-4">
+<div class="p-3 bg-primary/5 rounded-lg border border-primary/10">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-sm text-accent-gold">person</span>
+<p class="text-xs font-bold">Elder Grunhild</p>
+</div>
+<p class="text-[11px] text-slate-500 italic">Knows the secret path but requires a bribe of Elven Ale.</p>
+</div>
+<div class="p-3 bg-primary/5 rounded-lg border border-primary/10">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-sm text-accent-gold">priority_high</span>
+<p class="text-xs font-bold">Monolith Ritual</p>
+</div>
+<p class="text-[11px] text-slate-500 italic">Occurs at midnight. Every failed DC increases doom meter.</p>
+</div>
+</div>
+<button class="mt-4 w-full py-2 bg-slate-100 dark:bg-primary/10 text-[11px] font-bold uppercase rounded-lg hover:bg-primary/20 transition-all">View All Notes</button>
+</div>
+</aside>
+</main>
+<!-- Footer / Action Floating Bar -->
+<footer class="fixed bottom-6 left-1/2 -translate-x-1/2 glass px-6 py-3 rounded-full border border-primary/40 shadow-2xl shadow-primary/40 flex items-center gap-8 z-50">
+<div class="flex items-center gap-6">
+<button class="group flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">auto_stories</span>
+<span class="text-[10px] font-bold uppercase text-slate-400">Journal</span>
+</button>
+<button class="group flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary group-hover:scale-110 transition-transform">inventory_2</span>
+<span class="text-[10px] font-bold uppercase text-slate-400">Loot</span>
+</button>
+<div class="w-px h-8 bg-primary/30"></div>
+<button class="group flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary group-hover:scale-110 transition-transform">history_edu</span>
+<span class="text-[10px] font-bold uppercase text-slate-400">Quests</span>
+</button>
+<button class="group flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary group-hover:scale-110 transition-transform">emoji_events</span>
+<span class="text-[10px] font-bold uppercase text-slate-400">Awards</span>
+</button>
+</div>
+</footer>
+</div>
+</body></html>

@@ -1,0 +1,42 @@
+name: V2 Tests (Vitest)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'V2/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'V2/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [24.x]
+
+    defaults:
+      run:
+        working-directory: ./V2
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: './V2/package-lock.json'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Vitest with Coverage
+        run: npm run test:coverage

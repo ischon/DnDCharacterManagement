@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Character Management Dashboard (Clean)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#b72bee",
+                        "accent": "#ffd700",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#1d1022",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-dark {
+            background: rgba(183, 43, 238, 0.05);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(183, 43, 238, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex flex-col min-h-screen">
+<header class="sticky top-0 z-50 glass border-b border-primary/20 px-6 py-3 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">shield_with_heart</span>
+<h2 class="text-xl font-extrabold tracking-tight dark:text-slate-100">DungeonMaster Pro</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6 ml-4">
+<a class="text-primary font-semibold border-b-2 border-primary py-1" href="#">Dashboard</a>
+<a class="text-slate-400 hover:text-slate-100 transition-colors" href="#">Campaigns</a>
+<a class="text-slate-400 hover:text-slate-100 transition-colors" href="#">Spells</a>
+<a class="text-slate-400 hover:text-slate-100 transition-colors" href="#">Compendium</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="bg-primary/10 border-none rounded-full pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary w-64" placeholder="Search characters..." type="text"/>
+</div>
+<button class="p-2 rounded-full hover:bg-primary/20 transition-colors text-slate-400">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-primary/20">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold leading-none">Alistair Thorne</p>
+<p class="text-xs text-slate-400 font-medium mt-1 uppercase tracking-wider">Player</p>
+</div>
+<div class="size-10 rounded-full border-2 border-primary bg-cover bg-center" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDPe-3wrFyCRkTN3GS8-XPUJn0QfC6bv8uNghoyb_snV7hNj5vgHVf3QUNaX8xvFjMl4maMF3Q0FgIUcgi9y4KgSEKZTuZjKOXdoIRyweJuE0FSA3q8AmWeznGxwbQEflXtz1GPFhqWZJkhj5hu_blrZJLQsWm9YEQMQJKCkw22I-5pVBIHlP3L9fkRarcTfOObbz9kGK84Iov4yFrlXo42-5_rtgSZ481fqEUtmZoSxwpVlANlgn0t9cSzx3Aj7_aicZZLokoRR6M')"></div>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-7xl mx-auto w-full px-6 py-12">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+<div>
+<h1 class="text-4xl md:text-5xl font-black tracking-tight mb-3">My Characters</h1>
+<p class="text-slate-400 text-lg">Manage your heroes and prepare for the next session.</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary/10 text-primary font-bold border border-primary/30 hover:bg-primary/20 transition-all">
+<span class="material-symbols-outlined">filter_list</span>
+                    Filter
+                </button>
+<button class="flex items-center gap-2 px-7 py-2.5 rounded-lg bg-primary text-white font-bold shadow-lg shadow-primary/40 hover:scale-105 transition-all">
+<span class="material-symbols-outlined">add</span>
+                    Create New
+                </button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-12">
+<div class="group relative flex flex-col items-center justify-center h-[460px] rounded-2xl border-2 border-dashed border-primary/30 hover:border-primary transition-all cursor-pointer bg-primary/5 hover:bg-primary/10">
+<div class="size-16 rounded-full bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform mb-4">
+<span class="material-symbols-outlined text-4xl font-bold">add</span>
+</div>
+<p class="text-xl font-bold text-slate-100">Create New Hero</p>
+<p class="text-sm text-slate-400 mt-2">Start a new journey</p>
+</div>
+<div class="glass-dark rounded-2xl overflow-hidden flex flex-col border border-primary/20 hover:border-primary/50 transition-all group">
+<div class="h-52 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent z-10"></div>
+<div class="w-full h-full bg-cover bg-center transition-transform group-hover:scale-110 duration-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAIif9qZ7U1zMAeTuLzGQSfh7-4EN8qJPO2K3rSef75saBsvTpSv8HO_NWV_eN_rlAX9ywbuklosdCUG9_LFNL9nrjidP4PsDNuCSEilklXZnUGfzaokW4hEnUOYjIDBikeSnnGA01ECt0rF4h8_npvnPKDQ6Q2fjuPvGQojhXa67Pjup0CPOhBeVnPnbJaLsDLtT7igvhySRDS4F7S4umnCXKHRLeVNJjjZ2C1BvyD8_cF_b4QBgn_lRDmx6LlKZATVS-QoFKU3Mw')"></div>
+<div class="absolute top-4 right-4 z-20 bg-accent text-background-dark font-black text-xs px-2.5 py-1 rounded shadow-lg">LVL 12</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-2xl font-bold text-white">Grog Strongjaw</h3>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary transition-colors">more_vert</span>
+</div>
+<p class="text-primary text-sm font-bold mb-5 tracking-widest uppercase">Goliath Barbarian</p>
+<div class="mb-5">
+<div class="flex justify-between text-xs font-bold mb-2">
+<span class="text-slate-400 uppercase tracking-tighter">Health</span>
+<span class="text-slate-100">142 / 165 HP</span>
+</div>
+<div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 86%"></div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-3 mb-8">
+<div class="glass rounded-xl p-3 text-center">
+<p class="text-[10px] text-slate-400 uppercase font-extrabold mb-1">STR</p>
+<p class="text-xl font-black text-accent">24</p>
+</div>
+<div class="glass rounded-xl p-3 text-center">
+<p class="text-[10px] text-slate-400 uppercase font-extrabold mb-1">CON</p>
+<p class="text-xl font-black text-accent">20</p>
+</div>
+<div class="glass rounded-xl p-3 text-center">
+<p class="text-[10px] text-slate-400 uppercase font-extrabold mb-1">DEX</p>
+<p class="text-xl font-black text-accent">15</p>
+</div>
+</div>
+<div class="mt-auto flex gap-4">
+<button class="flex-1 bg-primary text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/80 transition-all">
+<span class="material-symbols-outlined text-lg">play_arrow</span>
+                            Play
+                        </button>
+<button class="flex-1 glass text-slate-100 font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:bg-white/10 transition-all border border-white/10">
+<span class="material-symbols-outlined text-lg">edit</span>
+                            Edit
+                        </button>
+</div>
+</div>
+</div>
+<div class="glass-dark rounded-2xl overflow-hidden flex flex-col border border-primary/20 hover:border-primary/50 transition-all group">
+<div class="h-52 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent z-10"></div>
+<div class="w-full h-full bg-cover bg-center transition-transform group-hover:scale-110 duration-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDHPM1WdXd1hYvUkrVzE9CQuYyJJ59RybpQDVYGrRAVH1eOzDEhEFK24w3slV5-DHcmXCsV9go4RA9iGu63eP8-xvZS0KcXS7KaLEggA6YhX5AWcNvaUVhWPbPwQRnXu_80BU-i99CAUGcKY7ZZzfGLhINFarnYqAE1P3r5QPZOqk8pfHGgm6-60os9C9PE0c1HcU6Tptvru9KYMVaq2HWSWC6bEK7VkHb2eh0iVWto3uTJhok4Ny_ee9ln9gLejNyoilSAPuLMB-U')"></div>
+<div class="absolute top-4 right-4 z-20 bg-accent text-background-dark font-black text-xs px-2.5 py-1 rounded shadow-lg">LVL 9</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-2xl font-bold text-white">Vex'ahlia</h3>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary transition-colors">more_vert</span>
+</div>
+<p class="text-primary text-sm font-bold mb-5 tracking-widest uppercase">Half-Elf Ranger</p>
+<div class="mb-5">
+<div class="flex justify-between text-xs font-bold mb-2">
+<span class="text-slate-400 uppercase tracking-tighter">Health</span>
+<span class="text-slate-100">68 / 68 HP</span>
+</div>
+<div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-3 mb-8">
+<div class="glass rounded-xl p-3 text-center">
+<p class="text-[10px] text-slate-400 uppercase font-extrabold mb-1">DEX</p>
+<p class="text-xl font-black text-accent">20</p>
+</div>
+<div class="glass rounded-xl p-3 text-center">
+<p class="text-[10px] text-slate-400 uppercase font-extrabold mb-1">WIS</p>
+<p class="text-xl font-black text-accent">16</p>
+</div>
+<div class="glass rounded-xl p-3 text-center">
+<p class="text-[10px] text-slate-400 uppercase font-extrabold mb-1">CHA</p>
+<p class="text-xl font-black text-accent">14</p>
+</div>
+</div>
+<div class="mt-auto flex gap-4">
+<button class="flex-1 bg-primary text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/80 transition-all">
+<span class="material-symbols-outlined text-lg">play_arrow</span>
+                            Play
+                        </button>
+<button class="flex-1 glass text-slate-100 font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:bg-white/10 transition-all border border-white/10">
+<span class="material-symbols-outlined text-lg">edit</span>
+                            Edit
+                        </button>
+</div>
+</div>
+</div>
+<div class="glass-dark rounded-2xl overflow-hidden flex flex-col border border-primary/20 hover:border-primary/50 transition-all group">
+<div class="h-52 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent z-10"></div>
+<div class="w-full h-full bg-cover bg-center transition-transform group-hover:scale-110 duration-700" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuChDc7pySM3wpagWCpuNrtv0Y33ooHlD-TdvyK5mFp-bxSoyHTh4iFYZtjcnu6ZXLF8jhhtJ72ad8mqF1nepSFzWbYLCCfJDiSKL3wCAqGTxgd-AodqeUk62yYr5pVepdA-7LyNxolYGY_mnkbechnD6KfrlShOMfrrohVMHErAC0LDgzvmN3dGztqXPOyZiWfhkN2x9DTh0mT-lRSTCWd3LJm8i3CQDw0h5H7EeXi6PmL9PCH3cfMmR2PpK0GoXXEYdcUsxzo4DQE')"></div>
+<div class="absolute top-4 right-4 z-20 bg-accent text-background-dark font-black text-xs px-2.5 py-1 rounded shadow-lg">LVL 10</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-1">
+<h3 class="text-2xl font-bold text-white">Keyleth</h3>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary transition-colors">more_vert</span>
+</div>
+<p class="text-primary text-sm font-bold mb-5 tracking-widest uppercase">Half-Elf Druid</p>
+<div class="mb-5">
+<div class="flex justify-between text-xs font-bold mb-2">
+<span class="text-slate-400 uppercase tracking-tighter">Health</span>
+<span class="text-slate-100">24 / 85 HP</span>
+</div>
+<div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full rounded-full" style="width: 28%"></div>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-3 mb-8">
+<div class="glass rounded-xl p-3 text-center">
+<p class="text-[10px] text-slate-400 uppercase font-extrabold mb-1">WIS</p>
+<p class="text-xl font-black text-accent">22</p>
+</div>
+<div class="glass rounded-xl p-3 text-center">
+<p class="text-[10px] text-slate-400 uppercase font-extrabold mb-1">INT</p>
+<p class="text-xl font-black text-accent">15</p>
+</div>
+<div class="glass rounded-xl p-3 text-center">
+<p class="text-[10px] text-slate-400 uppercase font-extrabold mb-1">CON</p>
+<p class="text-xl font-black text-accent">14</p>
+</div>
+</div>
+<div class="mt-auto flex gap-4">
+<button class="flex-1 bg-primary text-white font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:bg-primary/80 transition-all">
+<span class="material-symbols-outlined text-lg">play_arrow</span>
+                            Play
+                        </button>
+<button class="flex-1 glass text-slate-100 font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 hover:bg-white/10 transition-all border border-white/10">
+<span class="material-symbols-outlined text-lg">edit</span>
+                            Edit
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="mt-auto py-12 px-6 border-t border-primary/10">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex items-center gap-2 opacity-50">
+<span class="material-symbols-outlined">shield_with_heart</span>
+<span class="font-bold">DungeonMaster Pro</span>
+</div>
+<div class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-sm text-slate-500 font-medium">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">Support</a>
+<a class="hover:text-primary transition-colors" href="#">Changelog</a>
+<a class="hover:text-primary transition-colors" href="#">Wiki</a>
+</div>
+<p class="text-xs text-slate-600 text-center md:text-right uppercase tracking-widest">© 2024 DungeonMaster Pro. Functional Character Management.</p>
+</div>
+</footer>
+</div>
+
+</body></html>

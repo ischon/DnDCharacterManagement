@@ -29,9 +29,13 @@
 
 ## 4. Datamodel (Cloud Firestore)
 
-* **Collection `users`** -> `doc {uid}`: `{ email, displayName }`
-* **Collection `parties`** -> `doc {partyId}`: `{ dmUid, name, createdAt }`
-    * **Subcollection `npcs`** -> `doc {npcId}`: `{ name, hp, ac, notes }`
+*   **Root Structure:** `{appId}/...` (where `appId` acts as the environment/instance identifier, e.g., `1:12345:web:abcde/...`)
+*   **Collection `users`** -> `doc {uid}`: `{ email, displayName }`
+*   **Collection `templates`** -> `doc {templateId}`: 
+    * De DM's bibliotheek van monsters en NPC basis-statblocks. `{ dmUid, type, name, maxHp, ac, notes }`
+*   **Collection `parties`** -> `doc {partyId}`: 
+    * Regelt de sessie. `{ dmUid, name, createdAt, members: PartyEntity[] }`
+    * `members` bevat harde kopieën van templates (monsters/npcs) tijdens actieve sessies.
 * **Collection `characters`** -> `doc {charId}`:
     ```json
     {

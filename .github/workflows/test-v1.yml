@@ -2,9 +2,15 @@ name: Test V1
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+    paths:
+      - 'V1/**'
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+    paths:
+      - 'V1/**'
 
 jobs:
   test-V1:
@@ -12,17 +18,17 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [24.x]
 
     defaults:
       run:
         working-directory: V1
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'

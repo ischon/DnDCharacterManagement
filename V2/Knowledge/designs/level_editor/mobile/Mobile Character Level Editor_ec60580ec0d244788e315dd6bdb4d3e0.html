@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#7f0df2",
+                        "accent-gold": "#FFD700",
+                        "background-light": "#f7f5f8",
+                        "background-dark": "#0f0916",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(127, 13, 242, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(127, 13, 242, 0.1);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto">
+<header class="sticky top-0 z-50 glass border-b border-primary/20 p-4">
+<div class="flex items-center justify-between gap-4">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="flex flex-col items-center">
+<h1 class="text-lg font-bold leading-tight tracking-tight">Editing Grog</h1>
+<span class="text-xs font-medium text-primary uppercase tracking-widest">Level 5 Progression</span>
+</div>
+<button class="bg-primary hover:bg-primary/80 text-white px-4 py-1.5 rounded-full text-sm font-bold shadow-lg shadow-primary/20 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">lock</span>
+                    Save
+                </button>
+</div>
+</header>
+<main class="flex-1 px-4 py-6 space-y-6">
+<section class="space-y-3">
+<div class="flex justify-between items-end">
+<h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Target Level</h2>
+<span class="text-xs text-primary font-medium">15 levels remaining</span>
+</div>
+<div class="flex gap-3 overflow-x-auto pb-2 hide-scrollbar snap-x">
+<!-- Generating level pills -->
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 snap-center"><span class="text-slate-500 font-bold">1</span></div>
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 snap-center"><span class="text-slate-500 font-bold">2</span></div>
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 snap-center"><span class="text-slate-500 font-bold">3</span></div>
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 snap-center"><span class="text-slate-500 font-bold">4</span></div>
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-gold border-2 border-accent-gold ring-4 ring-accent-gold/20 snap-center shadow-lg"><span class="text-background-dark font-black text-lg">5</span></div>
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 snap-center"><span class="text-slate-500 font-bold">6</span></div>
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 snap-center"><span class="text-slate-500 font-bold">7</span></div>
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 snap-center"><span class="text-slate-500 font-bold">8</span></div>
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 snap-center"><span class="text-slate-500 font-bold">9</span></div>
+<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 snap-center"><span class="text-slate-500 font-bold">10</span></div>
+</div>
+</section>
+<section class="glass rounded-xl p-4 space-y-4">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary">fitness_center</span>
+<h2 class="text-base font-bold">Core Stats</h2>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+<div class="flex flex-col">
+<span class="text-sm font-bold">Strength</span>
+<span class="text-xs text-slate-400">Modifier: +4</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="size-10 flex items-center justify-center rounded-full bg-primary/20 text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<span class="text-xl font-bold min-w-[2ch] text-center">18</span>
+<button class="size-10 flex items-center justify-center rounded-full bg-primary text-white active:scale-90 transition-transform">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+<div class="flex flex-col">
+<span class="text-sm font-bold">Constitution</span>
+<span class="text-xs text-slate-400">Modifier: +3</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="size-10 flex items-center justify-center rounded-full bg-primary/20 text-primary active:scale-90 transition-transform">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<span class="text-xl font-bold min-w-[2ch] text-center">16</span>
+<button class="size-10 flex items-center justify-center rounded-full bg-primary text-white active:scale-90 transition-transform">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<section class="glass rounded-xl p-4 space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">favorite</span>
+<h2 class="text-base font-bold">Hit Points</h2>
+</div>
+<span class="text-xs font-bold text-accent-gold">d12 Hit Die</span>
+</div>
+<div class="flex p-1 bg-primary/10 rounded-lg">
+<button class="flex-1 py-1.5 text-xs font-bold rounded-md transition-all bg-primary text-white shadow-sm">FIXED (7)</button>
+<button class="flex-1 py-1.5 text-xs font-bold text-slate-400 rounded-md transition-all hover:text-slate-200">ROLLED</button>
+</div>
+<div class="flex items-center gap-4 pt-2">
+<div class="flex-1 p-3 bg-white/5 rounded-lg border border-white/5">
+<span class="block text-[10px] uppercase tracking-tighter text-slate-400 mb-1">Total HP</span>
+<div class="flex items-center justify-between">
+<span class="text-2xl font-black">58</span>
+<span class="text-xs text-primary font-bold">+10 gained</span>
+</div>
+</div>
+</div>
+</section>
+<section class="glass rounded-xl p-4 space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">auto_fix_high</span>
+<h2 class="text-base font-bold">Spells &amp; Slots</h2>
+</div>
+<span class="text-xs font-bold text-slate-400">3 Known</span>
+</div>
+<div class="grid grid-cols-4 gap-2">
+<div class="flex flex-col items-center p-2 rounded-lg bg-white/5 border border-white/5">
+<span class="text-[10px] text-slate-400 font-bold">LVL 1</span>
+<span class="text-lg font-bold">4</span>
+</div>
+<div class="flex flex-col items-center p-2 rounded-lg bg-primary/20 border border-primary/40 ring-1 ring-primary/30">
+<span class="text-[10px] text-primary font-bold">LVL 2</span>
+<span class="text-lg font-bold">3</span>
+</div>
+<div class="flex flex-col items-center p-2 rounded-lg bg-white/5 border border-white/5 opacity-50">
+<span class="text-[10px] text-slate-400 font-bold">LVL 3</span>
+<span class="text-lg font-bold">0</span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 rounded-lg border border-dashed border-primary/40 text-primary">
+<span class="material-symbols-outlined text-sm">add</span>
+</div>
+</div>
+<button class="w-full py-3 rounded-lg border border-primary/30 text-primary text-sm font-bold hover:bg-primary/5 transition-colors">
+                    Learn New Spell
+                </button>
+</section>
+<section class="glass rounded-xl p-4 space-y-4 mb-8">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">military_tech</span>
+<h2 class="text-base font-bold">Features &amp; Proficiencies</h2>
+</div>
+<div class="space-y-2">
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+<div class="flex flex-col">
+<span class="text-sm font-bold">Extra Attack</span>
+<span class="text-xs text-slate-400">Class Feature</span>
+</div>
+<div class="size-6 rounded-full bg-accent-gold flex items-center justify-center">
+<span class="material-symbols-outlined text-sm text-background-dark font-black">check</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+<div class="flex flex-col">
+<span class="text-sm font-bold">Athletics Proficiency</span>
+<span class="text-xs text-slate-400">Skill</span>
+</div>
+<div class="relative inline-flex h-6 w-11 items-center rounded-full bg-primary">
+<span class="translate-x-6 inline-block h-4 w-4 transform rounded-full bg-white transition"></span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+<div class="flex flex-col">
+<span class="text-sm font-bold">Fast Movement</span>
+<span class="text-xs text-slate-400">+10ft speed</span>
+</div>
+<div class="relative inline-flex h-6 w-11 items-center rounded-full bg-slate-700">
+<span class="translate-x-1 inline-block h-4 w-4 transform rounded-full bg-white transition"></span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<nav class="sticky bottom-0 z-50 glass border-t border-primary/20 px-6 py-4 flex justify-between items-center safe-area-bottom">
+<div class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold mt-1">Character</span>
+</div>
+<div class="flex flex-col items-center text-slate-500">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-[10px] font-bold mt-1">Equipment</span>
+</div>
+<div class="flex flex-col items-center text-slate-500">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold mt-1">Spells</span>
+</div>
+<div class="flex flex-col items-center text-slate-500">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold mt-1">Settings</span>
+</div>
+</nav>
+</div>
+</body></html>
