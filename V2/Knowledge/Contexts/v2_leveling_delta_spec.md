@@ -29,7 +29,14 @@ Bij het wisselen van het "Active Level" in Play Mode:
 - **Level Up**: `Current HP += (New Max HP - Old Max HP)`.
 - **Level Down**: `Current HP = min(Current HP, New Max HP)`.
 
-## 6. Data Schema (TypeScript)
+## 6. Rustmechanismen (Short/Long Rest)
+- **Short Rest**: Speler kan `hitDice.current` verbruiken om HP te herstellen.
+- **Long Rest**:
+    - `currentHp = Max HP`.
+    - `hitDice.current += floor(totalLevel / 2)`, met een minimum van 1.
+    - Bij multiclassing krijgt de gebruiker een popup om te kiezen welke types Hit Dice (bijv. d8 vs d10) hersteld worden tot het maximum.
+
+## 7. Data Schema (TypeScript)
 ```typescript
 interface Character {
   id: string;
@@ -37,18 +44,28 @@ interface Character {
   levels: LevelDelta[];
   playState: {
     currentHp: number;
+    tempHp: number;
+    deathSaves: { successes: number, failures: number };
     activeLevel: number;
+    inspiration: boolean;
+    experiencePoints: number;
+    initiative: number | null;
+    speed: number;
+    hitDice: { current: number };
+    currency: { cp: number, sp: number, ep: number, gp: number, pp: number };
+    preparedSpells: Record<string, string[]>; // Keyed by className
     conditions: string[];
-    preparedSpells: string[];
     usedSlots: { [level: number]: number };
-    inventory: string[];
+    inventory: InventoryItem[]; // Zie Context.md voor InventoryItem structuur
   };
 }
 
 interface LevelDelta {
   level: number;
+  classProgression: { className: string, newClassLevel: number }[]; // Welke class levelupte op dit moment
   statChanges: { [stat: string]: number };
   hpGain: { type: 'fixed' | 'rolled', value: number };
+  conModifierAtLevel: number; // Con mod op moment van level-up (voor HP calculus)
   addedProficiencies: string[];
   spellSlots: { [level: number]: number };
   addedSpells: string[];

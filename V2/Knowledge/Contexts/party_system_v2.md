@@ -11,7 +11,14 @@ The `PartyStore` initializes two high-bandwidth listeners:
 1. **Party Listener**: Syncs party metadata and the active `members` array (NPC/Monster copies).
 2. **Members Listener**: A collection query for all player characters where `partyId == currentPartyId`.
 
-This allows the DM to see realtime updates to player HP, status effects, and active resources.
+This allows the DM to see realtime updates via a dedicated **DM Player Card** component.
+
+### DM Overview Fields
+- **HP**: Current, Max, and **Temp HP** visible.
+- **Class Breakdown**: Full list of classes with subclasses and class-specific levels (e.g. "Fighter 5 (Champion) / Wizard 2").
+- **Core Stats**: Armor Class, Passive Perception (auto-computed), and Spell Save DC per casting class.
+- **Death Saves**: 3 success and 3 failure indicators, editable by the DM if `dmEditable` is enabled.
+- **Status Effects**: Realtime conditions list.
 
 ## NPC & Monster Management (Template & Instance Pattern)
 NPCs and Monsters are managed via a robust **Template & Instance** pattern:

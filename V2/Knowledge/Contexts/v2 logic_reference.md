@@ -16,8 +16,9 @@ Gebruikers (spelers) in staat stellen om hun character progressie over 20 levels
 - **Active Level Selection**: In de play-interface kan de gebruiker het "huidige level" selecteren, waarna de UI de berekende stats van dat level toont.
 
 ### 2.3 Edit vs. Play Mode
-- **Play Mode (Main Sheet)**: Geoptimaliseerd voor interactie tijdens een sessie. Velden zoals Base Stats, AC en Max HP zijn *readonly*. Hier vindt ook de selectie van "Voorbereide Spells" plaats en het beheer van **Inventory/Equipment**, aangezien items hoofdzakelijk tijdens gameplay worden verkregen.
-- **Edit Mode (Dedicated Screen)**: Toegankelijk via een "Edit Statistics" knop. Hier kan de gebruiker per level de stats configureren, inclusief Spell Slots, beschikbare spells, en **Features & Traits** die op dit specifieke level worden verdiend.
+- **Play Mode (Main Sheet)**: Geoptimaliseerd voor interactie tijdens een sessie. Velden zoals Base Stats, AC en Max HP zijn *readonly*.
+- **Reader Mode (UI Pattern)**: Voor grote tekstvelden (Backstory, Personality, Inventory) geldt: klikken op het veld opent een full-screen scrollbare modal voor optimale leesbaarheid op zowel mobiel als desktop.
+- **Edit Mode (Dedicated Screen)**: Toegankelijk via een "Edit Statistics" knop. Hier kan de gebruiker per level de stats configureren.
 
 ### 2.4 HP Management & History
 - **HP Build-up**: Opslag van HP winst per level (Base + Die Roll of Fixed value + berekende Con mod).
@@ -43,7 +44,7 @@ Gebruikers (spelers) in staat stellen om hun character progressie over 20 levels
     - `spellSlots`: {[level: number]: number}
     - `addedSpells`: string[]
     - `addedFeatures`: { name: string, description: string }[]
-- `playState`: { currentHp: number, activeLevel: number, conditions: string[], preparedSpells: string[], usedSlots: {[level: number]: number}, inventory: string[] }
+- `playState`: Bevat alle vluchtige sessie-data (HP, XP, Inspiration, Hit Dice, Currency, Prepared Spells). Voor multiclassing is `preparedSpells` een `Record<className, string[]>`.
 
 ## 5. Definition of Done
 - [ ] Gebruiker kan een character aanmaken en levels configureren in de Editor.
