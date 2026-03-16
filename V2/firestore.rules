@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global pathing strategy: {appId}/{collection}/{document}
+    match /{appId}/{collectionName}/{documentId} {
+      
+      // Default: deny everything. 
+      // All access MUST be authenticated and explicitly defined in collection matches below.
+      allow read, write: if false;
+
+      // DM Templates: Only the DM who created it can read/write
+      match /templates/{templateId} {
+        allow read, write: if request.auth != null && 
+          (request.auth.uid == request.resource.data.dmUid || 
+           (resource != null && request.auth.uid == resource.data.dmUid));
+      }
+
+      // Parties: Only the DM can write (manage members).
+      // Reading is allowed for all authenticated users (for now).
+      match /parties/{partyId} {
+        allow write: if request.auth != null && 
+          (request.auth.uid == request.resource.data.dmUid || 
+           (resource != null && request.auth.uid == resource.data.dmUid));
+        allow read: if request.auth != null;
+      }
+
+      // Characters: Owner or DM of linked party can access
+      match /characters/{charId} {
+        allow write: if request.auth != null && 
+          (request.auth.uid == request.resource.data.ownerUid || 
+           (resource != null && request.auth.uid == resource.data.ownerUid));
+          
+        allow read: if request.auth != null && 
+          (request.auth.uid == resource.data.ownerUid || 
+           resource.data.dmEditable == true ||
+           request.auth.uid == get(/databases/$(database)/documents/$(appId)/parties/$(resource.data.partyId)).data.dmUid);
+      }
+    }
+  }
+}

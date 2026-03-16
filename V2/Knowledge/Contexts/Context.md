@@ -1,7 +1,7 @@
-# 📄 Project Context & Master Specification: D&D Flex Char-Manager V1
+# 📄 Project Context & Master Specification: D&D Flex Char-Manager V2
 
 ## 1. Project Visie & Kernfilosofie
-**Titel:** D&D Flex Char-Manager V1
+**Titel:** D&D Flex Char-Manager V2
 **Doel:** Een webapplicatie voor D&D character management (spelers) en party-overzicht (Dungeon Masters).
 **De Kernfilosofie (Cruciaal voor AI-Agents):** Balans tussen automatisering en absolute vrijheid. Het systeem berekent basiswaarden (zoals modifiers op basis van stats), maar **elke berekende waarde moet door de gebruiker overschreven kunnen worden**. We enforcen géén rigide D&D rulesets of hardcoded classes/races. Homebrew moet out-of-the-box mogelijk zijn via vrije tekstvelden.
 
@@ -27,30 +27,35 @@
 * **Interactie:** Read-only by default. Als speler `dmEditable` op `true` zet, kan de DM waarden (zoals HP) live aanpassen.
 * **NPC's:** Kan tijdelijke NPC-kaarten (Naam, HP, AC, Notes) toevoegen aan het lokale party-overzicht.
 
-## 4. Datamodel (Cloud Firestore)
+## 4. Datamodel (V2 Implementation)
 
-* **Collection `users`** -> `doc {uid}`: `{ email, displayName }`
-* **Collection `parties`** -> `doc {partyId}`: `{ dmUid, name, createdAt }`
-    * **Subcollection `npcs`** -> `doc {npcId}`: `{ name, hp, ac, notes }`
-* **Collection `characters`** -> `doc {charId}`:
-    ```json
-    {
-      "ownerUid": "string",
-      "partyId": "string (optioneel)",
-      "dmEditable": false,
-      "core": { "name": "string", "avatarUrl": "string", "proficiencyBonus": 3 },
-      "stats": {
-        "strength": { "score": 16, "overrideMod": null }
-      },
-      "skills": {
-        "athletics": { "isProficient": true, "isExpertise": false, "overrideValue": null }
-      },
-      "resources": {
-        "spellSlots_level_1": { "max": 4, "current": 3 }
-      },
-      "freeform": { "inventory": "string", "customFeatures": "string" }
-    }
-    ```
+Het datamodel in V2 onderscheidt drie hoofdcategorieën van data om efficiëntie en realtime updates te optimaliseren:
+
+### 4.1 Character Core & Appearance
+Statische of zelden wijzigende data.
+- **core**: `name`, `playerName`, `background`, `alignment`, `proficiencyBonus`, `classes[]` (met `className`, `subclass`, `level`).
+- **appearance**: `age`, `height`, `weight`, `eyes`, `skin`, `hair`.
+
+### 4.2 Character PlayState
+Data die tijdens een speelsessie frequent wijzigt. Deze velden worden in Play Mode realtime gesynchroniseerd.
+- **playState**:
+    - `currentHp`, `tempHp`, `deathSaves` (met `successes` en `failures` 0-3).
+    - `inspiration` (boolean), `experiencePoints` (number).
+    - `initiative` (override), `speed`.
+    - `hitDice: { current: number }`.
+    - `preparedSpells: Record<string, string[]>` (voor multiclassing, keyed op `className`).
+    - `currency: { cp, sp, ep, gp, pp }`.
+    - `conditions[]`, `usedSlots[]`.
+
+### 4.3 Inventory & Freeform
+- **inventory**: `InventoryItem[]` met ondersteuning voor categorieën (**Items**, **Trinkets**, **Magical Items**), handmatige sortering (`sortIndex`) en nesting (`parentItemId`).
+- **freeform**: `personalityTraits`, `ideals`, `bonds`, `flaws`, `backstory`, `alliesAndOrganizations`, `otherProficienciesAndLanguages`.
+- **resources**: Dynamisch gedefinieerde counters (bijv. "Rages", "Ki Points").
+
+### 4.4 Session Notes (Subcollectie)
+- **sessionNotes**: Een afzonderlijke Firestore subcollectie (`characters/{charId}/sessionNotes`) die **strikt privé** is voor de eigenaar. Bevat: `title`, `body`, `sessionDate` (overschrijfbaar). DM heeft hier géén toegang toe, zelfs niet met `dmEditable`.
+
+---
 
 ## 5. Security Rules (Firestore & Storage)
 *Geïmplementeerd in Firebase console om datalekken te voorkomen.*

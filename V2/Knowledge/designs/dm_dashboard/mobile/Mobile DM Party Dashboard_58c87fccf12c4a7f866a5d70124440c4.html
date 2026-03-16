@@ -1,0 +1,228 @@
+<html class="dark"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#8c25f4",
+            "gold": "#d4af37",
+            "background-light": "#f7f5f8",
+            "background-dark": "#120b1a",
+            "card-dark": "#1e1329",
+          },
+          fontFamily: {
+            "display": ["Space Grotesk"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "1rem",
+            "xl": "1.5rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .glass-effect {
+      background: rgba(30, 19, 41, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(140, 37, 244, 0.2);
+    }
+    .gold-shimmer {
+      background: linear-gradient(135deg, #d4af37 0%, #f1d592 50%, #d4af37 100%);
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased selection:bg-primary/30">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden pb-24">
+<!-- Header -->
+<header class="sticky top-0 z-50 glass-effect px-4 py-3 flex items-center justify-between border-b border-primary/10">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase tracking-widest text-gold font-bold">Active Campaign</span>
+<h1 class="text-lg font-bold leading-tight tracking-tight text-slate-100">Shadows of the Underdark</h1>
+</div>
+<button class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/20 text-primary border border-primary/30">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<main class="flex flex-col gap-4 p-4">
+<!-- Top Action Button -->
+<button class="gold-shimmer flex w-full items-center justify-center gap-2 rounded-xl py-4 shadow-lg shadow-gold/20 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-background-dark font-bold">play_arrow</span>
+<span class="text-background-dark text-base font-bold uppercase tracking-wider">Start Session</span>
+</button>
+<div class="flex items-center justify-between mt-2">
+<h2 class="text-sm font-bold uppercase tracking-widest text-primary/80">Adventuring Party</h2>
+<span class="text-xs text-slate-400 bg-primary/10 px-2 py-1 rounded">Level 7</span>
+</div>
+<!-- Player Cards List -->
+<div class="flex flex-col gap-4">
+<!-- Player Card 1 -->
+<div class="glass-effect rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-gold"></div>
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="h-12 w-12 rounded-lg bg-center bg-cover border border-primary/20" data-alt="Female elf character portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCjWWz3cVMVoR9nxD4xaABH1cWL0fp28HsHnvzL4KTcwNQakSFvEaFUACXDKNr1yP8Oo2W8_sIWq9-C0vPvQ2WURbl2qlj8iqhIOUpDNnn4fKf480gM9F90M4yxR0-APJwy2etxKL2TElUUd-BTFj5IgjnItkkSwakR9TJEvuOTb4fR7w4-DR9h0XwGETOBXdrTzcxAFbrgbOT5-Wr83tOTcBDIT-7fWsyAM7NJQ4RvTPOrOAmj-1nIyYjBN2bcI9-bTexXvbHMXDo');"></div>
+<div>
+<h3 class="text-base font-bold text-white">Thia Nightbreeze</h3>
+<p class="text-xs text-slate-400">Sarah • Wood Elf Rogue</p>
+</div>
+</div>
+<div class="flex gap-1">
+<span class="bg-red-500/20 text-red-400 text-[10px] px-2 py-0.5 rounded-full border border-red-500/30">Poisoned</span>
+<span class="bg-blue-500/20 text-blue-400 text-[10px] px-2 py-0.5 rounded-full border border-blue-500/30">Hasted</span>
+</div>
+</div>
+<!-- Stats Row -->
+<div class="grid grid-cols-2 gap-2">
+<div class="flex items-center gap-2 bg-primary/10 rounded-lg p-2 border border-primary/5">
+<span class="material-symbols-outlined text-gold text-lg">shield</span>
+<div>
+<p class="text-[10px] uppercase text-slate-400 leading-none">AC</p>
+<p class="text-sm font-bold text-white">16</p>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-primary/10 rounded-lg p-2 border border-primary/5">
+<span class="material-symbols-outlined text-primary text-lg">visibility</span>
+<div>
+<p class="text-[10px] uppercase text-slate-400 leading-none">Passive P.</p>
+<p class="text-sm font-bold text-white">14</p>
+</div>
+</div>
+</div>
+<!-- HP Bar -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-end">
+<span class="text-[10px] font-bold text-slate-400 uppercase">Hit Points</span>
+<span class="text-xs font-bold text-white">38 / 52</span>
+</div>
+<div class="h-3 w-full bg-primary/20 rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-gradient-to-r from-red-500 to-emerald-500 rounded-full" style="width: 73%;"></div>
+</div>
+</div>
+</div>
+<!-- Player Card 2 -->
+<div class="glass-effect rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="h-12 w-12 rounded-lg bg-center bg-cover border border-primary/20" data-alt="Male human fighter portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdYu3Kwb9iDMqw78_LcJVg1UzZ5AefMvc-4elhQ-CBlPfMhhRgCOeacpWHTwEdmev5OHaQjB1wvpmRd3TuORvSPmY9ykarH8hnRz-2_c_jQmSxwPpkk3lnBPPw4aCNzvz-sgwj0i_lr_N8_7LLB-ezP-Ltfx98VWuhPbsHbSNthVF6qtV9Uxow8NTq_yx_8kcpR6zCapwxnkLrbPH1O6Qe4pVWQ5eJjyaIJ3sf-va9sE-EbkB_02w9nRaoxPJvKTNKCxjWuvvVU4E');"></div>
+<div>
+<h3 class="text-base font-bold text-white">Korgun Ironfoot</h3>
+<p class="text-xs text-slate-400">Mark • Dwarf Cleric</p>
+</div>
+</div>
+</div>
+<!-- Stats Row -->
+<div class="grid grid-cols-2 gap-2">
+<div class="flex items-center gap-2 bg-primary/10 rounded-lg p-2 border border-primary/5">
+<span class="material-symbols-outlined text-gold text-lg">shield</span>
+<div>
+<p class="text-[10px] uppercase text-slate-400 leading-none">AC</p>
+<p class="text-sm font-bold text-white">20</p>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-primary/10 rounded-lg p-2 border border-primary/5">
+<span class="material-symbols-outlined text-primary text-lg">visibility</span>
+<div>
+<p class="text-[10px] uppercase text-slate-400 leading-none">Passive P.</p>
+<p class="text-sm font-bold text-white">18</p>
+</div>
+</div>
+</div>
+<!-- HP Bar -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-end">
+<span class="text-[10px] font-bold text-slate-400 uppercase">Hit Points</span>
+<span class="text-xs font-bold text-white">65 / 65</span>
+</div>
+<div class="h-3 w-full bg-primary/20 rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-emerald-500 rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+</div>
+<!-- Player Card 3 -->
+<div class="glass-effect rounded-xl p-4 flex flex-col gap-3 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-gold"></div>
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="h-12 w-12 rounded-lg bg-center bg-cover border border-primary/20" data-alt="Female tiefling sorcerer portrait" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBqn0pm_evTgk_y790wrjiDHjlvck4VRSKLDDUHDwuRAy5oXOHekrm0SBsQ4pn7aGPt7nSo25HmALrOrKS1fFIQ1Edj_ml4FHq2Tgy6hu3NM4Bupsq20IvcrXmLFpOSyYOPt8XmiHfFmufruaLkrcoJDA8b896kh3IrSv_6m-sFm_1fuULCjKlUOXoXR9T8YKYiTqNnCbOjefMEysJDAPMSbUy6vDHLkZkSiDIOoxx7cayxFJOqNbHcwhrs3c2iGwoeVV4ha-emHq8');"></div>
+<div>
+<h3 class="text-base font-bold text-white">Xandala</h3>
+<p class="text-xs text-slate-400">Jess • Tiefling Sorcerer</p>
+</div>
+</div>
+<div class="flex gap-1">
+<span class="bg-amber-500/20 text-amber-400 text-[10px] px-2 py-0.5 rounded-full border border-amber-500/30">Charmed</span>
+</div>
+</div>
+<!-- Stats Row -->
+<div class="grid grid-cols-2 gap-2">
+<div class="flex items-center gap-2 bg-primary/10 rounded-lg p-2 border border-primary/5">
+<span class="material-symbols-outlined text-gold text-lg">shield</span>
+<div>
+<p class="text-[10px] uppercase text-slate-400 leading-none">AC</p>
+<p class="text-sm font-bold text-white">13</p>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-primary/10 rounded-lg p-2 border border-primary/5">
+<span class="material-symbols-outlined text-primary text-lg">visibility</span>
+<div>
+<p class="text-[10px] uppercase text-slate-400 leading-none">Passive P.</p>
+<p class="text-sm font-bold text-white">11</p>
+</div>
+</div>
+</div>
+<!-- HP Bar -->
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between items-end">
+<span class="text-[10px] font-bold text-slate-400 uppercase">Hit Points</span>
+<span class="text-xs font-bold text-white">12 / 41</span>
+</div>
+<div class="h-3 w-full bg-primary/20 rounded-full overflow-hidden border border-white/5">
+<div class="h-full bg-red-600 rounded-full" style="width: 29%;"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 glass-effect border-t border-primary/20 px-2 pb-6 pt-2">
+<div class="flex justify-around items-center max-w-md mx-auto">
+<a class="flex flex-col items-center gap-1 p-2 text-primary" href="#">
+<span class="material-symbols-outlined fill-1">group</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Party</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">swords</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Initiative</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">person_search</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">NPCs</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-slate-400 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Notes</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

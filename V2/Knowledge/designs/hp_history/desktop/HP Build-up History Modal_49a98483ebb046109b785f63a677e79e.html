@@ -1,0 +1,206 @@
+<html class="dark"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#b72bee",
+                        "gold": "#d4af37",
+                        "crimson": "#dc2626",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#1d1022",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(45, 26, 54, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(183, 43, 238, 0.2);
+        }
+        .gold-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+        }
+        .crimson-glow {
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative min-h-screen w-full flex flex-col overflow-x-hidden">
+<div class="fixed inset-0 z-0 bg-cover bg-center opacity-30 grayscale" data-alt="Dark abstract mystical parchment texture background" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAgCRfi1WxcNWNfR9JY-oBLYJ6XTC4CtqKOj4rxbU9cEZTcytrPQOQSDoEDr_vaBzDzImgTz2jFuDuuQywMs6Tln9YIbxIhwJ6icdhkPBbKpN0p3sCKiTfTvkp80H6o1gGFdSGV6NU3yzoi4FG7IhqN6yCV_WtXKRMOADjURPzH6nfJ0nKNVGgJschsHhE3GshlUDIwEnkUerf4rvQ03x9iYOlwIhV5LPdG36_KLK6gYUsrSkFcusR2NValOkYOPspg2XrzjyEBhcA');"></div>
+<div class="fixed inset-0 z-10 bg-black/60 backdrop-blur-sm"></div>
+<div class="relative z-20 flex h-full grow flex-col items-center justify-center p-4 md:p-10">
+<div class="w-full max-w-[1000px] glass-panel rounded-xl overflow-hidden shadow-2xl border border-primary/30 flex flex-col">
+<header class="flex items-center justify-between px-8 py-6 border-b border-primary/20 bg-primary/5">
+<div class="flex items-center gap-4">
+<div class="size-12 rounded-lg bg-crimson/20 flex items-center justify-center border border-crimson/40 text-crimson">
+<span class="material-symbols-outlined text-3xl">favorite</span>
+</div>
+<div>
+<h2 class="text-white text-2xl font-bold leading-tight tracking-tight">HP History: <span class="text-gold">Grog Strongjaw</span></h2>
+<p class="text-slate-400 text-sm">Barbarian Level 12 • Path of the Berserker</p>
+</div>
+</div>
+<button class="size-10 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-slate-400">close</span>
+</button>
+</header>
+<div class="flex flex-wrap gap-6 p-8 bg-white/5">
+<div class="flex-1 min-w-[200px] glass-panel p-5 rounded-lg border-l-4 border-l-crimson">
+<div class="flex justify-between items-start">
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Hit Dice</p>
+<span class="material-symbols-outlined text-crimson text-xl">playing_cards</span>
+</div>
+<p class="text-white text-3xl font-bold mt-1">12d12</p>
+</div>
+<div class="flex-1 min-w-[200px] glass-panel p-5 rounded-lg border-l-4 border-l-gold">
+<div class="flex justify-between items-start">
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Constitution</p>
+<span class="material-symbols-outlined text-gold text-xl">fitness_center</span>
+</div>
+<p class="text-white text-3xl font-bold mt-1">20 <span class="text-gold text-xl">(+5)</span></p>
+</div>
+<div class="flex-1 min-w-[200px] glass-panel p-5 rounded-lg border-l-4 border-l-primary">
+<div class="flex justify-between items-start">
+<p class="text-slate-400 text-xs font-semibold uppercase tracking-wider">Tough Feat</p>
+<span class="material-symbols-outlined text-primary text-xl">shield</span>
+</div>
+<p class="text-white text-3xl font-bold mt-1">Active <span class="text-primary text-xl">(+24)</span></p>
+</div>
+</div>
+<div class="px-8 pb-4 overflow-y-auto max-h-[400px]">
+<div class="@container">
+<table class="w-full text-left border-separate border-spacing-y-2">
+<thead>
+<tr class="text-slate-400 text-xs font-bold uppercase tracking-widest">
+<th class="px-4 py-3">Level</th>
+<th class="px-4 py-3">Method</th>
+<th class="px-4 py-3">Base</th>
+<th class="px-4 py-3">Con Mod</th>
+<th class="px-4 py-3">Bonus</th>
+<th class="px-4 py-3 text-right">HP Gained</th>
+</tr>
+</thead>
+<tbody>
+<tr class="glass-panel hover:bg-white/5 transition-colors group">
+<td class="px-4 py-4 font-bold text-gold">1</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 rounded bg-crimson/20 text-crimson text-[10px] font-bold uppercase">Maximized</span>
+</td>
+<td class="px-4 py-4 text-slate-300">12</td>
+<td class="px-4 py-4 text-slate-300">+3</td>
+<td class="px-4 py-4 text-slate-400">—</td>
+<td class="px-4 py-4 text-right font-bold text-white text-lg">15</td>
+</tr>
+<tr class="glass-panel hover:bg-white/5 transition-colors">
+<td class="px-4 py-4 font-bold text-gold">2</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 rounded bg-primary/20 text-primary text-[10px] font-bold uppercase">Rolled</span>
+</td>
+<td class="px-4 py-4 text-slate-300">9</td>
+<td class="px-4 py-4 text-slate-300">+3</td>
+<td class="px-4 py-4 text-slate-400">—</td>
+<td class="px-4 py-4 text-right font-bold text-white text-lg">12</td>
+</tr>
+<tr class="glass-panel hover:bg-white/5 transition-colors">
+<td class="px-4 py-4 font-bold text-gold">3</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 rounded bg-slate-700/50 text-slate-300 text-[10px] font-bold uppercase">Average</span>
+</td>
+<td class="px-4 py-4 text-slate-300">7</td>
+<td class="px-4 py-4 text-slate-300">+3</td>
+<td class="px-4 py-4 text-slate-400">—</td>
+<td class="px-4 py-4 text-right font-bold text-white text-lg">10</td>
+</tr>
+<tr class="glass-panel hover:bg-white/5 transition-colors border-l-2 border-l-gold">
+<td class="px-4 py-4 font-bold text-gold">4</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 rounded bg-primary/20 text-primary text-[10px] font-bold uppercase">Rolled</span>
+</td>
+<td class="px-4 py-4 text-slate-300">11</td>
+<td class="px-4 py-4 text-slate-300">+4 <span class="text-[10px] text-gold">(ASI)</span></td>
+<td class="px-4 py-4 text-primary font-medium">+8 <span class="text-[10px]">(Tough)</span></td>
+<td class="px-4 py-4 text-right font-bold text-white text-lg">23</td>
+</tr>
+<tr class="glass-panel hover:bg-white/5 transition-colors">
+<td class="px-4 py-4 font-bold text-gold">5</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 rounded bg-primary/20 text-primary text-[10px] font-bold uppercase">Rolled</span>
+</td>
+<td class="px-4 py-4 text-slate-300">8</td>
+<td class="px-4 py-4 text-slate-300">+4</td>
+<td class="px-4 py-4 text-primary font-medium">+2</td>
+<td class="px-4 py-4 text-right font-bold text-white text-lg">14</td>
+</tr>
+<tr class="glass-panel hover:bg-white/5 transition-colors">
+<td class="px-4 py-4 font-bold text-gold">...</td>
+<td class="px-4 py-4" colspan="4"></td>
+<td class="px-4 py-4 text-right"></td>
+</tr>
+<tr class="glass-panel hover:bg-white/5 transition-colors">
+<td class="px-4 py-4 font-bold text-gold">12</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 rounded bg-slate-700/50 text-slate-300 text-[10px] font-bold uppercase">Average</span>
+</td>
+<td class="px-4 py-4 text-slate-300">7</td>
+<td class="px-4 py-4 text-slate-300">+5</td>
+<td class="px-4 py-4 text-primary font-medium">+2</td>
+<td class="px-4 py-4 text-right font-bold text-white text-lg">14</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<footer class="p-8 border-t border-primary/20 bg-background-dark/50 relative overflow-hidden">
+<div class="absolute inset-0 gold-shimmer pointer-events-none opacity-20"></div>
+<div class="relative flex items-center justify-center">
+<div class="flex flex-col items-center crimson-glow px-12 py-6 rounded-xl border border-crimson/30 bg-crimson/5">
+<p class="text-slate-400 text-sm font-bold uppercase tracking-[0.2em] mb-1">Total Maximum Health</p>
+<div class="flex items-baseline gap-2">
+<span class="text-white text-6xl font-black tracking-tighter">145</span>
+<span class="text-crimson font-bold">HP</span>
+</div>
+<div class="mt-2 flex gap-1">
+<div class="h-1 w-8 bg-gold rounded-full"></div>
+<div class="h-1 w-24 bg-crimson rounded-full"></div>
+<div class="h-1 w-8 bg-gold rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 flex justify-end gap-4">
+<button class="px-6 py-2.5 rounded-lg border border-primary/40 text-primary font-bold text-sm hover:bg-primary/10 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">download</span>
+                            Export Log
+                        </button>
+<button class="px-8 py-2.5 rounded-lg bg-primary text-white font-bold text-sm hover:bg-primary/80 transition-all shadow-lg shadow-primary/20">
+                            Confirm Changes
+                        </button>
+</div>
+</footer>
+</div>
+<div class="mt-6 flex items-center gap-6 text-slate-500 text-xs">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">verified_user</span>
+                    Character sheet verified
+                </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">history</span>
+                    Last updated 2 hours ago
+                </div>
+</div>
+</div>
+</div>
+</body></html>

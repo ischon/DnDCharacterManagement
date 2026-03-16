@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#8c25f4",
+                        "background-light": "#f7f5f8",
+                        "background-dark": "#191022",
+                        "accent-gold": "#d4af37",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(140, 37, 244, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(140, 37, 244, 0.2);
+            box-shadow: 0 0 20px rgba(140, 37, 244, 0.1);
+        }
+        .hp-ring {
+            background: conic-gradient(#8c25f4 var(--progress), transparent 0deg);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<header class="sticky top-0 z-10 px-6 pt-12 pb-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs font-bold uppercase tracking-widest text-primary">Campaign Active</span>
+<h1 class="text-2xl font-bold">Shadows of Aethelgard</h1>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg shadow-primary/20 transition-all">
+                Start Session
+            </button>
+</div>
+</header>
+<main class="flex-1 px-4 py-6 overflow-y-auto">
+<div class="flex items-center justify-between mb-6 px-2">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">group</span>
+                Party Status
+            </h2>
+<span class="text-xs font-medium px-2 py-1 rounded bg-primary/10 text-primary">4 Members</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Player Card 1 -->
+<div class="glass-card rounded-xl p-4 flex flex-col items-center relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2">
+<span class="material-symbols-outlined text-[14px] text-primary/40">shield_with_heart</span>
+</div>
+<div class="relative w-24 h-24 flex items-center justify-center rounded-full mb-3">
+<div class="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+<div class="absolute inset-0 rounded-full border-4 border-primary border-t-transparent -rotate-45"></div>
+<div class="flex flex-col items-center">
+<span class="text-3xl font-bold">42</span>
+<span class="text-[10px] uppercase tracking-tighter opacity-60">HP</span>
+</div>
+</div>
+<h3 class="font-bold text-sm mb-1">Valerius</h3>
+<p class="text-[10px] text-primary font-medium uppercase tracking-wider mb-4">Lvl 8 Paladin</p>
+<div class="grid grid-cols-2 gap-2 w-full pt-3 border-t border-primary/10">
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold">20</span>
+<span class="text-[9px] opacity-50 uppercase">AC</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold">14</span>
+<span class="text-[9px] opacity-50 uppercase">Pass. P.</span>
+</div>
+</div>
+</div>
+<!-- Player Card 2 -->
+<div class="glass-card rounded-xl p-4 flex flex-col items-center relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2">
+<span class="material-symbols-outlined text-[14px] text-red-500/40">warning</span>
+</div>
+<div class="relative w-24 h-24 flex items-center justify-center rounded-full mb-3">
+<div class="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+<div class="absolute inset-0 rounded-full border-4 border-red-500 border-t-transparent rotate-90"></div>
+<div class="flex flex-col items-center">
+<span class="text-3xl font-bold text-red-500">12</span>
+<span class="text-[10px] uppercase tracking-tighter opacity-60">HP</span>
+</div>
+</div>
+<h3 class="font-bold text-sm mb-1">Elowen</h3>
+<p class="text-[10px] text-primary font-medium uppercase tracking-wider mb-4">Lvl 8 Rogue</p>
+<div class="grid grid-cols-2 gap-2 w-full pt-3 border-t border-primary/10">
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold">16</span>
+<span class="text-[9px] opacity-50 uppercase">AC</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold">19</span>
+<span class="text-[9px] opacity-50 uppercase">Pass. P.</span>
+</div>
+</div>
+</div>
+<!-- Player Card 3 -->
+<div class="glass-card rounded-xl p-4 flex flex-col items-center relative overflow-hidden">
+<div class="relative w-24 h-24 flex items-center justify-center rounded-full mb-3">
+<div class="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+<div class="absolute inset-0 rounded-full border-4 border-primary border-r-transparent rotate-180"></div>
+<div class="flex flex-col items-center">
+<span class="text-3xl font-bold">28</span>
+<span class="text-[10px] uppercase tracking-tighter opacity-60">HP</span>
+</div>
+</div>
+<h3 class="font-bold text-sm mb-1">Kaelen</h3>
+<p class="text-[10px] text-primary font-medium uppercase tracking-wider mb-4">Lvl 8 Wizard</p>
+<div class="grid grid-cols-2 gap-2 w-full pt-3 border-t border-primary/10">
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold">13</span>
+<span class="text-[9px] opacity-50 uppercase">AC</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold">12</span>
+<span class="text-[9px] opacity-50 uppercase">Pass. P.</span>
+</div>
+</div>
+</div>
+<!-- Player Card 4 -->
+<div class="glass-card rounded-xl p-4 flex flex-col items-center relative overflow-hidden">
+<div class="relative w-24 h-24 flex items-center justify-center rounded-full mb-3">
+<div class="absolute inset-0 rounded-full border-4 border-primary/20"></div>
+<div class="absolute inset-0 rounded-full border-4 border-primary"></div>
+<div class="flex flex-col items-center">
+<span class="text-3xl font-bold">85</span>
+<span class="text-[10px] uppercase tracking-tighter opacity-60">HP</span>
+</div>
+</div>
+<h3 class="font-bold text-sm mb-1">Thokk</h3>
+<p class="text-[10px] text-primary font-medium uppercase tracking-wider mb-4">Lvl 8 Barbarian</p>
+<div class="grid grid-cols-2 gap-2 w-full pt-3 border-t border-primary/10">
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold">18</span>
+<span class="text-[9px] opacity-50 uppercase">AC</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-xs font-bold">15</span>
+<span class="text-[9px] opacity-50 uppercase">Pass. P.</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 px-2">
+<h3 class="text-sm font-bold uppercase tracking-widest text-primary/60 mb-4">Quick DM Tools</h3>
+<div class="flex gap-3 overflow-x-auto pb-4 no-scrollbar">
+<button class="flex-shrink-0 flex flex-col items-center gap-2 p-4 glass-card rounded-xl w-24">
+<span class="material-symbols-outlined text-accent-gold">casino</span>
+<span class="text-[10px] font-bold">Roll D20</span>
+</button>
+<button class="flex-shrink-0 flex flex-col items-center gap-2 p-4 glass-card rounded-xl w-24">
+<span class="material-symbols-outlined text-accent-gold">skull</span>
+<span class="text-[10px] font-bold">Encounter</span>
+</button>
+<button class="flex-shrink-0 flex flex-col items-center gap-2 p-4 glass-card rounded-xl w-24">
+<span class="material-symbols-outlined text-accent-gold">menu_book</span>
+<span class="text-[10px] font-bold">Spells</span>
+</button>
+<button class="flex-shrink-0 flex flex-col items-center gap-2 p-4 glass-card rounded-xl w-24">
+<span class="material-symbols-outlined text-accent-gold">map</span>
+<span class="text-[10px] font-bold">Atlas</span>
+</button>
+</div>
+</div>
+</main>
+<nav class="bg-background-light dark:bg-background-dark/95 border-t border-primary/20 px-6 py-4 pb-8 flex justify-between items-center backdrop-blur-xl">
+<a class="flex flex-col items-center gap-1 text-accent-gold" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">dashboard</span>
+<span class="text-[10px] font-bold">Party</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="text-[10px] font-bold">Maps</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<div class="bg-primary p-3 rounded-full -mt-10 border-4 border-background-dark shadow-xl shadow-primary/30">
+<span class="material-symbols-outlined text-white">add</span>
+</div>
+<span class="text-[10px] font-bold">Actions</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="text-[10px] font-bold">Logs</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">DM Gear</span>
+</a>
+</nav>
+</body></html>
